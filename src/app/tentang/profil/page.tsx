@@ -19,7 +19,6 @@ export default function TentangKamiPage() {
         <MethodologySection />
         <AboutCTA />
       </main>
-      <Footer /> 
     </div>
   );
 }

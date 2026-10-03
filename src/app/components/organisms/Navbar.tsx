@@ -28,7 +28,7 @@ export const menuData: MenuItem[] = [
     subItems: [
       { label: "Profil Living Lab", href: "/tentang/profil" },
       { label: "Tim Kami", href: "/tentang/tim" },
-      { label: "Sejarah & Visi", href: "/tentang/sejarah" }
+      { label: "Visi & Misi", href: "/tentang/visi-misi" }
     ]
   },
   { label: "Sungai", href: "/sungai", type: "link" },
