@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation'; // 1. Import usePathname
+import { usePathname } from 'next/navigation'; 
 import { BrandLogo } from '../molecules/BrandLogo';
 import { NavigationMenu } from './NavigationMenu'; 
 import { ButtonCTA } from '../molecules/ButonCta';
@@ -48,10 +48,16 @@ export const menuData: MenuItem[] = [
 
 export const Navbar: React.FC = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const pathname = usePathname(); // 2. Inisialisasi pathname
+  const pathname = usePathname(); 
 
-const darkNavbarRoutes = ['/tentang', '/pengetahuan', '/kisah-sungai'];
-const isTentangPage = darkNavbarRoutes.some((route) => pathname.startsWith(route));
+  // 1. Cek apakah URL saat ini dimulai dengan '/tentang'
+  const isTentangPage = pathname.startsWith('/tentang');
+  
+  // 2. Cek apakah URL saat ini dimulai dengan '/kolaborasi'
+  const isKolaborasiPage = pathname.startsWith('/kolaborasi');
+
+  // 3. Gabungkan logika: Navbar akan gelap jika berada di halaman '/tentang' ATAU '/kolaborasi'
+  const useDarkBackground = isTentangPage || isKolaborasiPage;
 
   useEffect(() => {
     if (isMobileOpen) {
@@ -65,8 +71,8 @@ const isTentangPage = darkNavbarRoutes.some((route) => pathname.startsWith(route
     <>
       <nav 
         className={`w-full backdrop-blur-md border-b px-4 md:px-8 py-3 flex items-center justify-between absolute top-0 z-40 transition-colors duration-300 ${
-          isTentangPage 
-            ? 'bg-[#0f1713] border-gray-800' // Warna gelap untuk halaman /tentang/*
+          useDarkBackground 
+            ? 'bg-[#0f1713] border-gray-800' // Warna gelap untuk halaman /tentang/* dan /kolaborasi/*
             : 'bg-transparent border-white/10' // Warna default (transparan)
         }`}
       >
