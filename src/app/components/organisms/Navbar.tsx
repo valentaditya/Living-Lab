@@ -56,8 +56,14 @@ export const Navbar: React.FC = () => {
   // 2. Cek apakah URL saat ini dimulai dengan '/kolaborasi'
   const isKolaborasiPage = pathname.startsWith('/kolaborasi');
 
-  // 3. Gabungkan logika: Navbar akan gelap jika berada di halaman '/tentang' ATAU '/kolaborasi'
-  const useDarkBackground = isTentangPage || isKolaborasiPage;
+  // 3. Cek apakah URL saat ini dimulai dengan '/pengetahuan' (Pusat Pengetahuan)
+  const isPengetahuanPage = pathname.startsWith('/pengetahuan');
+
+  // 4. Cek apakah URL saat ini dimulai dengan '/kisah-sungai'
+  const isKisahSungaiPage = pathname.startsWith('/kisah-sungai');
+
+  // 5. Gabungkan logika: Navbar akan gelap jika berada di salah satu halaman tersebut
+  const useDarkBackground = isTentangPage || isKolaborasiPage || isPengetahuanPage || isKisahSungaiPage;
 
   useEffect(() => {
     if (isMobileOpen) {
@@ -72,7 +78,7 @@ export const Navbar: React.FC = () => {
       <nav 
         className={`w-full backdrop-blur-md border-b px-4 md:px-8 py-3 flex items-center justify-between absolute top-0 z-40 transition-colors duration-300 ${
           useDarkBackground 
-            ? 'bg-[#0f1713] border-gray-800' // Warna gelap untuk halaman /tentang/* dan /kolaborasi/*
+            ? 'bg-[#0f1713] border-gray-800' // Warna gelap untuk halaman /tentang, /kolaborasi, /pengetahuan, /kisah-sungai
             : 'bg-transparent border-white/10' // Warna default (transparan)
         }`}
       >
