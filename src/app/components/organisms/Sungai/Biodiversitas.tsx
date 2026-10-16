@@ -3,12 +3,54 @@ import Image from 'next/image';
 
 export const Biodiversitas = () => {
   const bioData = [
-    { name: "Ikan Wader Pari", local: "Wader", desc: "Ikan kecil endemik perairan tawar Jawa. Rentan terhadap pencemaran, menjadikannya indikator utama kualitas air yang baik.", status: "Rentan", peran: "Indikator Kualitas Air", img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=400&auto=format&fit=crop" },
-    { name: "Capung Jumputan", local: "Capung", desc: "Predator alami serangga kecil. Keberadaannya menandakan ekosistem perairan yang sehat dan minim bahan kimia.", status: "Melimpah", peran: "Bioindikator", img: "https://images.unsplash.com/photo-1550859492-d5da9d8e45f3?q=80&w=400&auto=format&fit=crop" },
-    { name: "Bambu Apus & Petung", local: "Bambu", desc: "Tanaman riparian yang akarnya kuat mengikat tanah, mencegah erosi tebing sungai, dan menjadi habitat berbagai satwa.", status: "Dilindungi", peran: "Stabilisasi Tebing", img: "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?q=80&w=400&auto=format&fit=crop" },
-    { name: "Raja Udang Mentimun", local: "Raja Udang", desc: "Burung pemakan ikan yang menjadi indikator kualitas air bersih. Sensitif terhadap perubahan lingkungan perairan.", status: "Langka", peran: "Indikator Air Bersih", img: "https://images.unsplash.com/photo-1444464666168-49d633b86797?q=80&w=400&auto=format&fit=crop" },
-    { name: "Udang Galah Sungai", local: "Udang Galah", desc: "Spesies krustasea yang memiliki nilai ekonomi tinggi. Keberadaannya menandakan kualitas air yang masih baik.", status: "Melimpah", peran: "Bioindikator", img: "https://images.unsplash.com/photo-1551244072-5d12893278ab?q=80&w=400&auto=format&fit=crop" },
-    { name: "Pohon Gayam", local: "Gayam", desc: "Pohon besar dengan akar kuat yang mampu menyerap air tanah dan mencegah erosi. Sering digunakan sebagai peneduh.", status: "Dilindungi", peran: "Konservasi Air", img: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=400&auto=format&fit=crop" },
+    { 
+      name: "Ikan Wader Pari", 
+      local: "Wader", 
+      desc: "Ikan kecil endemik perairan tawar Jawa. Rentan terhadap pencemaran, menjadikannya indikator utama kualitas air yang baik.", 
+      status: "Rentan", 
+      peran: "Indikator Kualitas Air", 
+      img: "/pictures/ikan.png" 
+    },
+    { 
+      name: "Capung Jumputan", 
+      local: "Capung", 
+      desc: "Predator alami serangga kecil. Keberadaannya menandakan ekosistem perairan yang sehat dan minim bahan kimia.", 
+      status: "Melimpah", 
+      peran: "Bioindikator", 
+      img: "/pictures/capung.png" 
+    },
+    { 
+      name: "Bambu Apus & Petung", 
+      local: "Bambu", 
+      desc: "Tanaman riparian yang akarnya kuat mengikat tanah, mencegah erosi tebing sungai, dan menjadi habitat berbagai satwa.", 
+      status: "Dilindungi", 
+      peran: "Stabilisasi Tebing", 
+      img: "/pictures/bambu.png" 
+    },
+    { 
+      name: "Raja Udang Mentimun", 
+      local: "Raja Udang", 
+      desc: "Burung pemakan ikan yang menjadi indikator kualitas air bersih. Sensitif terhadap perubahan lingkungan perairan.", 
+      status: "Langka", 
+      peran: "Indikator Air Bersih", 
+      img: "/pictures/burung.png" 
+    },
+    { 
+      name: "Udang Galah Sungai", 
+      local: "Udang Galah", 
+      desc: "Spesies krustasea yang memiliki nilai ekonomi tinggi. Keberadaannya menandakan kualitas air yang masih baik.", 
+      status: "Melimpah", 
+      peran: "Bioindikator", 
+      img: "/pictures/udang.png" 
+    },
+    { 
+      name: "Pohon Gayam", 
+      local: "Gayam", 
+      desc: "Pohon besar dengan akar kuat yang mampu menyerap air tanah dan mencegah erosi. Sering digunakan sebagai peneduh.", 
+      status: "Dilindungi", 
+      peran: "Konservasi Air", 
+      img: "/pictures/pohon.png" 
+    },
   ];
 
   return (
@@ -27,7 +69,14 @@ export const Biodiversitas = () => {
           {bioData.map((item, idx) => (
             <div key={idx} className="bg-white/5 border border-white/10 rounded-sm overflow-hidden flex flex-col">
               <div className="relative h-48 w-full bg-gray-800">
-                <Image src={item.img} alt={item.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+                <Image 
+                  src={item.img} 
+                  alt={item.name} 
+                  fill 
+                  priority 
+                  className="object-cover" 
+                  sizes="(max-width: 768px) 100vw, 33vw" 
+                />
                 <div className="absolute top-3 left-3 bg-teal-600 text-white text-[10px] font-mono px-2 py-1">
                   {item.status}
                 </div>

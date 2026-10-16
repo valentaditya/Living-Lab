@@ -43,10 +43,10 @@ export const HeroBerita = () => {
           {/* Right Image */}
           <div className="lg:col-span-6 relative h-[400px] lg:h-[500px] w-full rounded-sm overflow-hidden bg-gray-800">
             <Image
-              src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1200&auto=format&fit=crop"
-              alt="Dokumentasi Kegiatan Living Lab"
+              src="/pictures/kolaborasi.png" 
+              alt="Tangan memegang bibit tanaman dengan latar belakang warga berdiskusi di bantaran sungai"
               fill
-              priority
+              priority 
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
             />

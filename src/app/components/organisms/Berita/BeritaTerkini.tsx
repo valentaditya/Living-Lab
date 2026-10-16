@@ -32,9 +32,10 @@ export const BeritaTerkini = () => {
           <div className="lg:col-span-7 flex flex-col gap-4">
             <div className="relative w-full h-[350px] bg-gray-100 rounded-sm overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=800&auto=format&fit=crop"
-                alt="Pemasangan Sensor IoT"
+                src="/pictures/sensor.png" 
+                alt="Pemasangan sensor telemetri LoRaWAN di bantaran sungai"
                 fill
+                priority 
                 className="object-cover hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 768px) 100vw, 60vw"
               />
@@ -66,7 +67,13 @@ export const BeritaTerkini = () => {
           <div className="lg:col-span-5 flex flex-col gap-6">
             <div className="bg-white border border-gray-200 rounded-sm p-4 flex gap-4 hover:shadow-md transition-shadow">
               <div className="relative w-24 h-24 flex-shrink-0 bg-gray-100 rounded-sm overflow-hidden">
-                <Image src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" alt="Ekosistem" fill className="object-cover" sizes="96px" />
+                <Image 
+                  src="/pictures/mikroplastik.png" 
+                  alt="Penelitian mikroplastik di laboratorium" 
+                  fill 
+                  className="object-cover" 
+                  sizes="96px" 
+                />
               </div>
               <div className="flex flex-col justify-between">
                 <div>
@@ -80,7 +87,13 @@ export const BeritaTerkini = () => {
 
             <div className="bg-white border border-gray-200 rounded-sm p-4 flex gap-4 hover:shadow-md transition-shadow">
               <div className="relative w-24 h-24 flex-shrink-0 bg-gray-100 rounded-sm overflow-hidden">
-                <Image src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=200&auto=format&fit=crop" alt="Sekolah Sungai" fill className="object-cover" sizes="96px" />
+                <Image 
+                  src="/pictures/pemuda.png" 
+                  alt="Pelatihan pemuda dalam program Sekolah Sungai" 
+                  fill 
+                  className="object-cover" 
+                  sizes="96px" 
+                />
               </div>
               <div className="flex flex-col justify-between">
                 <div>

@@ -14,7 +14,7 @@ export const ProfilSungai = () => {
         { label: "Debit Aliran Rata-rata", value: "4,5 m³/detik" },
         { label: "Fokus Riset", value: "Mitigasi Lahar & Sanitasi" },
       ],
-      img: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=600&auto=format&fit=crop"
+      img: "/pictures/sungai1.jpg" 
     },
     {
       id: "DAS WINONGO / 02",
@@ -27,7 +27,7 @@ export const ProfilSungai = () => {
         { label: "Debit Aliran Rata-rata", value: "5,2 m³/detik" },
         { label: "Fokus Riset", value: "Biodiversitas & Konservasi" },
       ],
-      img: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=600&auto=format&fit=crop"
+      img: "/pictures/sungai2.jpg" 
     },
     {
       id: "DAS GAJAHWONG / 03",
@@ -40,7 +40,7 @@ export const ProfilSungai = () => {
         { label: "Debit Aliran Rata-rata", value: "4,1 m³/detik" },
         { label: "Fokus Riset", value: "Pemantauan Kualitas Air" },
       ],
-      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop"
+      img: "/pictures/sungai3.jpg" 
     }
   ];
 
@@ -69,7 +69,14 @@ export const ProfilSungai = () => {
                 <span className="text-xs text-gray-500 italic mb-4">{sungai.subtitle}</span>
                 
                 <div className="relative w-full h-40 bg-gray-100 rounded-sm mb-4 overflow-hidden">
-                  <Image src={sungai.img} alt={sungai.title} fill className="object-cover grayscale hover:grayscale-0 transition-all duration-300" sizes="(max-width: 768px) 100vw, 33vw" />
+                  <Image 
+                    src={sungai.img} 
+                    alt={sungai.title} 
+                    fill 
+                    priority 
+                    className="object-cover grayscale hover:grayscale-0 transition-all duration-300" 
+                    sizes="(max-width: 768px) 100vw, 33vw" 
+                  />
                 </div>
                 
                 <p className="text-xs text-gray-600 leading-relaxed mb-6 flex-grow">{sungai.desc}</p>

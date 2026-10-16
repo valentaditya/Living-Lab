@@ -7,22 +7,28 @@ export const LaporanAktivitas = () => {
       title: "Laporan Kepalasejahteraan Kolaboratif: Code Mengadopsi Sesi Konservasi Masyarakat 2024-2025",
       date: "DOKUMEN RISET // LAPORAN SEMESTER II",
       desc: "Analisis kuantitatif partisipatif tentang adopsi teknologi ramah lingkungan di 12 bantaran sungai.",
-      img: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=600&auto=format&fit=crop",
-      size: "84.2 MB // PDF"
+      img: "/pictures/laporan.png", // <-- FOTO 3: Laporan
+      alt: "Diskusi pemetaan partisipatif warga dan akademisi di bantaran sungai",
+      size: "84.2 MB // PDF",
+      priority: true // Gambar pertama di seksi ini
     },
     {
       title: "Katalog Bio-Indikator Riparian: Panduan Identifikasi Makrobentos Tiga Sungai Yogyakarta",
       date: "TAKSONOMI LAPANGAN // AKSI EKSPEDISI 24",
       desc: "Panduan visual untuk peneliti muda dan relawan dalam mengenali spesies air sebagai indikator kualitas air.",
-      img: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=600&auto=format&fit=crop",
-      size: "54.8 MB // PDF"
+      img: "/pictures/larva.png", // <-- FOTO 1: Larva
+      alt: "Larva makrobentos di atas batu sungai sebagai bio-indikator kualitas air",
+      size: "54.8 MB // PDF",
+      priority: false // Sebaiknya lazy load untuk optimasi Lighthouse
     },
     {
       title: "Audit Ekologi Restorasi Bambu dan Ketahanan Tanggul Alami Kali Winongo (2022-2024)",
       date: "MONITORING EKOLOGI // DOKUMEN TAHUNAN",
       desc: "Studi pengukuran tingkat keberhasilan penanaman bambu dalam mencegah erosi tebing sungai.",
-      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
-      size: "112.4 MB // PDF"
+      img: "/pictures/akar.png", // <-- FOTO 2: Akar
+      alt: "Jaringan akar pohon yang mengikat tebing sungai untuk mencegah erosi",
+      size: "112.4 MB // PDF",
+      priority: false // Sebaiknya lazy load untuk optimasi Lighthouse
     }
   ];
 
@@ -44,7 +50,14 @@ export const LaporanAktivitas = () => {
           {reports.map((report, idx) => (
             <div key={idx} className="bg-white border border-gray-200 rounded-sm overflow-hidden flex flex-col hover:shadow-lg transition-shadow">
               <div className="relative h-48 w-full bg-gray-100">
-                <Image src={report.img} alt={report.title} fill className="object-cover grayscale hover:grayscale-0 transition-all duration-300" sizes="(max-width: 768px) 100vw, 33vw" />
+                <Image 
+                  src={report.img} 
+                  alt={report.alt} 
+                  fill 
+                  priority={report.priority}
+                  className="object-cover grayscale hover:grayscale-0 transition-all duration-300" 
+                  sizes="(max-width: 768px) 100vw, 33vw" 
+                />
               </div>
               <div className="p-6 flex-grow flex flex-col">
                 <span className="text-[10px] font-mono text-gray-400 block mb-2">{report.date}</span>

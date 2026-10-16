@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function AboutCTA() {
   return (
     <section className="bg-[#0f1713] py-24 text-center">
@@ -19,11 +21,11 @@ export default function AboutCTA() {
           <button className="w-full sm:w-auto bg-teal-600 text-white px-8 py-4 rounded-sm text-sm font-bold hover:bg-teal-500 transition-colors">
             DAFTARKAN AGENDA KOLABORASI
           </button>
-          <button className="w-full sm:w-auto text-white px-8 py-4 rounded-sm text-sm font-semibold hover:text-teal-300 transition-colors border border-gray-700 sm:border-transparent">
-            LIHAT ROADMAP STRATEGIS (2024-2030)
-          </button>
+          <Link href="/tentang/faq"
+          className="w-full sm:w-auto text-white px-8 py-4 rounded-sm text-sm font-semibold hover:text-teal-300 transition-colors border border-gray-700 sm:border-transparent">
+            AJUKAN PERTANYAAN PADA KAMI
+          </Link>
         </div>
-
       </div>
     </section>
   );

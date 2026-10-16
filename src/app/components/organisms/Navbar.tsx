@@ -50,20 +50,11 @@ export const Navbar: React.FC = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const pathname = usePathname(); 
 
-  // 1. Cek apakah URL saat ini dimulai dengan '/tentang'
-  const isTentangPage = pathname.startsWith('/tentang');
+  // Daftar halaman yang membutuhkan navbar gelap
+  const darkPages = ['/tentang', '/kolaborasi', '/pengetahuan', '/kisah-sungai'];
   
-  // 2. Cek apakah URL saat ini dimulai dengan '/kolaborasi'
-  const isKolaborasiPage = pathname.startsWith('/kolaborasi');
-
-  // 3. Cek apakah URL saat ini dimulai dengan '/pengetahuan' (Pusat Pengetahuan)
-  const isPengetahuanPage = pathname.startsWith('/pengetahuan');
-
-  // 4. Cek apakah URL saat ini dimulai dengan '/kisah-sungai'
-  const isKisahSungaiPage = pathname.startsWith('/kisah-sungai');
-
-  // 5. Gabungkan logika: Navbar akan gelap jika berada di salah satu halaman tersebut
-  const useDarkBackground = isTentangPage || isKolaborasiPage || isPengetahuanPage || isKisahSungaiPage;
+  // Cek apakah URL saat ini termasuk halaman gelap
+  const isDarkPage = darkPages.some(page => pathname.startsWith(page));
 
   useEffect(() => {
     if (isMobileOpen) {
@@ -76,10 +67,12 @@ export const Navbar: React.FC = () => {
   return (
     <>
       <nav 
-        className={`w-full backdrop-blur-md border-b px-4 md:px-8 py-3 flex items-center justify-between absolute top-0 z-40 transition-colors duration-300 ${
-          useDarkBackground 
-            ? 'bg-[#0f1713] border-gray-800' // Warna gelap untuk halaman /tentang, /kolaborasi, /pengetahuan, /kisah-sungai
-            : 'bg-transparent border-white/10' // Warna default (transparan)
+        className={`w-full px-4 md:px-8 py-3 flex items-center justify-between absolute top-0 z-40 transition-colors duration-300 
+        font-sans text-sm font-medium tracking-wide
+        ${
+          isDarkPage 
+            ? 'bg-[#0f1713] text-white'      // Halaman gelap: background solid, tanpa blur/shadow
+            : 'bg-transparent text-white'    // Halaman default: murni transparan, tanpa blur/shadow/border
         }`}
       >
         <BrandLogo />
