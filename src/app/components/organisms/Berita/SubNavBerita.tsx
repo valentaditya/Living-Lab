@@ -3,7 +3,7 @@ import React from 'react';
 export const SubNavBerita = () => {
   const navItems = [
     { label: "Semua Berita Terkini", href: "#", active: true },
-    { label: "Agenda & Acara", href: "#", active: false },
+    { label: "Agenda & Acara", href: "#agenda", active: false },
     { label: "Siaran Pers Resmi", href: "#", active: false },
     { label: "Liputan Media & Kliping", href: "#", active: false },
     { label: "Laporan Aktivitas & Riset", href: "#", active: false },

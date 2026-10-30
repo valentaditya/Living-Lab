@@ -1,57 +1,21 @@
 "use client";
 
 import React, { useState } from 'react';
+import type { FAQItem } from "@/lib/cms-content";
 
-// Data FAQ
-const faqData = [
-  {
-    id: 1,
-    question: "Apa itu Living Lab Sungai Yogyakarta?",
-    answer: "Living Lab Sungai Yogyakarta adalah inisiatif riset kolaboratif terapan yang menempatkan koridor sungai (Kali Code, Winongo, Gajahwong) sebagai laboratorium hidup di mana akademisi, warga bantaran, pemerintah, dan industri bekerja sama secara egaliter untuk menyelesaikan persoalan sosial-ekologis secara nyata.",
-    tags: ["DAS CODE // WINONGO // GAJAHWONG"],
-    category: "Landasan Operasional"
-  },
-  {
-    id: 2,
-    question: "Siapa saja yang bisa terlibat dalam inisiatif ini?",
-    answer: "Inisiatif ini terbuka untuk siapa saja yang memiliki kepedulian terhadap sungai, mulai dari akademisi, mahasiswa, komunitas warga, LSM, sektor swasta, hingga instansi pemerintah.",
-    tags: [],
-    category: "Keterlibatan & Warga"
-  },
-  {
-    id: 3,
-    question: "Bagaimana cara masyarakat atau peneliti berkontribusi data?",
-    answer: "Anda dapat berkontribusi dengan mengikuti pelatihan sains warga (citizen science) yang kami adakan secara berkala, atau mengirimkan data hasil pemantauan mandiri melalui portal data terbuka kami.",
-    tags: [],
-    category: "Data & Akses"
-  },
-  {
-    id: 4,
-    question: "Apakah data kualitas air dan riset dapat diakses secara publik?",
-    answer: "Ya, seluruh data telemetri dan hasil riset kami dipublikasikan secara terbuka melalui repositori data kami. Kami percaya bahwa data terbuka adalah kunci untuk advokasi kebijakan yang berbasis bukti.",
-    tags: [],
-    category: "Data & Akses"
-  },
-  {
-    id: 5,
-    question: "Bagaimana prosedur menjadi mitra resmi atau sponsor riset?",
-    answer: "Silakan menghubungi tim sekretariat kami melalui email untuk mendapatkan dokumen panduan kemitraan. Kami akan menjadwalkan sesi diskusi awal untuk menyelaraskan tujuan dan ruang lingkup kolaborasi.",
-    tags: [],
-    category: "Kelembagaan"
-  }
-];
-
-const categories = ["Semua Pertanyaan", "Kelembagaan", "Keterlibatan & Warga", "Data & Akses"];
-
-export const FAQSection = () => {
+export const FAQSection = ({ faqs }: { faqs: FAQItem[] }) => {
   const [activeCategory, setActiveCategory] = useState("Semua Pertanyaan");
-  const [openId, setOpenId] = useState<number | null>(1); // Default item 1 terbuka
+  const [openId, setOpenId] = useState<string | null>(faqs[0]?.id ?? null);
+  const categories = [
+    "Semua Pertanyaan",
+    ...new Set(faqs.map((faq) => faq.category)),
+  ];
 
   const filteredFaqs = activeCategory === "Semua Pertanyaan" 
-    ? faqData 
-    : faqData.filter(faq => faq.category === activeCategory);
+    ? faqs
+    : faqs.filter(faq => faq.category === activeCategory);
 
-  const toggleAccordion = (id: number) => {
+  const toggleAccordion = (id: string) => {
     setOpenId(openId === id ? null : id);
   };
 
@@ -72,7 +36,7 @@ export const FAQSection = () => {
                   : "bg-transparent text-gray-600 border-gray-300 hover:bg-gray-100"
               }`}
             >
-              {cat} {cat === "Semua Pertanyaan" && "(5)"}
+              {cat} {cat === "Semua Pertanyaan" && `(${faqs.length})`}
             </button>
           ))}
         </div>
@@ -106,11 +70,6 @@ export const FAQSection = () => {
                     
                     {/* Tags */}
                     <div className="flex flex-wrap gap-2 mt-6">
-                      {faq.tags.map((tag, tIdx) => (
-                        <span key={tIdx} className="text-[9px] font-mono bg-teal-50 text-teal-800 px-2 py-1 border border-teal-100 uppercase tracking-wider">
-                          {tag}
-                        </span>
-                      ))}
                       <span className="text-[9px] font-mono text-gray-500 px-2 py-1">
                         Kategori: {faq.category}
                       </span>

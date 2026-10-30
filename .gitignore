@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 public/videos/river.mp4
+
+# Local Living Lab CMS content and uploads
+/.livinglab/
+/public/uploads/

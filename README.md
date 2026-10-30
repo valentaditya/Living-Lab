@@ -18,7 +18,24 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Admin Living Lab
+
+Buka `/login` untuk masuk ke panel admin. Kredensial lokal bawaan adalah
+`admin` / `admin`. Dashboard tersedia di `/dashboard` dan dilindungi sesi
+server-side.
+
+Panel admin tahap awal dapat mengubah judul/deskripsi beranda, berita, agenda,
+FAQ, serta mengunggah gambar dan PDF (maksimal 10 MB). Konten tersimpan di
+`.livinglab/content.json`, sedangkan file unggahan disimpan di
+`public/uploads/`. Riwayat login/logout, perubahan konten, dan unggahan media
+dicatat di `.livinglab/activity.jsonl`. Ketiga lokasi tersebut diabaikan Git.
+
+Untuk produksi, atur `LIVING_LAB_USERNAME`, `LIVING_LAB_PASSWORD`, dan
+`LIVING_LAB_AUTH_SECRET` (minimal 32 karakter). Gunakan server dengan
+penyimpanan disk persisten atau pindahkan penyimpanan konten/media ke database
+dan object storage sebelum memakai panel di lingkungan serverless.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
 

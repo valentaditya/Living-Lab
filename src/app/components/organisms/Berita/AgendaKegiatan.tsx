@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const AgendaKegiatan = () => {
+export const AgendaKegiatan = ({ subsection = false }: { subsection?: boolean }) => {
   const agendaData = [
     {
       day: "28", month: "FEB", year: "2025",
@@ -29,10 +29,16 @@ export const AgendaKegiatan = () => {
   ];
 
   return (
-    <section className="py-20 bg-[#f4f5f3] border-t border-gray-200">
-      <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+    <section
+      className={
+        subsection
+          ? "mt-10 border-t border-[#e5ebe4] pt-8"
+          : "py-20 bg-[#f4f5f3] border-t border-gray-200"
+      }
+    >
+      <div className={subsection ? "" : "container mx-auto px-4 lg:px-8 max-w-7xl"}>
         
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+        {!subsection && <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div>
             <span className="text-[10px] font-mono text-gray-500 tracking-widest block mb-2">[ SEKSI 02 // AGENDA & AKSI ]</span>
             <h2 className="text-3xl lg:text-4xl font-semibold text-[#0f1713]">Agenda & Kegiatan Terjadwal</h2>
@@ -40,7 +46,7 @@ export const AgendaKegiatan = () => {
           <p className="text-gray-500 text-sm max-w-md text-left md:text-right">
             Terbuka untuk akademisi, relawan mahasiswa, masyarakat umum, dan komunitas peduli sungai di Yogyakarta.
           </p>
-        </div>
+        </div>}
 
         <div className="flex flex-col gap-6">
           {agendaData.map((agenda, idx) => (

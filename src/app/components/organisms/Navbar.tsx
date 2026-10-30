@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation'; 
+import Link from 'next/link';
 import { BrandLogo } from '../molecules/BrandLogo';
 import { NavigationMenu } from './NavigationMenu'; 
 import { ButtonCTA } from '../molecules/ButonCta';
@@ -80,6 +81,12 @@ export const Navbar: React.FC = () => {
         <NavigationMenu />
 
         <div className="flex items-center gap-4">
+          <Link
+            href="/login"
+            className="rounded-full border border-white/35 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
+          >
+            Masuk
+          </Link>
           <div className="hidden md:block">
             <ButtonCTA text="Menjadi Mitra" />
           </div>

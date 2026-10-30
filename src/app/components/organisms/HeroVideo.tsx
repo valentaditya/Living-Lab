@@ -1,7 +1,12 @@
 import React from 'react';
 import { ButtonBase } from '../atoms/ButtonBase';
 
-export const HeroVideo: React.FC = () => {
+interface HeroVideoProps {
+    title?: string;
+    description?: string;
+}
+
+export const HeroVideo: React.FC<HeroVideoProps> = ({ title, description }) => {
     return (
         <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
 
@@ -20,12 +25,11 @@ export const HeroVideo: React.FC = () => {
             <div className="absolute inset-0 bg-black/60 -z-10"></div>
             <div className="relative z-10 text-center px-4 flex flex-col items-center">
                 <h1 className="text-white text-4xl md:text-6xl max-w-6xl font-bold mb-4 drop-shadow-md leading-snug">
-                    Memulihkan Sungai, Memberdayakan
-                    Masyarakat.
+                    {title ?? "Memulihkan Sungai, Memberdayakan Masyarakat."}
                 </h1>
                 <p className="text-gray-200 text-lg md:text-xl max-w-3xl drop-shadow-md">
-                    Riset berbasis sains dan aksi warga kolaboratif untuk masa depan ekosistem
-                    sungai yang berkelanjutan.
+                    {description ??
+                        "Riset berbasis sains dan aksi warga kolaboratif untuk masa depan ekosistem sungai yang berkelanjutan."}
                 </p>
                 <div className='mt-10'>
                     <ButtonBase className='py-3.5 text-sm font-semibold hover:scale-105 cursor-pointer'>Terlibat Sekarang</ButtonBase>
