@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   const navigasiLinks = [
@@ -26,8 +27,14 @@ export default function Footer() {
           {/* Column 1: Brand & Description */}
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
-                <span className="text-[#0f172a] text-xs font-bold">LL</span>
+              <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center p-1">
+                <Image
+                  src="/pictures/icon.png"
+                  alt=""
+                  width={512}
+                  height={512}
+                  className="h-full w-full object-contain"
+                />
               </div>
               <span className="font-semibold text-lg tracking-tight leading-tight">
                 Living Lab Sungai<br />Yogyakarta

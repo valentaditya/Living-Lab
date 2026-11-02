@@ -78,7 +78,13 @@ function SaveButton({ saving }: { saving: boolean }) {
   );
 }
 
-export function CMSAdminEditor({ section }: { section: Section }) {
+export function CMSAdminEditor({
+  section,
+  initialTab = "news",
+}: {
+  section: Section;
+  initialTab?: "news" | "agenda";
+}) {
   const [content, setContent] = useState<CMSContent | null>(null);
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [logs, setLogs] = useState<ActivityLogEntry[]>([]);
@@ -89,7 +95,7 @@ export function CMSAdminEditor({ section }: { section: Section }) {
   const [articleDraft, setArticleDraft] = useState<Article>(emptyArticle);
   const [agendaDraft, setAgendaDraft] = useState<AgendaItem>(emptyAgenda);
   const [activeContentTab, setActiveContentTab] = useState<"news" | "agenda">(
-    "news",
+    initialTab,
   );
   const [faqDraft, setFaqDraft] = useState<FAQItem>(emptyFAQ);
   const [uploading, setUploading] = useState(false);

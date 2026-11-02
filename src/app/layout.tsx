@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   title: "Living Lab Sungai Yogyakarta",
   description:
     "Riset berbasis sains dan aksi warga kolaboratif untuk masa depan ekosistem sungai yang berkelanjutan.",
+  icons: {
+    icon: "/pictures/icon.png",
+    shortcut: "/pictures/icon.png",
+    apple: "/pictures/icon.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

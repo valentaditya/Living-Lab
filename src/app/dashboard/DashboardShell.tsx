@@ -1,18 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   CalendarDays,
-  ChevronLeft,
+  ChevronRight,
   CircleHelp,
   FileText,
   Images,
   LayoutDashboard,
   ListChecks,
   Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
   Settings2,
-  Waves,
   X,
 } from "lucide-react";
 import { useState } from "react";
@@ -40,52 +42,102 @@ const groups = [
   },
 ];
 
+const pageNames: Record<string, string> = {
+  "/dashboard": "Dashboard",
+  "/dashboard/homepage": "Beranda",
+  "/dashboard/news": "Berita & Agenda",
+  "/dashboard/faq": "FAQ",
+  "/dashboard/media": "Pustaka Media",
+  "/dashboard/logs": "Log Aktivitas",
+};
+
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const pageName =
+    pageNames[pathname] ??
+    Object.entries(pageNames).find(
+      ([path]) => path !== "/dashboard" && pathname.startsWith(path),
+    )?.[1] ??
+    "Dashboard";
 
   return (
-    <div className="min-h-screen bg-[#f5f7f3] font-sans text-[#18271e]">
+    <div className="min-h-screen bg-[#F5F7F4] font-sans text-[#26372D]">
       {sidebarOpen && (
         <button
           aria-label="Tutup menu"
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-40 bg-[#10281f]/40 lg:hidden"
+          className="fixed inset-0 z-40 bg-[#1E3528]/40 backdrop-blur-[2px] lg:hidden"
         />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[270px] flex-col border-r border-[#e5ebe4] bg-white transition-transform lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-[250px] flex-col border-r border-[#E3E9E2] bg-white transition-[width,transform] duration-200 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } ${
+          sidebarCollapsed
+            ? "lg:w-[76px] lg:translate-x-0"
+            : "lg:w-[250px] lg:translate-x-0"
         }`}
       >
-        <div className="flex h-[76px] items-center justify-between border-b border-[#edf0ec] px-5">
-          <Link href="/dashboard" className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8efe7] text-[#416d50]">
-              <Waves size={21} />
+        <div
+          className={`flex h-[72px] shrink-0 items-center border-b border-[#EDF1ED] ${
+            sidebarCollapsed
+              ? "justify-center px-2"
+              : "justify-between px-4"
+          }`}
+        >
+          <Link
+            href="/dashboard"
+            title={sidebarCollapsed ? "Living Lab — Dashboard" : undefined}
+            className={`flex min-w-0 items-center ${
+              sidebarCollapsed ? "justify-center" : "gap-3"
+            }`}
+          >
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white p-1.5 ring-1 ring-[#E3E9E2]">
+              <Image
+                src="/pictures/icon.png"
+                alt=""
+                width={512}
+                height={512}
+                className="h-full w-full object-contain"
+              />
             </span>
-            <span>
-              <span className="block text-sm font-semibold">Living Lab</span>
-              <span className="text-[10px] tracking-wide text-[#849087]">
-                PANEL ADMIN
+            {!sidebarCollapsed && (
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-semibold text-[#1E3528]">
+                  Living Lab Sungai
+                </span>
+                <span className="text-[10px] font-medium tracking-[0.1em] text-[#7A887E]">
+                  PANEL ADMIN
+                </span>
               </span>
-            </span>
+            )}
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
             aria-label="Tutup menu"
-            className="text-[#829087] lg:hidden"
+            className="rounded-lg p-2 text-[#7A887E] transition hover:bg-[#F3F6F3] lg:hidden"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
-        <nav className="flex-1 space-y-7 overflow-y-auto px-3 py-6">
+        <nav
+          aria-label="Navigasi dashboard"
+          className={`flex-1 space-y-6 overflow-y-auto py-6 ${
+            sidebarCollapsed ? "px-2" : "px-3"
+          }`}
+        >
           {groups.map((group) => (
             <div key={group.title}>
-              <p className="px-3 text-[10px] font-semibold tracking-[0.16em] text-[#9aa49c]">
-                {group.title}
-              </p>
-              <div className="mt-2 space-y-1">
+              {!sidebarCollapsed && (
+                <p className="px-3 text-[10px] font-semibold tracking-[0.15em] text-[#96A198]">
+                  {group.title}
+                </p>
+              )}
+              <div className={`${sidebarCollapsed ? "mt-0" : "mt-2"} space-y-1`}>
                 {group.items.map(({ label, href, icon: Icon }) => {
                   const active =
                     pathname === href ||
@@ -95,14 +147,20 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                       key={href}
                       href={href}
                       onClick={() => setSidebarOpen(false)}
-                      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                      title={sidebarCollapsed ? label : undefined}
+                      aria-current={active ? "page" : undefined}
+                      className={`flex items-center rounded-xl text-sm font-medium outline-none transition focus-visible:ring-4 focus-visible:ring-[#315C40]/15 ${
+                        sidebarCollapsed
+                          ? "justify-center px-0 py-3"
+                          : "gap-3 px-3 py-2.5"
+                      } ${
                         active
-                          ? "bg-[#edf3ec] text-[#315b3d]"
-                          : "text-[#68766d] hover:bg-[#f6f8f5] hover:text-[#315b3d]"
+                          ? "bg-[#EAF1EA] text-[#315C40]"
+                          : "text-[#68766D] hover:bg-[#F5F8F5] hover:text-[#315C40]"
                       }`}
                     >
-                      <Icon size={18} strokeWidth={1.8} />
-                      {label}
+                      <Icon size={18} strokeWidth={1.8} aria-hidden="true" />
+                      {!sidebarCollapsed && label}
                     </Link>
                   );
                 })}
@@ -111,43 +169,142 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           ))}
         </nav>
 
-        <div className="border-t border-[#edf0ec] p-4">
+        <div
+          className={`shrink-0 border-t border-[#EDF1ED] py-4 ${
+            sidebarCollapsed ? "px-2" : "px-3"
+          }`}
+        >
           <Link
             href="/"
-            className="mb-3 flex items-center gap-2 px-2 py-2 text-xs text-[#6f7d73] hover:text-[#315b3d]"
+            title={sidebarCollapsed ? "Kembali ke situs" : undefined}
+            className={`mb-3 flex items-center rounded-xl py-2.5 text-xs font-medium text-[#68766D] outline-none transition hover:bg-[#F5F8F5] hover:text-[#315C40] focus-visible:ring-4 focus-visible:ring-[#315C40]/15 ${
+              sidebarCollapsed ? "justify-center px-0" : "gap-2 px-3"
+            }`}
           >
-            <ChevronLeft size={15} /> Kembali ke situs
+            <ChevronRight
+              size={16}
+              className="rotate-180"
+              aria-hidden="true"
+            />
+            {!sidebarCollapsed && "Kembali ke situs"}
           </Link>
-          <div className="flex items-center justify-between rounded-xl bg-[#f7f9f6] p-3">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#dfeade] text-xs font-semibold text-[#416d50]">
+          <div
+            className={`flex items-center ${
+              sidebarCollapsed
+                ? "flex-col gap-3"
+                : "justify-between rounded-xl bg-[#F5F7F4] p-2.5"
+            }`}
+          >
+            <div
+              className={`flex min-w-0 items-center ${
+                sidebarCollapsed ? "justify-center" : "gap-2.5"
+              }`}
+              title="Admin"
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#E3EEE3] text-xs font-semibold text-[#315C40]">
                 A
               </div>
-              <span className="text-xs font-medium text-[#526157]">Admin</span>
+              {!sidebarCollapsed && (
+                <span className="min-w-0">
+                  <span className="block text-xs font-semibold text-[#43564A]">
+                    Admin
+                  </span>
+                  <span className="block text-[10px] text-[#87938A]">
+                    Pengelola situs
+                  </span>
+                </span>
+              )}
             </div>
-            <LogoutButton />
+            <LogoutButton compact={sidebarCollapsed} />
           </div>
         </div>
       </aside>
 
-      <div className="lg:pl-[270px]">
-        <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#e5ebe4] bg-white/95 px-5 backdrop-blur sm:px-8">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            aria-label="Buka menu"
-            className="text-[#416d50] lg:hidden"
-          >
-            <Menu size={22} />
-          </button>
-          <div className="hidden items-center gap-2 text-xs text-[#849087] sm:flex">
-            <FileText size={15} /> Sistem pengelolaan konten
+      <div
+        className={`min-h-screen transition-[padding] duration-200 ${
+          sidebarCollapsed ? "lg:pl-[76px]" : "lg:pl-[250px]"
+        }`}
+      >
+        <header className="sticky top-0 z-30 flex h-[68px] items-center justify-between border-b border-[#E3E9E2] bg-white/95 px-4 backdrop-blur sm:px-7">
+          <div className="flex min-w-0 items-center gap-3">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Buka menu"
+              className="rounded-lg p-2 text-[#52735B] transition hover:bg-[#F2F6F2] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#315C40]/15 lg:hidden"
+            >
+              <Menu size={20} />
+            </button>
+            <button
+              onClick={() => setSidebarCollapsed((collapsed) => !collapsed)}
+              aria-label={
+                sidebarCollapsed ? "Perluas sidebar" : "Ciutkan sidebar"
+              }
+              aria-expanded={!sidebarCollapsed}
+              className="hidden rounded-lg p-2 text-[#52735B] transition hover:bg-[#F2F6F2] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#315C40]/15 lg:block"
+            >
+              {sidebarCollapsed ? (
+                <PanelLeftOpen size={19} />
+              ) : (
+                <PanelLeftClose size={19} />
+              )}
+            </button>
+            <div className="flex min-w-0 items-center gap-2 text-sm">
+              <span className="hidden text-[#87938A] sm:inline">
+                Panel Admin
+              </span>
+              <ChevronRight
+                size={14}
+                className="hidden text-[#A6B0A8] sm:block"
+                aria-hidden="true"
+              />
+              <span className="truncate font-medium text-[#314438]">
+                {pageName}
+              </span>
+            </div>
           </div>
-          <div className="ml-auto flex items-center gap-2 text-xs text-[#6f7d73]">
-            <span className="h-2 w-2 rounded-full bg-[#69a477]" />
-            Admin aktif
+          <div className="relative ml-3">
+            <button
+              type="button"
+              onClick={() => setProfileOpen((open) => !open)}
+              aria-expanded={profileOpen}
+              className="flex items-center gap-2 rounded-xl p-1.5 pr-2.5 outline-none transition hover:bg-[#F5F7F4] focus-visible:ring-4 focus-visible:ring-[#315C40]/15"
+            >
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E3EEE3] text-xs font-semibold text-[#315C40]">
+                A
+              </span>
+              <span className="hidden text-left sm:block">
+                <span className="block text-xs font-semibold text-[#314438]">
+                  Admin
+                </span>
+                <span className="block text-[10px] text-[#87938A]">
+                  Pengelola
+                </span>
+              </span>
+            </button>
+            {profileOpen && (
+              <>
+                <button
+                  type="button"
+                  aria-label="Tutup menu profil"
+                  onClick={() => setProfileOpen(false)}
+                  className="fixed inset-0 z-30 cursor-default"
+                />
+                <div className="absolute right-0 top-full z-40 mt-2 w-52 rounded-xl border border-[#E3E9E2] bg-white p-3 shadow-[0_12px_32px_rgba(30,53,40,0.12)]">
+                  <p className="px-2 py-1 text-xs font-semibold text-[#314438]">
+                    Admin
+                  </p>
+                  <p className="px-2 pb-2 text-[11px] text-[#7A887E]">
+                    Pengelola situs Living Lab
+                  </p>
+                  <div className="border-t border-[#EDF1ED] pt-2">
+                    <LogoutButton />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </header>
-        <main className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
+        <main className="mx-auto w-full max-w-[1440px] px-4 py-7 sm:px-7 sm:py-9 lg:px-10">
           {children}
         </main>
       </div>
