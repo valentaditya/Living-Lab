@@ -15,6 +15,7 @@ import {
   SearchField,
   useDebouncedValue,
 } from "./ListControls";
+import { EditorSkeleton, LogTableSkeleton, MediaGridSkeleton } from "./Skeletons";
 
 type Section = "homepage" | "news" | "faq" | "media" | "logs";
 type MediaFile = { name: string; url: string; size: number; updatedAt?: string };
@@ -344,7 +345,7 @@ export function CMSAdminEditor({
   }
 
   if (loading) {
-    return <p className="text-sm text-[#718076]">Memuat konten...</p>;
+    return <EditorSkeleton section={section} newsTab={activeContentTab} />;
   }
 
   if (error && section !== "logs" && !content) {
@@ -402,9 +403,11 @@ export function CMSAdminEditor({
             placeholder="Cari aktivitas, detail, atau email"
             label="Cari log aktivitas"
           />
-          {logsLoading && <span className="text-xs text-[#87938a]">Memuat...</span>}
+          {logsLoading && logs.length > 0 && <span className="text-xs text-[#87938a]">Memuat...</span>}
         </div>
-        {logs.length === 0 && !logsLoading ? (
+        {logsLoading && logs.length === 0 ? (
+          <LogTableSkeleton />
+        ) : logs.length === 0 ? (
           debouncedLogsQuery ? (
             <NoResults
               query={debouncedLogsQuery}
@@ -741,9 +744,11 @@ export function CMSAdminEditor({
               ))}
             </div>
           </div>
-          {mediaLoading && <span className="text-xs text-[#87938a]">Memuat...</span>}
+          {mediaLoading && media.length > 0 && <span className="text-xs text-[#87938a]">Memuat...</span>}
         </div>
-        {media.length === 0 && !mediaLoading ? (
+        {mediaLoading && media.length === 0 ? (
+          <MediaGridSkeleton />
+        ) : media.length === 0 ? (
           debouncedMediaQuery || mediaType !== "all" ? (
             <NoResults
               query={debouncedMediaQuery || mediaTypeFilters.find((filter) => filter.id === mediaType)?.label || ""}
