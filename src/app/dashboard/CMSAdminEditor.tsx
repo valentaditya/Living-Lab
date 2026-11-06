@@ -16,6 +16,21 @@ import {
   useDebouncedValue,
 } from "./ListControls";
 import { EditorSkeleton, LogTableSkeleton, MediaGridSkeleton } from "./Skeletons";
+import { StatusBadge } from "../components/atoms/StatusBadge";
+import {
+  agendaToDateInput,
+  dateInputToAgenda,
+  formatTimeRange,
+  joinMonthLabel,
+  LINK_PATTERN,
+  minutesToReadTime,
+  MONTHS,
+  parseTimeRange,
+  readTimeToMinutes,
+  splitMonthLabel,
+  suggestions,
+  TIME_ZONES,
+} from "./fieldFormats";
 
 type Section = "homepage" | "news" | "faq" | "media" | "logs";
 type MediaFile = { name: string; url: string; size: number; updatedAt?: string };
@@ -33,6 +48,34 @@ const mediaTypeFilters: { id: MediaType; label: string }[] = [
   { id: "image", label: "Gambar" },
   { id: "pdf", label: "PDF" },
 ];
+
+const tagColorOptions: { value: AgendaItem["tagColor"]; label: string }[] = [
+  { value: "green", label: "Hijau" },
+  { value: "orange", label: "Oranye" },
+  { value: "blue", label: "Biru" },
+];
+
+const currentYear = new Date().getFullYear();
+const yearOptions = Array.from({ length: 14 }, (_, index) => String(currentYear + 2 - index));
+
+/** Daftar saran untuk input teks (muncul saat mengetik). */
+function Suggestions({ id, values }: { id: string; values: string[] }) {
+  return (
+    <datalist id={id}>
+      {values.map((value) => (
+        <option key={value} value={value} />
+      ))}
+    </datalist>
+  );
+}
+
+function CharacterCount({ value, max }: { value: string; max: number }) {
+  return (
+    <span className="mt-1 block text-right text-[11px] font-normal text-[#9aa49c]">
+      {value.length}/{max}
+    </span>
+  );
+}
 
 const imageFilePattern = /\.(jpe?g|png|webp|gif)$/i;
 
@@ -58,7 +101,7 @@ const emptyArticle: Article = {
   summary: "",
   author: "",
   actionText: "Baca Selengkapnya",
-  actionHref: "#",
+  actionHref: "",
 };
 
 const emptyAgenda: AgendaItem = {
@@ -501,6 +544,7 @@ export function CMSAdminEditor({
               }
               className={inputClass}
             />
+            <CharacterCount value={content.settings.heroTitle} max={180} />
           </label>
           <label className={labelClass}>
             Deskripsi
@@ -520,6 +564,7 @@ export function CMSAdminEditor({
               }
               className={inputClass}
             />
+            <CharacterCount value={content.settings.heroDescription} max={500} />
           </label>
           <div className="flex justify-end">
             <SaveButton saving={saving} />
@@ -562,6 +607,7 @@ export function CMSAdminEditor({
             Pertanyaan
             <input
               required
+              maxLength={300}
               value={faqDraft.question}
               onChange={(event) =>
                 setFaqDraft({ ...faqDraft, question: event.target.value })
@@ -589,9 +635,12 @@ export function CMSAdminEditor({
               onChange={(event) =>
                 setFaqDraft({ ...faqDraft, category: event.target.value })
               }
-              placeholder="Contoh: Data & Akses"
+              list="faq-categories"
+              autoComplete="off"
+              placeholder="Pilih atau ketik kategori, mis. Data & Akses"
               className={inputClass}
             />
+            <Suggestions id="faq-categories" values={suggestions(content.faqs.map((faq) => faq.category))} />
           </label>
           <div className="flex justify-end gap-2">
             {editing && (
@@ -841,6 +890,8 @@ export function CMSAdminEditor({
 
   const editingArticle = articleDraft.id !== "";
   const editingAgenda = agendaDraft.id !== "";
+  const articleMonth = splitMonthLabel(articleDraft.date);
+  const agendaTime = parseTimeRange(agendaDraft.time);
   const newsList = paginate(
     content.articles.filter((article) =>
       matchesQuery(
@@ -915,8 +966,10 @@ export function CMSAdminEditor({
       <form
         onSubmit={async (event) => {
           event.preventDefault();
-          const nextArticle = {
-            ...articleDraft,
+          const { actionHref, ...article } = articleDraft;
+          const nextArticle: Article = {
+            ...article,
+            ...(actionHref?.trim() ? { actionHref: actionHref.trim() } : {}),
             id: articleDraft.id || crypto.randomUUID(),
           };
           const articles = editingArticle
@@ -935,10 +988,11 @@ export function CMSAdminEditor({
           {editingArticle ? "Ubah berita" : "Tambah berita"}
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className={labelClass}>
+          <label className={`${labelClass} sm:col-span-2`}>
             Judul
             <input
               required
+              maxLength={200}
               value={articleDraft.title}
               onChange={(event) =>
                 setArticleDraft({ ...articleDraft, title: event.target.value })
@@ -947,61 +1001,16 @@ export function CMSAdminEditor({
             />
           </label>
           <label className={labelClass}>
-            Gambar (URL media)
-            <input
-              required
-              value={articleDraft.image}
-              onChange={(event) =>
-                setArticleDraft({ ...articleDraft, image: event.target.value })
-              }
-              placeholder="/uploads/nama-file.jpg"
-              className={inputClass}
-            />
-          </label>
-          {imageOptions.length > 0 && (
-            <label className={labelClass}>
-              Atau pilih gambar dari pustaka media
-              <select
-                value=""
-                onChange={(event) => {
-                  if (event.target.value) {
-                    setArticleDraft({
-                      ...articleDraft,
-                      image: event.target.value,
-                    });
-                  }
-                }}
-                className={inputClass}
-              >
-                <option value="">Pilih gambar</option>
-                {imageOptions.map((file) => (
-                  <option key={file.name} value={file.url}>
-                    {file.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
-          <label className={labelClass}>
             Kategori
             <input
               required
+              list="article-categories"
+              autoComplete="off"
               value={articleDraft.category}
               onChange={(event) =>
                 setArticleDraft({ ...articleDraft, category: event.target.value })
               }
-              className={inputClass}
-            />
-          </label>
-          <label className={labelClass}>
-            Tanggal
-            <input
-              required
-              value={articleDraft.date}
-              onChange={(event) =>
-                setArticleDraft({ ...articleDraft, date: event.target.value })
-              }
-              placeholder="Okt 2026"
+              placeholder="Pilih atau ketik, mis. Riset Lapangan"
               className={inputClass}
             />
           </label>
@@ -1009,37 +1018,191 @@ export function CMSAdminEditor({
             Tag / wilayah
             <input
               required
+              list="article-tags"
+              autoComplete="off"
               value={articleDraft.tag}
               onChange={(event) =>
                 setArticleDraft({ ...articleDraft, tag: event.target.value })
               }
+              placeholder="mis. DAS Winongo"
               className={inputClass}
             />
           </label>
+          <div className={labelClass}>
+            Bulan terbit
+            <div className="grid grid-cols-[minmax(0,1fr)_110px] gap-2">
+              <select
+                required
+                aria-label="Bulan terbit"
+                value={articleMonth.month}
+                onChange={(event) =>
+                  setArticleDraft({
+                    ...articleDraft,
+                    date: joinMonthLabel(event.target.value, articleMonth.year || String(currentYear)),
+                  })
+                }
+                className={inputClass}
+              >
+                <option value="">Pilih bulan</option>
+                {MONTHS.map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+              <select
+                required
+                aria-label="Tahun terbit"
+                value={articleMonth.year}
+                onChange={(event) =>
+                  setArticleDraft({
+                    ...articleDraft,
+                    date: joinMonthLabel(articleMonth.month || MONTHS[new Date().getMonth()], event.target.value),
+                  })
+                }
+                className={inputClass}
+              >
+                <option value="">Tahun</option>
+                {yearOptions.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
           <label className={labelClass}>
+            Waktu baca (menit)
+            <input
+              required
+              type="number"
+              min={1}
+              max={180}
+              inputMode="numeric"
+              value={readTimeToMinutes(articleDraft.readTime)}
+              onChange={(event) =>
+                setArticleDraft({ ...articleDraft, readTime: minutesToReadTime(event.target.value) })
+              }
+              placeholder="5"
+              className={inputClass}
+            />
+          </label>
+          <label className={`${labelClass} sm:col-span-2`}>
             Penulis
             <input
               required
+              list="article-authors"
+              autoComplete="off"
               value={articleDraft.author}
               onChange={(event) =>
                 setArticleDraft({ ...articleDraft, author: event.target.value })
               }
+              placeholder="Nama penulis atau tim"
               className={inputClass}
             />
           </label>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_160px]">
+          <div className="space-y-4">
+            <label className={labelClass}>
+              Gambar (URL)
+              <input
+                required
+                value={articleDraft.image}
+                onChange={(event) =>
+                  setArticleDraft({ ...articleDraft, image: event.target.value })
+                }
+                pattern={LINK_PATTERN}
+                title="Awali dengan / untuk file di situs, atau https:// untuk gambar dari luar"
+                placeholder="https://… atau /pictures/nama-file.jpg"
+                className={inputClass}
+              />
+            </label>
+            {imageOptions.length > 0 && (
+              <label className={labelClass}>
+                Atau pilih dari pustaka media
+                <select
+                  value=""
+                  onChange={(event) => {
+                    if (event.target.value) {
+                      setArticleDraft({ ...articleDraft, image: event.target.value });
+                    }
+                  }}
+                  className={inputClass}
+                >
+                  <option value="">Pilih gambar</option>
+                  {imageOptions.map((file) => (
+                    <option key={file.name} value={file.url}>
+                      {file.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+          </div>
+          <div className={labelClass}>
+            Pratinjau
+            <div className="relative mt-1.5 h-28 overflow-hidden rounded-xl border border-[#dce4dc] bg-[#f3f5f2]">
+              {/^(\/(?!\/)|https?:\/\/.+)/.test(articleDraft.image) ? (
+                <img src={articleDraft.image} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <span className="flex h-full items-center justify-center text-[11px] text-[#9aa49c]">
+                  Belum ada gambar
+                </span>
+              )}
+            </div>
+          </div>
         </div>
         <label className={labelClass}>
           Ringkasan
           <textarea
             required
             rows={3}
+            maxLength={500}
             value={articleDraft.summary}
             onChange={(event) =>
               setArticleDraft({ ...articleDraft, summary: event.target.value })
             }
             className={inputClass}
           />
+          <CharacterCount value={articleDraft.summary} max={500} />
         </label>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className={labelClass}>
+            Teks tombol
+            <input
+              required
+              list="article-action-texts"
+              autoComplete="off"
+              maxLength={40}
+              value={articleDraft.actionText}
+              onChange={(event) =>
+                setArticleDraft({ ...articleDraft, actionText: event.target.value })
+              }
+              className={inputClass}
+            />
+          </label>
+          <label className={labelClass}>
+            Tautan artikel (opsional)
+            <input
+              value={articleDraft.actionHref ?? ""}
+              onChange={(event) =>
+                setArticleDraft({ ...articleDraft, actionHref: event.target.value })
+              }
+              pattern={LINK_PATTERN}
+              title="Awali dengan / untuk halaman di situs, atau https:// untuk tautan luar"
+              placeholder="/berita/judul-artikel"
+              className={inputClass}
+            />
+          </label>
+        </div>
+        <Suggestions id="article-categories" values={suggestions(content.articles.map((item) => item.category))} />
+        <Suggestions id="article-tags" values={suggestions(content.articles.map((item) => item.tag))} />
+        <Suggestions id="article-authors" values={suggestions(content.articles.map((item) => item.author))} />
+        <Suggestions
+          id="article-action-texts"
+          values={suggestions(content.articles.map((item) => item.actionText), ["Baca Selengkapnya", "Baca Artikel", "Baca Abstrak"])}
+        />
         <div className="flex justify-end gap-2">
           {editingArticle && (
             <button
@@ -1151,10 +1314,11 @@ export function CMSAdminEditor({
           {editingAgenda ? "Ubah agenda" : "Tambah agenda"}
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className={labelClass}>
+          <label className={`${labelClass} sm:col-span-2`}>
             Nama kegiatan
             <input
               required
+              maxLength={200}
               value={agendaDraft.title}
               onChange={(event) =>
                 setAgendaDraft({ ...agendaDraft, title: event.target.value })
@@ -1163,38 +1327,77 @@ export function CMSAdminEditor({
             />
           </label>
           <label className={labelClass}>
+            Tanggal
+            <input
+              required
+              type="date"
+              value={agendaToDateInput(agendaDraft.month, agendaDraft.day)}
+              onChange={(event) =>
+                setAgendaDraft({ ...agendaDraft, ...dateInputToAgenda(event.target.value) })
+              }
+              className={inputClass}
+            />
+          </label>
+          <fieldset className="min-w-0">
+            <legend className={labelClass}>Jam</legend>
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_82px] items-center gap-2">
+              <input
+                required
+                type="time"
+                aria-label="Jam mulai"
+                value={agendaTime.start}
+                onChange={(event) =>
+                  setAgendaDraft({
+                    ...agendaDraft,
+                    time: formatTimeRange(event.target.value, agendaTime.end, agendaTime.zone),
+                  })
+                }
+                className={inputClass}
+              />
+              <span className="mt-1.5 text-sm text-[#87938a]" aria-hidden="true">–</span>
+              <input
+                type="time"
+                aria-label="Jam selesai (opsional)"
+                min={agendaTime.start || undefined}
+                value={agendaTime.end}
+                onChange={(event) =>
+                  setAgendaDraft({
+                    ...agendaDraft,
+                    time: formatTimeRange(agendaTime.start, event.target.value, agendaTime.zone),
+                  })
+                }
+                className={inputClass}
+              />
+              <select
+                aria-label="Zona waktu"
+                value={agendaTime.zone}
+                onChange={(event) =>
+                  setAgendaDraft({
+                    ...agendaDraft,
+                    time: formatTimeRange(agendaTime.start, agendaTime.end, event.target.value),
+                  })
+                }
+                className={inputClass}
+              >
+                {TIME_ZONES.map((zone) => (
+                  <option key={zone} value={zone}>
+                    {zone}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </fieldset>
+          <label className={`${labelClass} sm:col-span-2`}>
             Lokasi
             <input
               required
+              list="agenda-locations"
+              autoComplete="off"
               value={agendaDraft.location}
               onChange={(event) =>
                 setAgendaDraft({ ...agendaDraft, location: event.target.value })
               }
-              className={inputClass}
-            />
-          </label>
-          <label className={labelClass}>
-            Bulan (3 huruf)
-            <input
-              required
-              maxLength={3}
-              value={agendaDraft.month}
-              onChange={(event) =>
-                setAgendaDraft({ ...agendaDraft, month: event.target.value.toUpperCase() })
-              }
-              placeholder="NOV"
-              className={inputClass}
-            />
-          </label>
-          <label className={labelClass}>
-            Tanggal
-            <input
-              required
-              value={agendaDraft.day}
-              onChange={(event) =>
-                setAgendaDraft({ ...agendaDraft, day: event.target.value })
-              }
-              placeholder="28"
+              placeholder="Gedung, kampus, atau tautan acara daring"
               className={inputClass}
             />
           </label>
@@ -1202,26 +1405,62 @@ export function CMSAdminEditor({
             Kategori kegiatan
             <input
               required
+              list="agenda-categories"
+              autoComplete="off"
               value={agendaDraft.tagLabel}
               onChange={(event) =>
                 setAgendaDraft({ ...agendaDraft, tagLabel: event.target.value })
               }
+              placeholder="mis. Forum Publik"
               className={inputClass}
             />
           </label>
+          <div className={labelClass}>
+            Warna label
+            <div className="flex items-center gap-3">
+              <select
+                aria-label="Warna label"
+                value={agendaDraft.tagColor}
+                onChange={(event) =>
+                  setAgendaDraft({
+                    ...agendaDraft,
+                    tagColor: event.target.value as AgendaItem["tagColor"],
+                  })
+                }
+                className={inputClass}
+              >
+                {tagColorOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <span className="mt-1.5 shrink-0">
+                <StatusBadge label={agendaDraft.tagLabel || "Contoh"} color={agendaDraft.tagColor} />
+              </span>
+            </div>
+          </div>
           <label className={labelClass}>
-            Waktu
+            Teks tombol
             <input
               required
-              value={agendaDraft.time}
+              list="agenda-buttons"
+              autoComplete="off"
+              maxLength={40}
+              value={agendaDraft.buttonText}
               onChange={(event) =>
-                setAgendaDraft({ ...agendaDraft, time: event.target.value })
+                setAgendaDraft({ ...agendaDraft, buttonText: event.target.value })
               }
-              placeholder="09:00 - 13:00 WIB"
               className={inputClass}
             />
           </label>
         </div>
+        <Suggestions id="agenda-locations" values={suggestions(content.agenda.map((item) => item.location))} />
+        <Suggestions id="agenda-categories" values={suggestions(content.agenda.map((item) => item.tagLabel))} />
+        <Suggestions
+          id="agenda-buttons"
+          values={suggestions(content.agenda.map((item) => item.buttonText), ["Daftar Gratis", "Ajukan Kehadiran", "Informasi"])}
+        />
         <div className="flex justify-end gap-2">
           {editingAgenda && (
             <button
