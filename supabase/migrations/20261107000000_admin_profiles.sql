@@ -78,3 +78,5 @@ create policy "avatars_own_delete" on storage.objects
     and (storage.foldername(name))[1] = (select auth.uid())::text
     and (select public.is_admin())
   );
+
+-- testing
