@@ -45,7 +45,6 @@ export const KondisiSosial = () => {
                 <span className="text-2xl font-bold text-[#0f1713]">12 Program Aktif</span>
                 <p className="text-xs text-gray-500 mt-2">Restorasi vegetasi riparian, bank sampah sirkular, dan pemantauan debit sungai.</p>
               </div>
-              <span className="text-teal-600 text-xl">🌱</span>
             </div>
             
             <div className="border border-gray-200 p-6 rounded-sm flex justify-between items-start">
@@ -54,7 +53,6 @@ export const KondisiSosial = () => {
                 <span className="text-2xl font-bold text-[#0f1713]">28 Komunitas</span>
                 <p className="text-xs text-gray-500 mt-2">Forum warga bantaran Kali Code, Winongo Asri, dan Gajahwong.</p>
               </div>
-              <span className="text-blue-600 text-xl">👥</span>
             </div>
 
             <div className="border border-gray-200 p-6 rounded-sm flex justify-between items-start">
@@ -63,7 +61,6 @@ export const KondisiSosial = () => {
                 <span className="text-2xl font-bold text-[#0f1713]">3 Sungai Dipantau</span>
                 <p className="text-xs text-gray-500 mt-2">Sensor kualitas air dan tinggi muka air berbasis IoT.</p>
               </div>
-              <span className="text-purple-600 text-xl">📡</span>
             </div>
           </div>
 

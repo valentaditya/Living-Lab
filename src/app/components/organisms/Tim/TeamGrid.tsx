@@ -12,8 +12,11 @@ export const TeamGrid = () => {
       quote: "Laboratorium sejati bukan berada di dalam ruang tertutup kampus, melainkan di bentaran kali dan obrolan warga.",
       focusLabel: "FOKUS UTAMA",
       focusValue: "Hidrologi Urban & Tata Kelola DAS",
+<<<<<<< Updated upstream
       pId: "P-ID: 881-UAJY",
       icon: "💧"
+=======
+>>>>>>> Stashed changes
     },
     {
       badge: "ECO-LAB / / 02",
@@ -24,8 +27,11 @@ export const TeamGrid = () => {
       quote: "Setiap mikroorganisme di aliran sungai adalah indikator kejujuran peradaban kota kita.",
       focusLabel: "FOKUS UTAMA",
       focusValue: "Bio-indikator Bentik & Kimia Sungai",
+<<<<<<< Updated upstream
       pId: "P-ID: 882-UAJY",
       icon: "🔬"
+=======
+>>>>>>> Stashed changes
     },
     {
       badge: "PAGUYUBAN / / CODE",
@@ -36,8 +42,12 @@ export const TeamGrid = () => {
       quote: "Sungai bukan tempat membuang masa lalu, melainkan halaman depan masa depan anak cucu kami.",
       focusLabel: "FOKUS UTAMA",
       focusValue: "Aksi Relawan & Edukasi Warga",
+<<<<<<< Updated upstream
       pId: "P-ID: 981-COMM",
       icon: "🤝"
+=======
+      
+>>>>>>> Stashed changes
     },
     {
       badge: "TELEMETRI / / IOT",
@@ -48,8 +58,12 @@ export const TeamGrid = () => {
       quote: "Teknologi sensor hanya bermakna jika datanya dipahami dan dijaga bersama oleh warga yang tinggal di tepiannya.",
       focusLabel: "FOKUS UTAMA",
       focusValue: "Telemetri LoRaWAN & Open Hardware",
+<<<<<<< Updated upstream
       pId: "P-ID: 883-DIY",
       icon: "📡"
+=======
+      
+>>>>>>> Stashed changes
     },
     {
       badge: "KONSERVASI / / WINONGO",
@@ -60,8 +74,11 @@ export const TeamGrid = () => {
       quote: "Mungkur kali dadi madhep kali: ketika sungai dihormati, bencana luapan berubah menjadi anugerah kehidupan.",
       focusLabel: "FOKUS UTAMA",
       focusValue: "Ruang Terbuka Hijau & Ekowisata",
+<<<<<<< Updated upstream
       pId: "P-ID: 982-COMM",
       icon: "🌿"
+=======
+>>>>>>> Stashed changes
     },
     {
       badge: "SPASIAL / / KEBIJAKAN",

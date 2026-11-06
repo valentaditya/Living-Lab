@@ -48,7 +48,7 @@ export const StoryContentHeader: React.FC<StoryContentHeaderProps> = ({
       <div className="space-y-4 max-w-4xl">
         <div className="inline-flex items-center gap-2 font-mono text-xs text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded">
           <Feather className="w-3.5 h-3.5" />
-          <span>Esei & Refleksi Warga Bantaran</span>
+          <span>Essay & Refleksi Warga Bantaran</span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 leading-[1.18] font-sans">

@@ -66,7 +66,7 @@ export const StoryArticleBody: React.FC<StoryArticleBodyProps> = ({ abstract }) 
             Dokumen & Catatan Terkait
           </span>
           <h4 className="font-semibold text-slate-900 text-base">
-            Unduh Laporan Lengkap Esei & Dokumentasi
+            Unduh Laporan Lengkap Essay & Dokumentasi
           </h4>
           <p className="text-xs text-slate-600 leading-relaxed">
             Dapatkan transkrip wawancara penuh dan galeri foto resolusi tinggi dalam bentuk dokumen PDF.

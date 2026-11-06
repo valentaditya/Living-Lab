@@ -48,13 +48,13 @@ const STORIES_MOCK: StoryItem[] = [
     id: 'str-4',
     code: 'STR-2026-04',
     category: 'Photo Essay',
-    title: 'Esei Foto: Wajah-Wajah di Balik Pelestarian Titik Nol Aliran Sungai Code',
+    title: 'Essay Foto: Wajah-Wajah di Balik Pelestarian Titik Nol Aliran Sungai Code',
     authorOrFigure: 'Dokumentasi Visual Living Lab',
     location: 'Koridor Code Tengah',
     abstract: 'Kumpulan potret hitam-putih dan berwarna yang merekam dinamika keseharian para penggerak komunitas, anak-anak, dan relawan di bantaran sungai.',
     date: 'Jul 2026',
     readTimeOrMedia: '12 Foto',
-    slug: 'esei-foto-titik-nol-code'
+    slug: 'essay-foto-titik-nol-code'
   },
   {
     id: 'str-5',
@@ -123,6 +123,7 @@ export default function KisahSungaiPage() {
       <main className="relative z-10 mx-auto px-6 sm:px-8 lg:px-12 pt-28 md:pt-36 pb-24 space-y-12">
         
         {/* Header */}
+<<<<<<< Updated upstream
         <header className="border-b border-slate-900/10 pb-8 space-y-4">
           <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-emerald-800">
             <span className="font-semibold">Pusat Narasi</span>
@@ -146,6 +147,15 @@ export default function KisahSungaiPage() {
               FOKUS NARASI: <span className="text-emerald-700 font-semibold">REFLEKTIF & HUMAN-CENTERED</span>
             </div>
           </div>
+=======
+        <header className="border-b border-slate-900/10 pb-8">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 font-sans">
+            Kisah & Refleksi Sungai
+          </h1>
+          <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed">
+            Mengeksplorasi ikatan mendalam antara manusia dan sungai melalui narasi human-centered, catatan lapangan, essay foto, serta dokumenter mini kehidupan bantaran.
+          </p>
+>>>>>>> Stashed changes
         </header>
 
         {/* Featured Organism */}

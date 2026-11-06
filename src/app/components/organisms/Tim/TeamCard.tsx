@@ -10,12 +10,19 @@ interface TeamCardProps {
   quote: string;
   focusLabel: string;
   focusValue: string;
+<<<<<<< Updated upstream
   pId: string;
   icon: string;
 }
 
 export const TeamCard: React.FC<TeamCardProps> = ({
   badge, image, role, name, title, quote, focusLabel, focusValue, pId, icon
+=======
+}
+
+export const TeamCard: React.FC<TeamCardProps> = ({
+  badge, image, role, name, title, quote, focusLabel, focusValue, 
+>>>>>>> Stashed changes
 }) => {
   return (
     <article className="bg-white border border-gray-200 rounded-sm flex flex-col h-full hover:shadow-lg transition-shadow duration-300">
@@ -54,7 +61,6 @@ export const TeamCard: React.FC<TeamCardProps> = ({
             <span>{pId}</span>
           </div>
           <div className="flex items-center gap-2 text-xs font-medium text-[#0f1713]">
-            <span>{icon}</span>
             <span>{focusValue}</span>
           </div>
         </div>

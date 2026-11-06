@@ -31,7 +31,7 @@ export const FeaturedStoryHero: React.FC<FeaturedStoryHeroProps> = ({ item }) =>
           <div className="space-y-5">
             <div className="inline-flex items-center gap-2 font-mono text-xs text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded">
               <Feather className="w-3.5 h-3.5" />
-              <span>Esei Naratif & Refleksi Warga</span>
+              <span>Essay Naratif & Refleksi Warga</span>
             </div>
 
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-slate-900 leading-[1.18] font-sans">
@@ -54,7 +54,7 @@ export const FeaturedStoryHero: React.FC<FeaturedStoryHeroProps> = ({ item }) =>
               href={`/kisah-sungai/${item.slug}`}
               className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-slate-900 hover:bg-emerald-800 text-white font-medium rounded-lg transition duration-200"
             >
-              <span>Baca Esei Lengkap</span>
+              <span>Baca Essay Lengkap</span>
               <ArrowDownRight className="w-4 h-4 stroke-[2.2]" />
             </Link>
           </div>
