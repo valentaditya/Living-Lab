@@ -4,8 +4,9 @@ import { HeroBerita } from '@/app/components/organisms/Berita/HeroBerita';
 import { BeritaAgendaTabs } from '@/app/components/organisms/Berita/BeritaAgendaTabs';
 import { getCMSContent } from '@/lib/cms-content';
 
-// Konten dari Supabase: halaman dirender ulang tiap 60 detik, dan langsung setelah admin menyimpan.
-export const revalidate = 60;
+// Konten dari Supabase dibaca di setiap kunjungan, jadi perubahan dari dashboard
+// langsung tampil (tanpa cache halaman di server maupun di browser).
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: 'Berita & Agenda | Living Lab Sungai Yogyakarta',

@@ -58,8 +58,8 @@ terdaftar di `admin_users` (dijaga Row Level Security di database).
    membuat akun.
 
 Lalu jalankan `npm run dev`, buka `/login`, dan masuk dengan email tersebut.
-Dashboard ada di `/dashboard`. Halaman publik membaca ulang konten tiap 60
-detik, dan langsung setelah admin menyimpan dari dashboard.
+Dashboard ada di `/dashboard`. Beranda, Berita, dan FAQ membaca konten dari
+Supabase di setiap kunjungan, jadi perubahan dari dashboard langsung tampil.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
