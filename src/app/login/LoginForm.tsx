@@ -8,7 +8,7 @@ import { ArrowRight, Eye, EyeOff, LoaderCircle, LockKeyhole } from "lucide-react
 
 export function LoginForm() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -23,7 +23,7 @@ export function LoginForm() {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
       const result: { message?: string; redirectTo?: string } =
         await response.json();
@@ -139,19 +139,21 @@ export function LoginForm() {
               <form onSubmit={handleSubmit} className="mt-7 space-y-5">
                 <div>
                   <label
-                    htmlFor="username"
+                    htmlFor="email"
                     className="mb-2 block text-sm font-medium text-[#314438]"
                   >
-                    Nama pengguna
+                    Email
                   </label>
                   <input
-                    id="username"
-                    name="username"
+                    id="email"
+                    name="email"
+                    type="email"
+                    inputMode="email"
                     autoComplete="username"
                     required
-                    value={username}
-                    onChange={(event) => setUsername(event.target.value)}
-                    placeholder="Masukkan nama pengguna"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    placeholder="Masukkan email admin"
                     className="h-[52px] w-full rounded-xl border border-[#DCE5DC] bg-white px-4 text-sm text-[#1E3528] outline-none transition placeholder:text-[#98A49B] hover:border-[#B9C9BB] focus:border-[#315C40] focus:ring-4 focus:ring-[#315C40]/10"
                   />
                 </div>

@@ -1,12 +1,20 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
-import { hasValidSession } from "@/lib/auth";
-import { getCMSContent, saveCMSContent } from "@/lib/cms-content";
+import { getAdminSession } from "@/lib/auth";
+import { getCMSContentStrict, saveCMSContent } from "@/lib/cms-content";
 import { writeActivityLog } from "@/lib/activity-log";
 import type { AgendaItem } from "@/types/agenda";
 import type { Article } from "@/types/article";
 import type { FAQItem } from "@/lib/cms-content";
 
 export const runtime = "nodejs";
+
+/** Halaman publik yang menampilkan konten CMS; dirender ulang setelah konten disimpan. */
+const publicPagesUsingContent = ["/", "/berita", "/tentang/faq"];
+
+function errorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "Terjadi kesalahan pada server.";
+}
 
 function isArticle(value: unknown): value is Article {
   if (!value || typeof value !== "object") return false;
@@ -65,14 +73,21 @@ function isFAQItem(value: unknown): value is FAQItem {
 }
 
 export async function GET() {
-  if (!(await hasValidSession())) {
+  const admin = await getAdminSession();
+  if (!admin) {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
   }
-  return NextResponse.json(await getCMSContent());
+
+  try {
+    return NextResponse.json(await getCMSContentStrict(admin.supabase));
+  } catch (error) {
+    return NextResponse.json({ message: errorMessage(error) }, { status: 500 });
+  }
 }
 
 export async function PUT(request: Request) {
-  if (!(await hasValidSession())) {
+  const admin = await getAdminSession();
+  if (!admin) {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
   }
 
@@ -106,7 +121,13 @@ export async function PUT(request: Request) {
     return NextResponse.json({ message: "Struktur konten tidak valid." }, { status: 400 });
   }
 
-  const current = await getCMSContent();
+  let current;
+  try {
+    current = await getCMSContentStrict(admin.supabase);
+  } catch (error) {
+    return NextResponse.json({ message: errorMessage(error) }, { status: 500 });
+  }
+
   const next = {
     settings: {
       heroTitle: content.settings.heroTitle.trim().slice(0, 180),
@@ -141,11 +162,20 @@ export async function PUT(request: Request) {
     JSON.stringify(current.faqs) !== JSON.stringify(next.faqs) ? "FAQ" : null,
   ].filter((section): section is string => section !== null);
 
-  await saveCMSContent({ ...current, ...next });
+  try {
+    await saveCMSContent(admin.supabase, { ...current, ...next });
+  } catch (error) {
+    return NextResponse.json({ message: errorMessage(error) }, { status: 500 });
+  }
+
+  publicPagesUsingContent.forEach((path) => revalidatePath(path));
+
   if (updatedSections.length > 0) {
     await writeActivityLog(
+      admin.supabase,
       "Memperbarui konten",
       `Bagian yang diperbarui: ${updatedSections.join(", ")}.`,
+      admin.email,
     );
   }
   return NextResponse.json({ message: "Konten berhasil disimpan." });

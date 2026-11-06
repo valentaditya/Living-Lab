@@ -15,9 +15,12 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Settings2,
+  UserRound,
   X,
 } from "lucide-react";
 import { useState } from "react";
+import type { AdminAccountSummary } from "@/lib/admin-profile";
+import { AdminAvatar } from "./AdminAvatar";
 import { LogoutButton } from "./LogoutButton";
 
 const groups = [
@@ -40,6 +43,10 @@ const groups = [
       { label: "Log Aktivitas", href: "/dashboard/logs", icon: ListChecks },
     ],
   },
+  {
+    title: "AKUN",
+    items: [{ label: "Profil Saya", href: "/dashboard/profile", icon: UserRound }],
+  },
 ];
 
 const pageNames: Record<string, string> = {
@@ -49,9 +56,16 @@ const pageNames: Record<string, string> = {
   "/dashboard/faq": "FAQ",
   "/dashboard/media": "Pustaka Media",
   "/dashboard/logs": "Log Aktivitas",
+  "/dashboard/profile": "Profil Saya",
 };
 
-export function DashboardShell({ children }: { children: React.ReactNode }) {
+export function DashboardShell({
+  children,
+  account,
+}: {
+  children: React.ReactNode;
+  account: AdminAccountSummary;
+}) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -195,26 +209,26 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 : "justify-between rounded-xl bg-[#F5F7F4] p-2.5"
             }`}
           >
-            <div
-              className={`flex min-w-0 items-center ${
+            <Link
+              href="/dashboard/profile"
+              onClick={() => setSidebarOpen(false)}
+              className={`flex min-w-0 items-center rounded-lg outline-none focus-visible:ring-4 focus-visible:ring-[#315C40]/15 ${
                 sidebarCollapsed ? "justify-center" : "gap-2.5"
               }`}
-              title="Admin"
+              title={`${account.name} — Profil Saya`}
             >
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#E3EEE3] text-xs font-semibold text-[#315C40]">
-                A
-              </div>
+              <AdminAvatar name={account.name} avatarUrl={account.avatarUrl} size={32} />
               {!sidebarCollapsed && (
                 <span className="min-w-0">
-                  <span className="block text-xs font-semibold text-[#43564A]">
-                    Admin
+                  <span className="block truncate text-xs font-semibold text-[#43564A]">
+                    {account.name}
                   </span>
-                  <span className="block text-[10px] text-[#87938A]">
-                    Pengelola situs
+                  <span className="block truncate text-[10px] text-[#87938A]">
+                    {account.position}
                   </span>
                 </span>
               )}
-            </div>
+            </Link>
             <LogoutButton compact={sidebarCollapsed} />
           </div>
         </div>
@@ -269,15 +283,13 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               aria-expanded={profileOpen}
               className="flex items-center gap-2 rounded-xl p-1.5 pr-2.5 outline-none transition hover:bg-[#F5F7F4] focus-visible:ring-4 focus-visible:ring-[#315C40]/15"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E3EEE3] text-xs font-semibold text-[#315C40]">
-                A
-              </span>
-              <span className="hidden text-left sm:block">
-                <span className="block text-xs font-semibold text-[#314438]">
-                  Admin
+              <AdminAvatar name={account.name} avatarUrl={account.avatarUrl} size={32} />
+              <span className="hidden max-w-[180px] text-left sm:block">
+                <span className="block truncate text-xs font-semibold text-[#314438]">
+                  {account.name}
                 </span>
-                <span className="block text-[10px] text-[#87938A]">
-                  Pengelola
+                <span className="block truncate text-[10px] text-[#87938A]">
+                  {account.position}
                 </span>
               </span>
             </button>
@@ -289,14 +301,22 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                   onClick={() => setProfileOpen(false)}
                   className="fixed inset-0 z-30 cursor-default"
                 />
-                <div className="absolute right-0 top-full z-40 mt-2 w-52 rounded-xl border border-[#E3E9E2] bg-white p-3 shadow-[0_12px_32px_rgba(30,53,40,0.12)]">
-                  <p className="px-2 py-1 text-xs font-semibold text-[#314438]">
-                    Admin
+                <div className="absolute right-0 top-full z-40 mt-2 w-60 rounded-xl border border-[#E3E9E2] bg-white p-3 shadow-[0_12px_32px_rgba(30,53,40,0.12)]">
+                  <p className="truncate px-2 py-1 text-xs font-semibold text-[#314438]">
+                    {account.name}
                   </p>
-                  <p className="px-2 pb-2 text-[11px] text-[#7A887E]">
-                    Pengelola situs Living Lab
+                  <p className="truncate px-2 pb-2 text-[11px] text-[#7A887E]">
+                    {account.email}
                   </p>
-                  <div className="border-t border-[#EDF1ED] pt-2">
+                  <div className="space-y-1 border-t border-[#EDF1ED] pt-2">
+                    <Link
+                      href="/dashboard/profile"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-2 rounded-lg px-2 py-2 text-xs font-medium text-[#43564A] outline-none transition hover:bg-[#F5F8F5] hover:text-[#315C40] focus-visible:ring-4 focus-visible:ring-[#315C40]/15"
+                    >
+                      <UserRound size={15} aria-hidden="true" />
+                      Profil saya
+                    </Link>
                     <LogoutButton />
                   </div>
                 </div>

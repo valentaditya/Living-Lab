@@ -5,6 +5,9 @@ import { FAQSection } from '@/app/components/organisms/FAQ/FAQSection';
 import { CtaFAQ } from '@/app/components/organisms/FAQ/CtaFAQ';
 import { getCMSContent } from '@/lib/cms-content';
 
+// Konten dari Supabase: halaman dirender ulang tiap 60 detik, dan langsung setelah admin menyimpan.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: 'Pertanyaan yang Sering Diajukan | Living Lab Sungai Yogyakarta',
   description: 'Informasi seputar cara kerja, keterlibatan publik, akses data, dan operasional Living Lab Sungai Yogyakarta.',

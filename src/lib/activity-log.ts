@@ -1,62 +1,128 @@
 import "server-only";
 
-import { randomUUID } from "node:crypto";
-import { appendFile, mkdir, readFile } from "node:fs/promises";
-import path from "node:path";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { createSupabaseServerClient } from "./supabase/server";
 
 export interface ActivityLogEntry {
   id: string;
   action: string;
   detail: string;
   createdAt: string;
+  actorEmail?: string | null;
 }
 
-const storageDirectory = path.join(process.cwd(), ".livinglab");
-const logPath = path.join(storageDirectory, "activity.jsonl");
+interface ActivityLogRow {
+  id: string;
+  action: string;
+  detail: string;
+  actor_email: string | null;
+  created_at: string;
+}
+
 const maximumLogEntries = 100;
 
-export async function writeActivityLog(action: string, detail: string) {
-  const entry: ActivityLogEntry = {
-    id: randomUUID(),
-    action,
-    detail,
-    createdAt: new Date().toISOString(),
-  };
+/**
+ * Mencatat aktivitas admin. Gagal mencatat tidak menggagalkan aksi utamanya,
+ * cukup dicatat di log server.
+ */
+export async function writeActivityLog(
+  supabase: SupabaseClient,
+  action: string,
+  detail: string,
+  actorEmail?: string | null,
+) {
+  const { error } = await supabase
+    .from("activity_logs")
+    .insert({ action, detail, actor_email: actorEmail ?? null });
 
-  await mkdir(storageDirectory, { recursive: true });
-  await appendFile(logPath, `${JSON.stringify(entry)}\n`, "utf8");
+  if (error) {
+    console.error("[activity-log] Gagal menulis log:", error.message);
+  }
 }
 
-export async function getActivityLogs(): Promise<ActivityLogEntry[]> {
-  let contents: string;
-  try {
-    contents = await readFile(logPath, "utf8");
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
-    throw error;
+const logColumns = "id, action, detail, actor_email, created_at";
+
+function toEntry(row: ActivityLogRow): ActivityLogEntry {
+  return {
+    id: row.id,
+    action: row.action,
+    detail: row.detail,
+    actorEmail: row.actor_email,
+    createdAt: row.created_at,
+  };
+}
+
+/** Log terbaru, untuk ringkasan di halaman utama dashboard. */
+export async function getActivityLogs(
+  supabase?: SupabaseClient,
+  limit = maximumLogEntries,
+): Promise<ActivityLogEntry[]> {
+  const client = supabase ?? (await createSupabaseServerClient());
+  const { data, error } = await client
+    .from("activity_logs")
+    .select(logColumns)
+    .order("created_at", { ascending: false })
+    .limit(limit)
+    .overrideTypes<ActivityLogRow[], { merge: false }>();
+
+  if (error) {
+    throw new Error(`Gagal memuat log aktivitas: ${error.message}`);
   }
 
-  return contents
-    .split("\n")
+  return data.map(toEntry);
+}
+
+export interface ActivityLogPage {
+  items: ActivityLogEntry[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+/**
+ * Kata kunci dibersihkan dari karakter khusus filter PostgREST (koma, kurung,
+ * wildcard) supaya aman disisipkan ke filter `or`.
+ */
+function searchWords(query: string) {
+  return query
+    .replace(/[%_*,()"\\:]/g, " ")
+    .trim()
+    .split(/\s+/)
     .filter(Boolean)
-    .slice(-maximumLogEntries)
-    .reverse()
-    .map((line) => {
-      const entry: unknown = JSON.parse(line);
-      if (
-        !entry ||
-        typeof entry !== "object" ||
-        !("id" in entry) ||
-        !("action" in entry) ||
-        !("detail" in entry) ||
-        !("createdAt" in entry) ||
-        typeof entry.id !== "string" ||
-        typeof entry.action !== "string" ||
-        typeof entry.detail !== "string" ||
-        typeof entry.createdAt !== "string"
-      ) {
-        throw new Error("Stored Living Lab activity log has an invalid entry.");
-      }
-      return entry as ActivityLogEntry;
-    });
+    .slice(0, 6);
+}
+
+/** Pencarian + pagination di database. Setiap kata harus cocok di aksi, detail, atau email. */
+export async function searchActivityLogs(
+  supabase: SupabaseClient,
+  { query, page, pageSize }: { query: string; page: number; pageSize: number },
+): Promise<ActivityLogPage> {
+  const words = searchWords(query.slice(0, 100));
+  const withFilters = <T extends { or: (filter: string) => T }>(request: T) =>
+    words.reduce(
+      (filtered, word) =>
+        filtered.or(`action.ilike.%${word}%,detail.ilike.%${word}%,actor_email.ilike.%${word}%`),
+      request,
+    );
+
+  const from = (page - 1) * pageSize;
+  const { data, error, count } = await withFilters(
+    supabase.from("activity_logs").select(logColumns, { count: "exact" }),
+  )
+    .order("created_at", { ascending: false })
+    .range(from, from + pageSize - 1)
+    .overrideTypes<ActivityLogRow[], { merge: false }>();
+
+  // Halaman di luar jangkauan (mis. setelah pencarian menyempit): kembalikan total saja.
+  if (error?.code === "PGRST103") {
+    const { count: total } = await withFilters(
+      supabase.from("activity_logs").select("id", { count: "exact", head: true }),
+    );
+    return { items: [], total: total ?? 0, page, pageSize };
+  }
+  if (error) {
+    throw new Error(`Gagal memuat log aktivitas: ${error.message}`);
+  }
+
+  return { items: data.map(toEntry), total: count ?? data.length, page, pageSize };
 }

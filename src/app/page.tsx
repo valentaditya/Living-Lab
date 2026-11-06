@@ -7,6 +7,9 @@ import AgendaSection from "./components/organisms/AgendaSection";
 import CtaSection from "./components/organisms/CtaSectiob";
 import { getCMSContent } from "@/lib/cms-content";
 
+// Konten dari Supabase: halaman dirender ulang tiap 60 detik, dan langsung setelah admin menyimpan.
+export const revalidate = 60;
+
 
 export default async function Home() {
   const content = await getCMSContent();

@@ -11,7 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { getActivityLogs } from "@/lib/activity-log";
-import { getCMSContent } from "@/lib/cms-content";
+import { getCMSContentStrict } from "@/lib/cms-content";
 
 const shortcutItems: {
   title: string;
@@ -66,8 +66,8 @@ function formatRelativeTime(date: string, now: number) {
 
 export default async function DashboardPage() {
   const [content, activityLogs] = await Promise.all([
-    getCMSContent(),
-    getActivityLogs(),
+    getCMSContentStrict(),
+    getActivityLogs(undefined, 5),
   ]);
   const now = Date.now();
   const currentDate = new Intl.DateTimeFormat("id-ID", {

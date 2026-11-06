@@ -1,12 +1,11 @@
 import "server-only";
 
-import { randomUUID } from "node:crypto";
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
-import path from "node:path";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { AGENDA_DATA } from "@/data/dummyAnggota";
 import { DUMMY_ARTICLES } from "@/data/dummyArticle";
 import type { AgendaItem } from "@/types/agenda";
 import type { Article } from "@/types/article";
+import { createSupabasePublicClient } from "./supabase/public";
 
 export interface FAQItem {
   id: string;
@@ -26,9 +25,6 @@ export interface CMSContent {
   agenda: AgendaItem[];
   faqs: FAQItem[];
 }
-
-const storageDirectory = path.join(process.cwd(), ".livinglab");
-const contentPath = path.join(storageDirectory, "content.json");
 
 const defaultContent: CMSContent = {
   settings: {
@@ -77,37 +73,139 @@ const defaultContent: CMSContent = {
   ],
 };
 
-function isCMSContent(value: unknown): value is CMSContent {
-  if (!value || typeof value !== "object") return false;
-  const content = value as Partial<CMSContent>;
-  return (
-    !!content.settings &&
-    typeof content.settings.heroTitle === "string" &&
-    typeof content.settings.heroDescription === "string" &&
-    Array.isArray(content.articles) &&
-    Array.isArray(content.agenda) &&
-    Array.isArray(content.faqs)
-  );
+interface SettingsRow {
+  hero_title: string;
+  hero_description: string;
 }
 
+interface ArticleRow {
+  id: string;
+  category: string;
+  image: string;
+  date_label: string;
+  read_time: string;
+  tag: string;
+  title: string;
+  summary: string;
+  author: string;
+  action_text: string;
+  action_href: string | null;
+}
+
+interface AgendaRow {
+  id: string;
+  month: string;
+  day: string;
+  tag_label: string;
+  tag_color: AgendaItem["tagColor"];
+  time_label: string;
+  title: string;
+  location: string;
+  button_text: string;
+}
+
+interface FAQRow {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+}
+
+async function readContent(supabase: SupabaseClient): Promise<CMSContent> {
+  const [settings, articles, agenda, faqs] = await Promise.all([
+    supabase
+      .from("site_settings")
+      .select("hero_title, hero_description")
+      .eq("id", 1)
+      .maybeSingle()
+      .overrideTypes<SettingsRow, { merge: false }>(),
+    supabase
+      .from("articles")
+      .select("id, category, image, date_label, read_time, tag, title, summary, author, action_text, action_href")
+      .order("sort_order")
+      .overrideTypes<ArticleRow[], { merge: false }>(),
+    supabase
+      .from("agenda_items")
+      .select("id, month, day, tag_label, tag_color, time_label, title, location, button_text")
+      .order("sort_order")
+      .overrideTypes<AgendaRow[], { merge: false }>(),
+    supabase
+      .from("faqs")
+      .select("id, question, answer, category")
+      .order("sort_order")
+      .overrideTypes<FAQRow[], { merge: false }>(),
+  ]);
+
+  const error = settings.error ?? articles.error ?? agenda.error ?? faqs.error;
+  if (error) {
+    throw new Error(`Gagal membaca konten dari Supabase: ${error.message}`);
+  }
+
+  return {
+    settings: settings.data
+      ? {
+          heroTitle: settings.data.hero_title,
+          heroDescription: settings.data.hero_description,
+        }
+      : defaultContent.settings,
+    articles: (articles.data ?? []).map((row) => ({
+      id: row.id,
+      category: row.category,
+      image: row.image,
+      date: row.date_label,
+      readTime: row.read_time,
+      tag: row.tag,
+      title: row.title,
+      summary: row.summary,
+      author: row.author,
+      actionText: row.action_text,
+      ...(row.action_href ? { actionHref: row.action_href } : {}),
+    })),
+    agenda: (agenda.data ?? []).map((row) => ({
+      id: row.id,
+      month: row.month,
+      day: row.day,
+      tagLabel: row.tag_label,
+      tagColor: row.tag_color,
+      time: row.time_label,
+      title: row.title,
+      location: row.location,
+      buttonText: row.button_text,
+    })),
+    faqs: (faqs.data ?? []).map((row) => ({
+      id: row.id,
+      question: row.question,
+      answer: row.answer,
+      category: row.category,
+    })),
+  };
+}
+
+/**
+ * Untuk halaman publik. Kalau Supabase tidak bisa dibaca (misalnya tabel belum
+ * dibuat), situs tetap tampil memakai konten bawaan.
+ */
 export async function getCMSContent(): Promise<CMSContent> {
   try {
-    const stored = JSON.parse(await readFile(contentPath, "utf8")) as unknown;
-    if (!isCMSContent(stored)) {
-      throw new Error("Stored Living Lab content has an invalid shape.");
-    }
-    return stored;
+    return await readContent(createSupabasePublicClient());
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return defaultContent;
-    }
-    throw error;
+    console.error("[cms] Memakai konten bawaan:", error instanceof Error ? error.message : error);
+    return defaultContent;
   }
 }
 
-export async function saveCMSContent(content: CMSContent) {
-  await mkdir(storageDirectory, { recursive: true });
-  const temporaryPath = path.join(storageDirectory, `content-${randomUUID()}.tmp`);
-  await writeFile(temporaryPath, JSON.stringify(content, null, 2), "utf8");
-  await rename(temporaryPath, contentPath);
+/**
+ * Untuk panel admin. Error dilempar, bukan diganti konten bawaan, supaya editor
+ * tidak pernah menimpa data asli di Supabase dengan konten bawaan.
+ */
+export async function getCMSContentStrict(supabase?: SupabaseClient): Promise<CMSContent> {
+  return readContent(supabase ?? createSupabasePublicClient());
+}
+
+/** Menyimpan seluruh konten dalam satu transaksi (fungsi SQL save_cms_content). */
+export async function saveCMSContent(supabase: SupabaseClient, content: CMSContent) {
+  const { error } = await supabase.rpc("save_cms_content", { content });
+  if (error) {
+    throw new Error(`Gagal menyimpan konten ke Supabase: ${error.message}`);
+  }
 }

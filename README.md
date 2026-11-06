@@ -18,22 +18,48 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Admin Living Lab
+## Admin Living Lab (Supabase)
 
-Buka `/login` untuk masuk ke panel admin. Kredensial lokal bawaan adalah
-`admin` / `admin`. Dashboard tersedia di `/dashboard` dan dilindungi sesi
-server-side.
+Login, konten publik, dan panel admin memakai [Supabase](https://supabase.com):
 
-Panel admin tahap awal dapat mengubah judul/deskripsi beranda, berita, agenda,
-FAQ, serta mengunggah gambar dan PDF (maksimal 10 MB). Konten tersimpan di
-`.livinglab/content.json`, sedangkan file unggahan disimpan di
-`public/uploads/`. Riwayat login/logout, perubahan konten, dan unggahan media
-dicatat di `.livinglab/activity.jsonl`. Ketiga lokasi tersebut diabaikan Git.
+| Bagian | Disimpan di |
+| --- | --- |
+| Login admin | Supabase Auth (email + kata sandi), hak admin di tabel `admin_users` |
+| Judul/deskripsi beranda, berita, agenda, FAQ | Tabel `site_settings`, `articles`, `agenda_items`, `faqs` |
+| Gambar dan PDF (maks. 10 MB) | Storage bucket `media` (publik untuk dibaca) |
+| Riwayat login/logout, perubahan konten, unggahan | Tabel `activity_logs` |
+| Profil admin (nama, telepon, jabatan) dan foto profil | Tabel `admin_profiles`, Storage bucket `avatars` |
 
-Untuk produksi, atur `LIVING_LAB_USERNAME`, `LIVING_LAB_PASSWORD`, dan
-`LIVING_LAB_AUTH_SECRET` (minimal 32 karakter). Gunakan server dengan
-penyimpanan disk persisten atau pindahkan penyimpanan konten/media ke database
-dan object storage sebelum memakai panel di lingkungan serverless.
+Publik hanya bisa membaca konten. Menulis data hanya bisa dilakukan akun yang
+terdaftar di `admin_users` (dijaga Row Level Security di database).
+
+### Setup sekali
+
+1. Salin `.env.example` menjadi `.env.local`, lalu isi URL dan publishable key
+   dari Supabase → Project Settings → API Keys.
+2. Supabase → SQL Editor: tempel **isi** file berikut (bukan path-nya) lalu
+   jalankan, satu per satu sesuai urutan:
+   - `supabase/migrations/20261106000000_living_lab_cms.sql`: tabel konten,
+     aturan akses, bucket `media`, dan konten awal.
+   - `supabase/migrations/20261107000000_admin_profiles.sql`: tabel
+     `admin_profiles` dan bucket `avatars` untuk halaman Profil Saya.
+3. Supabase → Authentication → Users → Add user → Create new user. Isi email
+   dan kata sandi admin, centang **Auto Confirm User**.
+4. Jadikan akun itu admin lewat SQL Editor:
+
+   ```sql
+   insert into public.admin_users (user_id)
+   select id from auth.users where email = 'email-admin@contoh.ac.id'
+   on conflict do nothing;
+   ```
+
+5. Disarankan: Authentication → Sign In / Providers → matikan
+   **Allow new users to sign up**, supaya tidak ada orang lain yang bisa
+   membuat akun.
+
+Lalu jalankan `npm run dev`, buka `/login`, dan masuk dengan email tersebut.
+Dashboard ada di `/dashboard`. Halaman publik membaca ulang konten tiap 60
+detik, dan langsung setelah admin menyimpan dari dashboard.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

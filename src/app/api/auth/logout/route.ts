@@ -1,20 +1,25 @@
 import { NextResponse } from "next/server";
-import {
-  hasValidSession,
-  SESSION_COOKIE_NAME,
-  sessionCookieOptions,
-} from "@/lib/auth";
+import { getAdminSession } from "@/lib/auth";
 import { writeActivityLog } from "@/lib/activity-log";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+export const runtime = "nodejs";
 
 export async function POST() {
-  if (await hasValidSession()) {
-    await writeActivityLog("Logout", "Admin keluar dari panel.");
+  const admin = await getAdminSession();
+
+  if (admin) {
+    await writeActivityLog(
+      admin.supabase,
+      "Logout",
+      `${admin.email ?? "Admin"} keluar dari panel admin.`,
+      admin.email,
+    );
   }
 
-  const response = NextResponse.json({ redirectTo: "/login" });
-  response.cookies.set(SESSION_COOKIE_NAME, "", {
-    ...sessionCookieOptions,
-    maxAge: 0,
-  });
-  return response;
+  // Hanya mengakhiri sesi di perangkat ini, bukan di semua perangkat.
+  const supabase = admin?.supabase ?? (await createSupabaseServerClient());
+  await supabase.auth.signOut({ scope: "local" });
+
+  return NextResponse.json({ redirectTo: "/login" });
 }

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { hasValidSession } from "@/lib/auth";
+import { getAdminSession } from "@/lib/auth";
+import { getAccountSummary } from "@/lib/admin-profile";
 import { DashboardShell } from "./DashboardShell";
 
 export default async function DashboardLayout({
@@ -7,9 +8,11 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  if (!(await hasValidSession())) {
+  const admin = await getAdminSession();
+  if (!admin) {
     redirect("/login");
   }
 
-  return <DashboardShell>{children}</DashboardShell>;
+  const account = await getAccountSummary(admin);
+  return <DashboardShell account={account}>{children}</DashboardShell>;
 }

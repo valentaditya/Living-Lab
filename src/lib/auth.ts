@@ -1,100 +1,51 @@
-import { createHash, createHmac, timingSafeEqual } from "node:crypto";
-import { cookies } from "next/headers";
+import "server-only";
 
-export const SESSION_COOKIE_NAME = "living-lab-session";
-const SESSION_DURATION_SECONDS = 60 * 60 * 8;
-const DEVELOPMENT_AUTH_SECRET =
-  "living-lab-development-secret-change-before-deployment";
+import { cache } from "react";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { createSupabaseServerClient } from "./supabase/server";
 
-function getAuthSecret() {
-  const secret =
-    process.env.LIVING_LAB_AUTH_SECRET ??
-    (process.env.NODE_ENV === "production" ? undefined : DEVELOPMENT_AUTH_SECRET);
-
-  if (!secret || secret.length < 32) {
-    throw new Error(
-      "LIVING_LAB_AUTH_SECRET must be set to at least 32 characters.",
-    );
-  }
-
-  return secret;
+export interface AdminSession {
+  /** Client yang membawa sesi admin; semua tulis data lewat client ini agar RLS berlaku. */
+  supabase: SupabaseClient;
+  userId: string;
+  email: string | null;
 }
 
-function matchesCredential(value: string, expected: string) {
-  const valueHash = createHash("sha256").update(value).digest();
-  const expectedHash = createHash("sha256").update(expected).digest();
-  return timingSafeEqual(valueHash, expectedHash);
-}
+/** Akun dianggap admin hanya jika terdaftar di tabel admin_users. */
+export async function isAdminUser(supabase: SupabaseClient, userId: string) {
+  const { data, error } = await supabase
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id", userId)
+    .maybeSingle();
 
-export function verifyCredentials(username: string, password: string) {
-  const developmentMode = process.env.NODE_ENV !== "production";
-  return (
-    matchesCredential(
-      username,
-      process.env.LIVING_LAB_USERNAME ?? (developmentMode ? "admin" : ""),
-    ) &&
-    matchesCredential(
-      password,
-      process.env.LIVING_LAB_PASSWORD ?? (developmentMode ? "admin" : ""),
-    )
-  );
-}
-
-export function createSessionToken(now = Date.now()) {
-  const payload = Buffer.from(
-    JSON.stringify({
-      username: "admin",
-      expiresAt: now + SESSION_DURATION_SECONDS * 1000,
-    }),
-  ).toString("base64url");
-  const signature = createHmac("sha256", getAuthSecret())
-    .update(payload)
-    .digest("base64url");
-
-  return payload + "." + signature;
-}
-
-export function isValidSessionToken(token: string | undefined, now = Date.now()) {
-  if (!token) return false;
-
-  const [payload, signature, extra] = token.split(".");
-  if (!payload || !signature || extra !== undefined) return false;
-
-  const expectedSignature = createHmac("sha256", getAuthSecret())
-    .update(payload)
-    .digest();
-  const actualSignature = Buffer.from(signature, "base64url");
-
-  if (
-    actualSignature.length !== expectedSignature.length ||
-    !timingSafeEqual(actualSignature, expectedSignature)
-  ) {
+  if (error) {
+    console.error("[auth] Gagal memeriksa admin_users:", error.message);
     return false;
   }
-
-  let session: { username?: unknown; expiresAt?: unknown };
-  try {
-    session = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
-  } catch {
-    return false;
-  }
-
-  return (
-    session.username === "admin" &&
-    typeof session.expiresAt === "number" &&
-    session.expiresAt > now
-  );
+  return data !== null;
 }
+
+/**
+ * Mengembalikan sesi admin yang valid, atau null.
+ * Identitas diverifikasi lewat getClaims(), hak admin lewat tabel admin_users.
+ * Hasilnya di-cache per request, jadi layout dan halaman tidak memeriksa dua kali.
+ */
+export const getAdminSession = cache(async (): Promise<AdminSession | null> => {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.auth.getClaims();
+  const claims = data?.claims;
+
+  if (error || !claims?.sub) return null;
+  if (!(await isAdminUser(supabase, claims.sub))) return null;
+
+  return {
+    supabase,
+    userId: claims.sub,
+    email: typeof claims.email === "string" ? claims.email : null,
+  };
+});
 
 export async function hasValidSession() {
-  const cookieStore = await cookies();
-  return isValidSessionToken(cookieStore.get(SESSION_COOKIE_NAME)?.value);
+  return (await getAdminSession()) !== null;
 }
-
-export const sessionCookieOptions = {
-  httpOnly: true,
-  sameSite: "lax" as const,
-  secure: process.env.NODE_ENV === "production",
-  path: "/",
-  maxAge: SESSION_DURATION_SECONDS,
-};

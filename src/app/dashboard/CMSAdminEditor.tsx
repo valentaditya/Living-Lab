@@ -1,14 +1,45 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type FormEvent } from "react";
+import { Check, Copy, ExternalLink } from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { AgendaItem } from "@/types/agenda";
 import type { Article } from "@/types/article";
 import type { CMSContent, FAQItem } from "@/lib/cms-content";
 import type { ActivityLogEntry } from "@/lib/activity-log";
+import {
+  matchesQuery,
+  NoResults,
+  paginate,
+  Pagination,
+  SearchField,
+  useDebouncedValue,
+} from "./ListControls";
 
 type Section = "homepage" | "news" | "faq" | "media" | "logs";
 type MediaFile = { name: string; url: string; size: number; updatedAt?: string };
+type MediaType = "all" | "image" | "pdf";
+type PagedResponse<T> = { items: T[]; total: number; page: number; pageSize: number; message?: string };
+
+const NEWS_PAGE_SIZE = 10;
+const AGENDA_PAGE_SIZE = 10;
+const FAQ_PAGE_SIZE = 10;
+const MEDIA_PAGE_SIZE = 12;
+const LOGS_PAGE_SIZE = 20;
+
+const mediaTypeFilters: { id: MediaType; label: string }[] = [
+  { id: "all", label: "Semua" },
+  { id: "image", label: "Gambar" },
+  { id: "pdf", label: "PDF" },
+];
+
+const imageFilePattern = /\.(jpe?g|png|webp|gif)$/i;
+
+function formatDateTime(value?: string) {
+  return value
+    ? new Date(value).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })
+    : "";
+}
 
 const newsAgendaTabs = [
   { id: "news", label: "Berita" },
@@ -100,6 +131,38 @@ export function CMSAdminEditor({
   const [faqDraft, setFaqDraft] = useState<FAQItem>(emptyFAQ);
   const [uploading, setUploading] = useState(false);
 
+  // Pencarian & halaman untuk daftar yang difilter di browser (konten sudah dimuat utuh).
+  const [newsQuery, setNewsQuery] = useState("");
+  const [newsPage, setNewsPage] = useState(1);
+  const [agendaQuery, setAgendaQuery] = useState("");
+  const [agendaPage, setAgendaPage] = useState(1);
+  const [faqQuery, setFaqQuery] = useState("");
+  const [faqPage, setFaqPage] = useState(1);
+
+  // Pustaka media & log: dicari dan dipotong per halaman di server.
+  const [mediaQuery, setMediaQuery] = useState("");
+  const [mediaType, setMediaType] = useState<MediaType>("all");
+  const [mediaPage, setMediaPage] = useState(1);
+  const [mediaTotal, setMediaTotal] = useState(0);
+  const [mediaLoading, setMediaLoading] = useState(false);
+  const [mediaReloadKey, setMediaReloadKey] = useState(0);
+  const [copiedUrl, setCopiedUrl] = useState("");
+  const [imageOptions, setImageOptions] = useState<MediaFile[]>([]);
+  const [logsQuery, setLogsQuery] = useState("");
+  const [logsPage, setLogsPage] = useState(1);
+  const [logsTotal, setLogsTotal] = useState(0);
+  const [logsLoading, setLogsLoading] = useState(false);
+  const debouncedMediaQuery = useDebouncedValue(mediaQuery);
+  const debouncedLogsQuery = useDebouncedValue(logsQuery);
+  const mediaRequest = useRef(0);
+  const logsRequest = useRef(0);
+
+  const articleFormRef = useRef<HTMLFormElement>(null);
+  const agendaFormRef = useRef<HTMLFormElement>(null);
+  const faqFormRef = useRef<HTMLFormElement>(null);
+  const scrollToForm = (form: HTMLFormElement | null) =>
+    form?.scrollIntoView({ behavior: "smooth", block: "start" });
+
   async function loadContent() {
     setLoading(true);
     setError("");
@@ -116,11 +179,13 @@ export function CMSAdminEditor({
     }
   }
 
-  async function loadMedia() {
+  /** Gambar terbaru untuk pilihan gambar di form berita. */
+  async function loadImageOptions() {
     try {
-      const response = await fetch("/api/admin/media");
-      if (!response.ok) throw new Error("Gagal memuat pustaka media.");
-      setMedia((await response.json()) as MediaFile[]);
+      const response = await fetch("/api/admin/media?type=image&pageSize=200");
+      const result = (await response.json()) as PagedResponse<MediaFile>;
+      if (!response.ok) throw new Error(result.message ?? "Gagal memuat pustaka media.");
+      setImageOptions(result.items);
     } catch (loadError) {
       setError(
         loadError instanceof Error
@@ -130,34 +195,92 @@ export function CMSAdminEditor({
     }
   }
 
-  async function loadLogs() {
-    setLoading(true);
-    setError("");
-    try {
-      const response = await fetch("/api/admin/logs");
-      if (!response.ok) throw new Error("Gagal memuat log aktivitas.");
-      setLogs((await response.json()) as ActivityLogEntry[]);
-    } catch (loadError) {
-      setError(
-        loadError instanceof Error
-          ? loadError.message
-          : "Gagal memuat log aktivitas.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
-    if (section === "logs") {
-      void loadLogs();
-    } else {
+    if (section !== "logs") {
       void loadContent();
-      if (section === "media" || section === "news") void loadMedia();
+      if (section === "news") void loadImageOptions();
     }
     // Load the selected section once on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Pustaka media: muat ulang saat kata kunci, jenis file, atau halaman berubah.
+  useEffect(() => {
+    if (section !== "media") return;
+    const requestId = ++mediaRequest.current;
+    setMediaLoading(true);
+    const params = new URLSearchParams({
+      q: debouncedMediaQuery,
+      type: mediaType,
+      page: String(mediaPage),
+      pageSize: String(MEDIA_PAGE_SIZE),
+    });
+    fetch(`/api/admin/media?${params}`)
+      .then(async (response) => {
+        const result = (await response.json()) as PagedResponse<MediaFile>;
+        if (!response.ok) throw new Error(result.message ?? "Gagal memuat pustaka media.");
+        return result;
+      })
+      .then((result) => {
+        if (requestId !== mediaRequest.current) return;
+        setMedia(result.items);
+        setMediaTotal(result.total);
+        const lastPage = Math.max(1, Math.ceil(result.total / MEDIA_PAGE_SIZE));
+        if (mediaPage > lastPage) setMediaPage(lastPage);
+      })
+      .catch((loadError: unknown) => {
+        if (requestId !== mediaRequest.current) return;
+        setError(loadError instanceof Error ? loadError.message : "Gagal memuat pustaka media.");
+      })
+      .finally(() => {
+        if (requestId === mediaRequest.current) setMediaLoading(false);
+      });
+  }, [section, debouncedMediaQuery, mediaType, mediaPage, mediaReloadKey]);
+
+  // Log aktivitas: pencarian dan halaman dikerjakan di database.
+  useEffect(() => {
+    if (section !== "logs") return;
+    const requestId = ++logsRequest.current;
+    setLogsLoading(true);
+    const params = new URLSearchParams({
+      q: debouncedLogsQuery,
+      page: String(logsPage),
+      pageSize: String(LOGS_PAGE_SIZE),
+    });
+    fetch(`/api/admin/logs?${params}`)
+      .then(async (response) => {
+        const result = (await response.json()) as PagedResponse<ActivityLogEntry>;
+        if (!response.ok) throw new Error(result.message ?? "Gagal memuat log aktivitas.");
+        return result;
+      })
+      .then((result) => {
+        if (requestId !== logsRequest.current) return;
+        setError("");
+        setLogs(result.items);
+        setLogsTotal(result.total);
+        const lastPage = Math.max(1, Math.ceil(result.total / LOGS_PAGE_SIZE));
+        if (logsPage > lastPage) setLogsPage(lastPage);
+      })
+      .catch((loadError: unknown) => {
+        if (requestId !== logsRequest.current) return;
+        setError(loadError instanceof Error ? loadError.message : "Gagal memuat log aktivitas.");
+      })
+      .finally(() => {
+        if (requestId !== logsRequest.current) return;
+        setLogsLoading(false);
+        setLoading(false);
+      });
+  }, [section, debouncedLogsQuery, logsPage]);
+
+  async function copyUrl(url: string) {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedUrl(url);
+      setTimeout(() => setCopiedUrl((current) => (current === url ? "" : current)), 2000);
+    } catch {
+      setError("URL tidak bisa disalin otomatis. Salin dari tautan Buka.");
+    }
+  }
 
   async function persist(nextContent: CMSContent) {
     setSaving(true);
@@ -207,7 +330,10 @@ export function CMSAdminEditor({
       if (!response.ok) throw new Error(result.message ?? "Upload gagal.");
       form.reset();
       setNotice("File berhasil diunggah.");
-      await loadMedia();
+      setMediaQuery("");
+      setMediaType("all");
+      setMediaPage(1);
+      setMediaReloadKey((key) => key + 1);
     } catch (uploadError) {
       setError(
         uploadError instanceof Error ? uploadError.message : "Upload gagal.",
@@ -221,7 +347,7 @@ export function CMSAdminEditor({
     return <p className="text-sm text-[#718076]">Memuat konten...</p>;
   }
 
-  if (error && (section === "logs" || !content)) {
+  if (error && section !== "logs" && !content) {
     return (
       <div>
         <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -229,9 +355,7 @@ export function CMSAdminEditor({
         </p>
         <button
           type="button"
-          onClick={() =>
-            section === "logs" ? void loadLogs() : void loadContent()
-          }
+          onClick={() => void loadContent()}
           className="mt-4 rounded-xl border border-[#dce4dc] bg-white px-4 py-2 text-sm font-medium text-[#385944]"
         >
           Coba lagi
@@ -260,19 +384,48 @@ export function CMSAdminEditor({
   );
 
   if (section === "logs") {
+    const logsTotalPages = Math.max(1, Math.ceil(logsTotal / LOGS_PAGE_SIZE));
     return (
       <>
         <PageHeading
           title="Log Aktivitas"
-          description="Riwayat login, logout, perubahan konten, dan unggahan media terbaru."
+          description="Riwayat login, logout, perubahan konten, dan unggahan media."
         />
         {alerts}
-        {logs.length === 0 ? (
-          <div className="rounded-2xl border border-[#e5ebe4] bg-white p-8 text-center text-sm text-[#87938a]">
-            Belum ada aktivitas yang tercatat.
-          </div>
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <SearchField
+            value={logsQuery}
+            onChange={(value) => {
+              setLogsQuery(value);
+              setLogsPage(1);
+            }}
+            placeholder="Cari aktivitas, detail, atau email"
+            label="Cari log aktivitas"
+          />
+          {logsLoading && <span className="text-xs text-[#87938a]">Memuat...</span>}
+        </div>
+        {logs.length === 0 && !logsLoading ? (
+          debouncedLogsQuery ? (
+            <NoResults
+              query={debouncedLogsQuery}
+              itemLabel="aktivitas"
+              onClear={() => {
+                setLogsQuery("");
+                setLogsPage(1);
+              }}
+            />
+          ) : (
+            <div className="rounded-2xl border border-[#e5ebe4] bg-white p-8 text-center text-sm text-[#87938a]">
+              Belum ada aktivitas yang tercatat.
+            </div>
+          )
         ) : (
-          <div className="overflow-hidden rounded-2xl border border-[#e5ebe4] bg-white">
+          <div
+            aria-busy={logsLoading}
+            className={`overflow-hidden rounded-2xl border border-[#e5ebe4] bg-white transition-opacity ${
+              logsLoading ? "opacity-60" : ""
+            }`}
+          >
             <div className="hidden grid-cols-[minmax(160px,0.8fr)_minmax(180px,0.8fr)_minmax(0,2fr)] gap-4 border-b border-[#edf0ec] bg-[#f8faf7] px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#87938a] sm:grid">
               <span>Waktu</span>
               <span>Aktivitas</span>
@@ -284,26 +437,29 @@ export function CMSAdminEditor({
                   key={entry.id}
                   className="grid gap-2 px-5 py-4 sm:grid-cols-[minmax(160px,0.8fr)_minmax(180px,0.8fr)_minmax(0,2fr)] sm:items-center sm:gap-4"
                 >
-                  <time
-                    dateTime={entry.createdAt}
-                    className="text-xs text-[#87938a]"
-                  >
-                    {new Date(entry.createdAt).toLocaleString("id-ID", {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    })}
+                  <time dateTime={entry.createdAt} className="text-xs text-[#87938a]">
+                    {formatDateTime(entry.createdAt)}
                   </time>
-                  <span className="text-sm font-medium text-[#315b3d]">
-                    {entry.action}
+                  <span className="min-w-0">
+                    <span className="block text-sm font-medium text-[#315b3d]">{entry.action}</span>
+                    {entry.actorEmail && (
+                      <span className="block truncate text-xs text-[#87938a]">{entry.actorEmail}</span>
+                    )}
                   </span>
-                  <span className="text-sm leading-5 text-[#68766d]">
-                    {entry.detail}
-                  </span>
+                  <span className="text-sm leading-5 text-[#68766d]">{entry.detail}</span>
                 </article>
               ))}
             </div>
           </div>
         )}
+        <Pagination
+          page={Math.min(logsPage, logsTotalPages)}
+          totalPages={logsTotalPages}
+          total={logsTotal}
+          pageSize={LOGS_PAGE_SIZE}
+          itemLabel="aktivitas"
+          onPageChange={setLogsPage}
+        />
       </>
     );
   }
@@ -372,6 +528,11 @@ export function CMSAdminEditor({
 
   if (section === "faq") {
     const editing = faqDraft.id !== "";
+    const faqList = paginate(
+      content.faqs.filter((faq) => matchesQuery(faqQuery, faq.question, faq.answer, faq.category)),
+      faqPage,
+      FAQ_PAGE_SIZE,
+    );
     return (
       <>
         <PageHeading
@@ -388,7 +549,8 @@ export function CMSAdminEditor({
               : [...content.faqs, nextFAQ];
             if (await persist({ ...content, faqs })) setFaqDraft(emptyFAQ);
           }}
-          className="mb-7 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
+          ref={faqFormRef}
+          className="mb-7 scroll-mt-24 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
         >
           <h2 className="text-base font-semibold text-[#24392a]">
             {editing ? "Ubah pertanyaan" : "Tambah pertanyaan"}
@@ -441,8 +603,34 @@ export function CMSAdminEditor({
             <SaveButton saving={saving} />
           </div>
         </form>
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-base font-semibold text-[#24392a]">Daftar pertanyaan</h2>
+          <SearchField
+            value={faqQuery}
+            onChange={(value) => {
+              setFaqQuery(value);
+              setFaqPage(1);
+            }}
+            placeholder="Cari pertanyaan, jawaban, atau kategori"
+            label="Cari FAQ"
+          />
+        </div>
+        {content.faqs.length === 0 ? (
+          <div className="rounded-2xl border border-[#e5ebe4] bg-white p-8 text-center text-sm text-[#87938a]">
+            Belum ada pertanyaan.
+          </div>
+        ) : faqList.total === 0 ? (
+          <NoResults
+            query={faqQuery}
+            itemLabel="pertanyaan"
+            onClear={() => {
+              setFaqQuery("");
+              setFaqPage(1);
+            }}
+          />
+        ) : (
         <div className="space-y-3">
-          {content.faqs.map((faq) => (
+          {faqList.pageItems.map((faq) => (
             <article
               key={faq.id}
               className="flex flex-col gap-3 rounded-xl border border-[#e5ebe4] bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
@@ -454,7 +642,10 @@ export function CMSAdminEditor({
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={() => setFaqDraft(faq)}
+                  onClick={() => {
+                    setFaqDraft(faq);
+                    scrollToForm(faqFormRef.current);
+                  }}
                   className="rounded-lg border border-[#dce4dc] px-3 py-1.5 text-xs font-medium text-[#385944]"
                 >
                   Ubah
@@ -475,6 +666,15 @@ export function CMSAdminEditor({
             </article>
           ))}
         </div>
+        )}
+        <Pagination
+          page={faqList.page}
+          totalPages={faqList.totalPages}
+          total={faqList.total}
+          pageSize={FAQ_PAGE_SIZE}
+          itemLabel={faqQuery ? "pertanyaan yang cocok" : "pertanyaan"}
+          onPageChange={setFaqPage}
+        />
       </>
     );
   }
@@ -509,18 +709,67 @@ export function CMSAdminEditor({
             {uploading ? "Mengunggah..." : "Unggah file"}
           </button>
         </form>
-        {media.length === 0 ? (
-          <div className="rounded-2xl border border-[#e5ebe4] bg-white p-8 text-center text-sm text-[#87938a]">
-            Belum ada media yang diunggah.
+        <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <SearchField
+              value={mediaQuery}
+              onChange={(value) => {
+                setMediaQuery(value);
+                setMediaPage(1);
+              }}
+              placeholder="Cari nama file"
+              label="Cari media"
+            />
+            <div role="group" aria-label="Jenis file" className="flex gap-1 rounded-xl border border-[#dce4dc] bg-white p-1">
+              {mediaTypeFilters.map((filter) => (
+                <button
+                  key={filter.id}
+                  type="button"
+                  aria-pressed={mediaType === filter.id}
+                  onClick={() => {
+                    setMediaType(filter.id);
+                    setMediaPage(1);
+                  }}
+                  className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                    mediaType === filter.id
+                      ? "bg-[#315b3d] text-white"
+                      : "text-[#526157] hover:bg-[#f5f8f5]"
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
           </div>
+          {mediaLoading && <span className="text-xs text-[#87938a]">Memuat...</span>}
+        </div>
+        {media.length === 0 && !mediaLoading ? (
+          debouncedMediaQuery || mediaType !== "all" ? (
+            <NoResults
+              query={debouncedMediaQuery || mediaTypeFilters.find((filter) => filter.id === mediaType)?.label || ""}
+              itemLabel="file"
+              onClear={() => {
+                setMediaQuery("");
+                setMediaType("all");
+                setMediaPage(1);
+              }}
+            />
+          ) : (
+            <div className="rounded-2xl border border-[#e5ebe4] bg-white p-8 text-center text-sm text-[#87938a]">
+              Belum ada media yang diunggah.
+            </div>
+          )
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div
+            aria-busy={mediaLoading}
+            className={`grid gap-4 transition-opacity sm:grid-cols-2 xl:grid-cols-3 ${mediaLoading ? "opacity-60" : ""}`}
+          >
             {media.map((file) => (
               <article
                 key={file.name}
                 className="overflow-hidden rounded-xl border border-[#e5ebe4] bg-white"
               >
-                {/\.(jpe?g|png|webp|gif)$/i.test(file.name) ? (
+                {imageFilePattern.test(file.name) ? (
                   <div className="relative h-40 bg-[#f3f5f2]">
                     <Image
                       src={file.url}
@@ -536,23 +785,86 @@ export function CMSAdminEditor({
                   </div>
                 )}
                 <div className="p-3">
-                  <p className="truncate text-xs font-medium text-[#526157]">
+                  <p className="truncate text-xs font-medium text-[#526157]" title={file.name}>
                     {file.name}
                   </p>
-                  <p className="mt-1 text-[10px] text-[#9aa49c]">
-                    {(file.size / 1024).toFixed(0)} KB · {file.url}
+                  <p className="mt-1 text-[11px] text-[#9aa49c]">
+                    {(file.size / 1024).toFixed(0)} KB
+                    {file.updatedAt ? ` · ${formatDateTime(file.updatedAt)}` : ""}
                   </p>
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => void copyUrl(file.url)}
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#dce4dc] px-2.5 py-1.5 text-xs font-medium text-[#385944] transition hover:bg-[#f5f8f5]"
+                    >
+                      {copiedUrl === file.url ? (
+                        <>
+                          <Check size={13} aria-hidden="true" /> Tersalin
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={13} aria-hidden="true" /> Salin URL
+                        </>
+                      )}
+                    </button>
+                    <a
+                      href={file.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#dce4dc] px-2.5 py-1.5 text-xs font-medium text-[#385944] transition hover:bg-[#f5f8f5]"
+                    >
+                      <ExternalLink size={13} aria-hidden="true" /> Buka
+                    </a>
+                  </div>
                 </div>
               </article>
             ))}
           </div>
         )}
+        <Pagination
+          page={Math.min(mediaPage, Math.max(1, Math.ceil(mediaTotal / MEDIA_PAGE_SIZE)))}
+          totalPages={Math.max(1, Math.ceil(mediaTotal / MEDIA_PAGE_SIZE))}
+          total={mediaTotal}
+          pageSize={MEDIA_PAGE_SIZE}
+          itemLabel="file"
+          onPageChange={setMediaPage}
+        />
       </>
     );
   }
 
   const editingArticle = articleDraft.id !== "";
   const editingAgenda = agendaDraft.id !== "";
+  const newsList = paginate(
+    content.articles.filter((article) =>
+      matchesQuery(
+        newsQuery,
+        article.title,
+        article.category,
+        article.tag,
+        article.author,
+        article.summary,
+        article.date,
+      ),
+    ),
+    newsPage,
+    NEWS_PAGE_SIZE,
+  );
+  const agendaList = paginate(
+    content.agenda.filter((agenda) =>
+      matchesQuery(
+        agendaQuery,
+        agenda.title,
+        agenda.location,
+        agenda.tagLabel,
+        agenda.time,
+        `${agenda.day} ${agenda.month}`,
+      ),
+    ),
+    agendaPage,
+    AGENDA_PAGE_SIZE,
+  );
   return (
     <>
       <PageHeading
@@ -611,7 +923,8 @@ export function CMSAdminEditor({
             setArticleDraft(emptyArticle);
           }
         }}
-        className="mb-7 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
+        ref={articleFormRef}
+        className="mb-7 scroll-mt-24 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
       >
         <h2 className="text-base font-semibold text-[#24392a]">
           {editingArticle ? "Ubah berita" : "Tambah berita"}
@@ -640,7 +953,7 @@ export function CMSAdminEditor({
               className={inputClass}
             />
           </label>
-          {media.some((file) => /\.(jpe?g|png|webp|gif)$/i.test(file.name)) && (
+          {imageOptions.length > 0 && (
             <label className={labelClass}>
               Atau pilih gambar dari pustaka media
               <select
@@ -656,13 +969,11 @@ export function CMSAdminEditor({
                 className={inputClass}
               >
                 <option value="">Pilih gambar</option>
-                {media
-                  .filter((file) => /\.(jpe?g|png|webp|gif)$/i.test(file.name))
-                  .map((file) => (
-                    <option key={file.name} value={file.url}>
-                      {file.name}
-                    </option>
-                  ))}
+                {imageOptions.map((file) => (
+                  <option key={file.name} value={file.url}>
+                    {file.name}
+                  </option>
+                ))}
               </select>
             </label>
           )}
@@ -737,8 +1048,34 @@ export function CMSAdminEditor({
           <SaveButton saving={saving} />
         </div>
       </form>
-      <div className="mb-10 space-y-3">
-        {content.articles.map((article) => (
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-base font-semibold text-[#24392a]">Daftar berita</h2>
+        <SearchField
+          value={newsQuery}
+          onChange={(value) => {
+            setNewsQuery(value);
+            setNewsPage(1);
+          }}
+          placeholder="Cari judul, kategori, penulis, atau tag"
+          label="Cari berita"
+        />
+      </div>
+      {content.articles.length === 0 ? (
+        <div className="rounded-2xl border border-[#e5ebe4] bg-white p-8 text-center text-sm text-[#87938a]">
+          Belum ada berita.
+        </div>
+      ) : newsList.total === 0 ? (
+        <NoResults
+          query={newsQuery}
+          itemLabel="berita"
+          onClear={() => {
+            setNewsQuery("");
+            setNewsPage(1);
+          }}
+        />
+      ) : (
+      <div className="space-y-3">
+        {newsList.pageItems.map((article) => (
           <article
             key={article.id}
             className="flex flex-col gap-3 rounded-xl border border-[#e5ebe4] bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
@@ -752,7 +1089,10 @@ export function CMSAdminEditor({
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={() => setArticleDraft(article)}
+                onClick={() => {
+                  setArticleDraft(article);
+                  scrollToForm(articleFormRef.current);
+                }}
                 className="rounded-lg border border-[#dce4dc] px-3 py-1.5 text-xs font-medium text-[#385944]"
               >
                 Ubah
@@ -773,6 +1113,15 @@ export function CMSAdminEditor({
           </article>
         ))}
       </div>
+      )}
+      <Pagination
+        page={newsList.page}
+        totalPages={newsList.totalPages}
+        total={newsList.total}
+        pageSize={NEWS_PAGE_SIZE}
+        itemLabel={newsQuery ? "berita yang cocok" : "berita"}
+        onPageChange={setNewsPage}
+      />
       </>
       )}
       {activeContentTab === "agenda" && (
@@ -790,7 +1139,8 @@ export function CMSAdminEditor({
             setAgendaDraft(emptyAgenda);
           }
         }}
-        className="space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
+        ref={agendaFormRef}
+        className="mb-7 scroll-mt-24 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
       >
         <h2 className="text-base font-semibold text-[#24392a]">
           {editingAgenda ? "Ubah agenda" : "Tambah agenda"}
@@ -880,8 +1230,34 @@ export function CMSAdminEditor({
           <SaveButton saving={saving} />
         </div>
       </form>
-      <div className="mt-4 space-y-3">
-        {content.agenda.map((agenda) => (
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-base font-semibold text-[#24392a]">Daftar agenda</h2>
+        <SearchField
+          value={agendaQuery}
+          onChange={(value) => {
+            setAgendaQuery(value);
+            setAgendaPage(1);
+          }}
+          placeholder="Cari kegiatan, lokasi, atau kategori"
+          label="Cari agenda"
+        />
+      </div>
+      {content.agenda.length === 0 ? (
+        <div className="rounded-2xl border border-[#e5ebe4] bg-white p-8 text-center text-sm text-[#87938a]">
+          Belum ada agenda.
+        </div>
+      ) : agendaList.total === 0 ? (
+        <NoResults
+          query={agendaQuery}
+          itemLabel="agenda"
+          onClear={() => {
+            setAgendaQuery("");
+            setAgendaPage(1);
+          }}
+        />
+      ) : (
+      <div className="space-y-3">
+        {agendaList.pageItems.map((agenda) => (
           <article
             key={agenda.id}
             className="flex flex-col gap-3 rounded-xl border border-[#e5ebe4] bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
@@ -895,7 +1271,10 @@ export function CMSAdminEditor({
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={() => setAgendaDraft(agenda)}
+                onClick={() => {
+                  setAgendaDraft(agenda);
+                  scrollToForm(agendaFormRef.current);
+                }}
                 className="rounded-lg border border-[#dce4dc] px-3 py-1.5 text-xs font-medium text-[#385944]"
               >
                 Ubah
@@ -916,6 +1295,15 @@ export function CMSAdminEditor({
           </article>
         ))}
       </div>
+      )}
+      <Pagination
+        page={agendaList.page}
+        totalPages={agendaList.totalPages}
+        total={agendaList.total}
+        pageSize={AGENDA_PAGE_SIZE}
+        itemLabel={agendaQuery ? "agenda yang cocok" : "agenda"}
+        onPageChange={setAgendaPage}
+      />
       </>
       )}
       </div>
