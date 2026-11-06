@@ -24,6 +24,17 @@ export const Navbar: React.FC = () => {
 
   const isDarkPage = darkPages.some((page) => pathname.startsWith(page));
 
+  // Header selalu menempel di atas; di halaman dengan hero foto ia transparan
+  // di posisi paling atas dan berubah solid begitu halaman digulir.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const solid = isDarkPage || scrolled;
+
   useEffect(() => {
     if (!isMobileOpen) return;
 
@@ -51,8 +62,8 @@ export const Navbar: React.FC = () => {
   return (
     <>
       <header
-        className={`absolute inset-x-0 top-0 z-40 font-sans text-white ${
-          isDarkPage ? 'bg-[#0f1713]' : 'bg-transparent'
+        className={`fixed inset-x-0 top-0 z-40 font-sans text-white transition-[background-color,box-shadow] duration-300 ${
+          solid ? 'bg-[#0f1713]/95 shadow-[0_6px_24px_rgba(0,0,0,0.18)] backdrop-blur' : 'bg-transparent'
         }`}
       >
         <nav

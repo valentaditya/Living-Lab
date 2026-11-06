@@ -27,7 +27,7 @@ export function BeritaAgendaTabs({
 
   return (
     <div>
-      <div className="sticky top-0 z-30 border-b border-[#e5ebe4] bg-white/95 backdrop-blur">
+      <div className="sticky top-16 z-30 border-b border-[#e5ebe4] bg-white/95 backdrop-blur">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div
             role="tablist"
