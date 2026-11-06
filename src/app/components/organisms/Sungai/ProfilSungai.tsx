@@ -4,7 +4,7 @@ import Image from 'next/image';
 export const ProfilSungai = () => {
   const sungaiData = [
     {
-      id: "DAS CODE / 01",
+      das: "DAS Code",
       title: "Kali Code",
       subtitle: "Jantung urban & Kehidupan Lahar",
       desc: "Membelah pusat kota Yogyakarta, Kali Code adalah ikon transformasi dari permukiman padat menjadi kampung wisata yang mandiri. Aliran lahar dingin Gunung Merapi menjadi tantangan sekaligus berkah bagi warga.",
@@ -17,7 +17,7 @@ export const ProfilSungai = () => {
       img: "/pictures/sungai1.jpg" 
     },
     {
-      id: "DAS WINONGO / 02",
+      das: "DAS Winongo",
       title: "Kali Winongo",
       subtitle: "Laboratorium Biosains & Kearifan Agraria",
       desc: "Membentang di bagian barat kota, Kali Winongo menyimpan kekayaan hayati dan kearifan lokal. Menjadi laboratorium alam bagi peneliti biologi dan akademisi untuk mempelajari ekosistem riparian dan akuatik.",
@@ -30,7 +30,7 @@ export const ProfilSungai = () => {
       img: "/pictures/sungai2.jpg" 
     },
     {
-      id: "DAS GAJAHWONG / 03",
+      das: "DAS Gajahwong",
       title: "Kali Gajahwong",
       subtitle: "Koridor Hayati & Rute Bio-Indikator",
       desc: "Membelah pusat kota Yogyakarta, Kali Gajahwong kini menjadi ruang terbuka hijau yang ramah. Berbagai komunitas dan akademisi bekerja bersama untuk memulihkan ekosistem sungai dan meningkatkan kualitas air.",
@@ -49,7 +49,7 @@ export const ProfilSungai = () => {
       <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
         
         <div className="text-center mb-12">
-          <span className="text-[10px] font-mono text-gray-500 tracking-widest block mb-2">PROFIL HIDROLOGI & WILAYAH</span>
+          <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">Profil Hidrologi & Wilayah</span>
           <h2 className="text-3xl lg:text-4xl font-semibold text-[#0f1713] mb-4">Tiga Arti Kehidupan Yogyakarta</h2>
           <p className="text-gray-600 text-sm max-w-2xl mx-auto">
             Masing-masing sungai mengemban karakter lanskap yang berbeda, tantangan ekologi yang unik, serta dinamika komunitas yang menjadikannya laboratorium hidup yang berbeda.
@@ -59,9 +59,9 @@ export const ProfilSungai = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {sungaiData.map((sungai, idx) => (
             <div key={idx} className="bg-white border border-gray-200 rounded-sm flex flex-col h-full hover:shadow-lg transition-shadow">
-              <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <span className="text-[10px] font-mono text-teal-700 bg-teal-50 px-2 py-1">{sungai.id}</span>
-                <span className="text-[10px] font-mono text-gray-400">Rilis: 21 Maret 2024</span>
+              <div className="p-6 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2 bg-gray-50/50">
+                <span className="text-xs text-teal-700 bg-teal-50 px-2 py-1">{sungai.das}</span>
+                <span className="text-xs text-gray-400">Rilis: 21 Maret 2024</span>
               </div>
               
               <div className="p-6 flex-grow flex flex-col">

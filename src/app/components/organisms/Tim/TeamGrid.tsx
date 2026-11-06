@@ -4,75 +4,69 @@ import { TeamCard } from './TeamCard';
 export const TeamGrid = () => {
   const teamData = [
     {
-      badge: "CODE / / LAB-01",
+      badge: "Lab Code",
       image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop",
-      role: "[ KETUA TIM RISET ]",
+      role: "Ketua Tim Riset",
       name: "Dr. Ir. Budi Santoso, M.Eng.",
       title: "Dosen Teknik Lingkungan UAJY • Spesialis Hidrodinamika",
       quote: "Laboratorium sejati bukan berada di dalam ruang tertutup kampus, melainkan di bentaran kali dan obrolan warga.",
-      focusLabel: "FOKUS UTAMA",
+      focusLabel: "Fokus Utama",
       focusValue: "Hidrologi Urban & Tata Kelola DAS",
-      pId: "P-ID: 881-UAJY",
       icon: "💧"
     },
     {
-      badge: "ECO-LAB / / 02",
+      badge: "Eco-Lab",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
-      role: "[ KOORDINATOR EKOLOGI ]",
+      role: "Koordinator Ekologi",
       name: "Sekar Ayu Prabawati, S.Si., M.Sc.",
       title: "Peneliti Biologi Perairan UAJY • Bioindikator Makrobentos",
       quote: "Setiap mikroorganisme di aliran sungai adalah indikator kejujuran peradaban kota kita.",
-      focusLabel: "FOKUS UTAMA",
+      focusLabel: "Fokus Utama",
       focusValue: "Bio-indikator Bentik & Kimia Sungai",
-      pId: "P-ID: 882-UAJY",
       icon: "🔬"
     },
     {
-      badge: "PAGUYUBAN / / CODE",
+      badge: "Paguyuban Code",
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=600&auto=format&fit=crop",
-      role: "[ KOORDINATOR LAPANGAN ]",
+      role: "Koordinator Lapangan",
       name: "FX. Bambang Hendro",
       title: "Tokoh Paguyuban Pemerti Kali Code • Relawan Bencana DAS",
       quote: "Sungai bukan tempat membuang masa lalu, melainkan halaman depan masa depan anak cucu kami.",
-      focusLabel: "FOKUS UTAMA",
+      focusLabel: "Fokus Utama",
       focusValue: "Aksi Relawan & Edukasi Warga",
-      pId: "P-ID: 981-COMM",
       icon: "🤝"
     },
     {
-      badge: "TELEMETRI / / IOT",
+      badge: "Telemetri IoT",
       image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=600&auto=format&fit=crop",
-      role: "[ SPESIALIS IOT & SAINS WARGA ]",
+      role: "Spesialis IoT & Sains Warga",
       name: "Maria Dwi Lestari, S.T.",
       title: "Peneliti Sains Komputasi DIY • Pegiat Open Hardware",
       quote: "Teknologi sensor hanya bermakna jika datanya dipahami dan dijaga bersama oleh warga yang tinggal di tepiannya.",
-      focusLabel: "FOKUS UTAMA",
+      focusLabel: "Fokus Utama",
       focusValue: "Telemetri LoRaWAN & Open Hardware",
-      pId: "P-ID: 883-DIY",
       icon: "📡"
     },
     {
-      badge: "KONSERVASI / / WINONGO",
+      badge: "Konservasi Winongo",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
-      role: "[ INISIATOR KONSERVASI ]",
+      role: "Inisiator Konservasi",
       name: "Danang Wijayanto",
       title: "Inisiator FKWA Winongo Asri • Penggiat Ekoparian",
       quote: "Mungkur kali dadi madhep kali: ketika sungai dihormati, bencana luapan berubah menjadi anugerah kehidupan.",
-      focusLabel: "FOKUS UTAMA",
+      focusLabel: "Fokus Utama",
       focusValue: "Ruang Terbuka Hijau & Ekowisata",
-      pId: "P-ID: 982-COMM",
       icon: "🌿"
     },
     {
-      badge: "SPASIAL / / KEBIJAKAN",
+      badge: "Spasial & Kebijakan",
       image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=600&auto=format&fit=crop", // Placeholder, ganti dengan foto asli
-      role: "[ PERENCANA TATA RUANG ]",
+      role: "Perencana Tata Ruang",
       name: "Nurul Hidayati, M.P.W.K.",
       title: "Dosen Perencanaan Wilayah Kota UAJY • Analis Spasial",
       quote: "Mengintegrasikan kearifan lokal bantara ke dalam rencana tata ruang kota adalah wujud keadilan spasial.",
-      focusLabel: "FOKUS UTAMA",
+      focusLabel: "Fokus Utama",
       focusValue: "Kebijakan Sempadan & Mitigasi Banjir",
-      pId: "P-ID: 884-UAJY",
       icon: "📐"
     }
   ];

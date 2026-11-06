@@ -9,9 +9,8 @@ export const CtaRoadmap = () => {
           
           {/* Left Content */}
           <div className="flex flex-col gap-4 max-w-2xl text-center lg:text-left">
-            <span className="inline-flex items-center gap-2 text-[10px] font-mono text-teal-400 tracking-widest mb-2 justify-center lg:justify-start">
-              <span className="w-2 h-2 rounded-full bg-teal-400"></span>
-              KOLABORASI & PERCEPATAN ROADMAP
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-teal-400">
+              Kolaborasi & Percepatan Roadmap
             </span>
             <h2 className="text-3xl md:text-5xl font-bold leading-tight">
               Ingin Mengambil Bagian dalam Percepatan Fase 2 & 3?
@@ -40,10 +39,9 @@ export const CtaRoadmap = () => {
         </div>
 
         {/* Bottom Metadata */}
-        <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-[10px] font-mono text-gray-500 gap-4">
-          <span>VERSI MATRIKS ROADMAP: V2.4.1-2024.REV</span>
-          <span>PENINJAUAN TERAKHIR: OKTOBER 2024 OLEH TIM AHLI DAS YOGYAKARTA</span>
-        </div>
+        <p className="mt-16 pt-8 border-t border-gray-800 text-xs text-gray-500 text-center md:text-left">
+          Peninjauan terakhir: Oktober 2024 oleh Tim Ahli DAS Yogyakarta
+        </p>
       </div>
     </section>
   );

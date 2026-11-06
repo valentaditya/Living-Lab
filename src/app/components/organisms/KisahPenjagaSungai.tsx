@@ -4,7 +4,7 @@ import { ArrowRight, Mic, Send } from 'lucide-react';
 export const KisahPenjagaSungai: React.FC = () => {
   return (
     <section className="w-full bg-[#fcfdfd] py-12 font-sans text-slate-800 antialiased">
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[96rem] px-4 sm:px-6 lg:px-8">
         
       
         <div className="mb-10 max-w-3xl">
@@ -82,7 +82,7 @@ export const KisahPenjagaSungai: React.FC = () => {
 
             <div className="bg-white rounded-[24px] p-4 sm:p-5 border border-slate-200/80 shadow-sm flex flex-row gap-4 items-start group hover:border-slate-300 transition-all">
              
-              <div className="w-28 h-20 sm:w-32 sm:h-32 rounded-xl overflow-hidden shrink-0 bg-slate-100">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden shrink-0 bg-slate-100">
                 <img
                   src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=400&auto=format&fit=crop"
                   alt="Kali Code"
@@ -112,7 +112,7 @@ export const KisahPenjagaSungai: React.FC = () => {
             </div>
 
             <div className="bg-white rounded-[24px] p-4 sm:p-5 border border-slate-200/80 shadow-sm flex flex-row gap-4 items-start group hover:border-slate-300 transition-all">
-              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden shrink-0 bg-slate-100">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden shrink-0 bg-slate-100">
                 <img
                   src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=400&auto=format&fit=crop"
                   alt="Penganyam Bambu"
@@ -141,7 +141,7 @@ export const KisahPenjagaSungai: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-[#eff3fe] border border-[#e0e7ff] rounded-[24px] p-5 sm:p-6 flex flex-row items-center justify-between gap-4 shadow-sm shrink-0">
+            <div className="bg-[#eff3fe] border border-[#e0e7ff] rounded-[24px] p-5 sm:p-6 flex flex-col items-start gap-4 shadow-sm shrink-0 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-start gap-3">
                 <div className="text-[#1b7a43] mt-0.5 shrink-0 bg-white p-1.5 rounded-lg shadow-xs">
                   <Send className="w-4 h-4 -rotate-45 stroke-[2.5]" />

@@ -1,107 +1,97 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation'; 
+import React, { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { Menu } from 'lucide-react';
 import { BrandLogo } from '../molecules/BrandLogo';
-import { NavigationMenu } from './NavigationMenu'; 
-import { ButtonCTA } from '../molecules/ButonCta';
-import { MenuIcon } from '../atoms/MenuIcon';
+import { NavigationMenu } from './NavigationMenu';
 import { MobileMenu } from './MobileMenu';
 
-interface SubMenuItem {
-  label: string;
-  href: string;
-}
+export { menuData } from './navigation-data';
+export type { MenuItem } from './navigation-data';
 
-export interface MenuItem {
-  label: string;
-  type: 'link' | 'dropdown';
-  href?: string;
-  subItems?: SubMenuItem[];
-}
-
-export const menuData: MenuItem[] = [
-  { label: "Beranda", href: "/", type: "link" },
-  { 
-    label: "Tentang Kami", 
-    type: "dropdown",
-    subItems: [
-      { label: "Profil Living Lab", href: "/tentang/profil" },
-      { label: "Tim Kami", href: "/tentang/tim" },
-      { label: "Visi & Misi", href: "/tentang/visi-misi" }
-    ]
-  },
-  { label: "Sungai", href: "/sungai", type: "link" },
-  { 
-    label: "Pusat Pengetahuan", 
-    type: "dropdown",
-    subItems: [
-      { label: "Jurnal & Publikasi", href: "/pengetahuan/jurnal" },
-      { label: "Data Kualitas Air", href: "/pengetahuan/data" },
-      { label: "Modul Edukasi", href: "/pengetahuan/modul" }
-    ]
-  },
-  { label: "Berita", href: "/berita", type: "link" },
-  { label: "Kisah Sungai", href: "/kisah-sungai", type: "link" },
-  { label: "Kolaborasi", href: "/kolaborasi", type: "link" },
-];
+// Halaman yang memakai navbar gelap solid (halaman lain: transparan di atas hero)
+const darkPages = ['/tentang', '/kolaborasi', '/pengetahuan', '/kisah-sungai'];
 
 export const Navbar: React.FC = () => {
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
-  // Daftar halaman yang membutuhkan navbar gelap
-  const darkPages = ['/tentang', '/kolaborasi', '/pengetahuan', '/kisah-sungai'];
-  
-  // Cek apakah URL saat ini termasuk halaman gelap
-  const isDarkPage = darkPages.some(page => pathname.startsWith(page));
+  // Menyimpan path saat menu dibuka, sehingga menu otomatis tertutup ketika halaman berganti.
+  const [openedAt, setOpenedAt] = useState<string | null>(null);
+  const isMobileOpen = openedAt === pathname;
+  const closeMobile = () => setOpenedAt(null);
+
+  const isDarkPage = darkPages.some((page) => pathname.startsWith(page));
 
   useEffect(() => {
-    if (isMobileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    if (!isMobileOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenedAt(null);
+    };
+    // Menu mobile disembunyikan mulai breakpoint xl, jadi tutup juga state-nya.
+    const desktopQuery = window.matchMedia('(min-width: 80rem)');
+    const onDesktop = () => {
+      if (desktopQuery.matches) setOpenedAt(null);
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    desktopQuery.addEventListener('change', onDesktop);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+      desktopQuery.removeEventListener('change', onDesktop);
+    };
   }, [isMobileOpen]);
 
   return (
     <>
-      <nav 
-        className={`w-full px-4 md:px-8 py-3 flex items-center justify-between absolute top-0 z-40 transition-colors duration-300 
-        font-sans text-sm font-medium tracking-wide
-        ${
-          isDarkPage 
-            ? 'bg-[#0f1713] text-white'      // Halaman gelap: background solid, tanpa blur/shadow
-            : 'bg-transparent text-white'    // Halaman default: murni transparan, tanpa blur/shadow/border
+      <header
+        className={`absolute inset-x-0 top-0 z-40 font-sans text-white ${
+          isDarkPage ? 'bg-[#0f1713]' : 'bg-transparent'
         }`}
       >
-        <BrandLogo />
-       
-        <NavigationMenu />
+        <nav
+          aria-label="Navigasi utama"
+          className="mx-auto flex h-16 max-w-[96rem] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
+        >
+          <BrandLogo />
 
-        <div className="flex items-center gap-4">
-          <Link
-            href="/login"
-            className="rounded-full border border-white/35 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
-          >
-            Masuk
-          </Link>
-          <div className="hidden md:block">
-            <ButtonCTA text="Menjadi Mitra" />
+          <NavigationMenu pathname={pathname} />
+
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <Link
+              href="/login"
+              className="hidden rounded-full border border-white/35 px-4 py-2 text-xs font-semibold transition hover:bg-white/10 sm:inline-flex"
+            >
+              Masuk
+            </Link>
+            <Link
+              href="/kolaborasi"
+              className="hidden rounded-full bg-white px-5 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-100 min-[90rem]:inline-flex"
+            >
+              Menjadi Mitra
+            </Link>
+
+            <button
+              type="button"
+              className="-mr-2 rounded-lg p-2 transition hover:bg-white/10 xl:hidden"
+              onClick={() => setOpenedAt(pathname)}
+              aria-label="Buka menu"
+              aria-expanded={isMobileOpen}
+              aria-controls="mobile-menu"
+            >
+              <Menu className="h-6 w-6" aria-hidden="true" />
+            </button>
           </div>
-          
-          <button 
-            className="p-2 md:hidden text-white hover:bg-white/10 rounded-lg transition"
-            onClick={() => setIsMobileOpen(true)}
-            aria-label="Open Menu"
-          >
-            <MenuIcon />
-          </button>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
-      <MobileMenu isOpen={isMobileOpen} onClose={() => setIsMobileOpen(false)} />
+      <MobileMenu isOpen={isMobileOpen} onClose={closeMobile} pathname={pathname} />
     </>
   );
 };

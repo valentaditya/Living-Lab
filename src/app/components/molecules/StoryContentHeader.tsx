@@ -2,10 +2,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Feather } from 'lucide-react';
-import { StoryBadge } from '../atoms/StoryBadge';
 
 interface StoryContentHeaderProps {
-  code: string;
   category: string;
   title: string;
   authorOrFigure: string;
@@ -15,7 +13,6 @@ interface StoryContentHeaderProps {
 }
 
 export const StoryContentHeader: React.FC<StoryContentHeaderProps> = ({
-  code,
   category,
   title,
   authorOrFigure,
@@ -26,7 +23,7 @@ export const StoryContentHeader: React.FC<StoryContentHeaderProps> = ({
   return (
     <header className="border-b border-slate-900/10 pb-10 space-y-6">
       {/* Tombol Kembali & Breadcrumb */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
         <Link
           href="/kisah-sungai"
           className="inline-flex items-center gap-2 text-slate-600 hover:text-emerald-800 transition w-fit"
@@ -35,18 +32,14 @@ export const StoryContentHeader: React.FC<StoryContentHeaderProps> = ({
           <span>Kembali ke Indeks Kisah</span>
         </Link>
 
-        <div className="flex items-center gap-2 text-slate-500">
-          <span className="font-semibold text-emerald-800">{code}</span>
-          <span className="text-slate-300">/</span>
-          <span>{category}</span>
-          <span className="text-slate-300">/</span>
-          <span>{date}</span>
-        </div>
+        <p className="text-slate-500">
+          <span className="font-semibold text-emerald-800">{category}</span> · {date}
+        </p>
       </div>
 
       {/* Judul Utama */}
       <div className="space-y-4 max-w-4xl">
-        <div className="inline-flex items-center gap-2 font-mono text-xs text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded">
+        <div className="inline-flex items-center gap-2 text-xs text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded">
           <Feather className="w-3.5 h-3.5" />
           <span>Esei & Refleksi Warga Bantaran</span>
         </div>
@@ -55,7 +48,7 @@ export const StoryContentHeader: React.FC<StoryContentHeaderProps> = ({
           {title}
         </h1>
 
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2 text-sm text-slate-600 font-mono">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2 text-sm text-slate-600">
           <div>
             <span className="text-slate-400">Tokoh / Penulis: </span>
             <span className="text-slate-900 font-semibold">{authorOrFigure}</span>

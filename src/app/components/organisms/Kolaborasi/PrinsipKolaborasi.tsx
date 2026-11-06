@@ -9,7 +9,7 @@ export const PrinsipKolaborasi = () => {
           
           {/* Left Column: Title */}
           <div className="lg:col-span-5 flex flex-col gap-4">
-            <span className="text-[10px] font-mono text-gray-500 tracking-widest block mb-2">[ SEKSI 01 // KONSEP ]</span>
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">Konsep</span>
             <h2 className="text-4xl lg:text-5xl font-bold text-[#0f1713] leading-[1.1] mb-6">
               PRINSIP<br />CO-CREATION &<br />CO-PRODUCTION
             </h2>
@@ -31,13 +31,13 @@ export const PrinsipKolaborasi = () => {
             {/* Principles Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <span className="text-[10px] font-mono text-teal-700 font-bold block mb-2">01. CO-CREATION (PERUMUSAN BERSAMA)</span>
+                <span className="block mb-2 text-xs font-bold uppercase tracking-wider text-teal-700">Co-Creation (Perumusan Bersama)</span>
                 <p className="text-sm text-gray-600 leading-relaxed">
                   Warga, akademisi, dan pemerintah duduk setara dalam perumusan pengetahuan. Bukan sekadar menerima hasil riset, melainkan turut serta dalam mengidentifikasi masalah, merumuskan solusi, dan mengambil keputusan bersama.
                 </p>
               </div>
               <div>
-                <span className="text-[10px] font-mono text-teal-700 font-bold block mb-2">02. CO-PRODUCTION (AKSI BERSAMA)</span>
+                <span className="block mb-2 text-xs font-bold uppercase tracking-wider text-teal-700">Co-Production (Aksi Bersama)</span>
                 <p className="text-sm text-gray-600 leading-relaxed">
                   Implementasi solusi dilakukan secara kolektif. Mulai dari pemasangan sensor, penanaman vegetasi riparian, hingga pengelolaan sampah sirkular, semuanya melibatkan partisipasi aktif warga bantara dan mitra strategis.
                 </p>

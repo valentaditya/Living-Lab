@@ -18,7 +18,7 @@ export const AgendaSection: React.FC<{
         subsection ? "" : "bg-white py-12 sm:py-16"
       }`}
     >
-      <div className={subsection ? "" : "mx-auto px-4 sm:px-6 lg:px-8"}>
+      <div className={subsection ? "" : "mx-auto max-w-[96rem] px-4 sm:px-6 lg:px-8"}>
         {!subsection && (
           <AgendaHeader />
         )}

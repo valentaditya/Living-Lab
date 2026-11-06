@@ -13,9 +13,7 @@ export const KondisiSosial = () => {
             </h2>
             
             <div className="flex flex-wrap gap-2 mb-2">
-              <span className="text-[10px] font-mono bg-teal-50 text-teal-700 px-2 py-1 border border-teal-100">KORIDOR 3 DAS</span>
-              <span className="text-[10px] font-mono bg-gray-50 text-gray-600 px-2 py-1 border border-gray-200">STATUS INDEKS: RILIS 21</span>
-              <span className="text-[10px] font-mono bg-gray-50 text-gray-600 px-2 py-1 border border-gray-200">REVIEWS & ANALYTICS</span>
+              <span className="text-[10px] tracking-wider bg-teal-50 text-teal-700 px-2 py-1 border border-teal-100">KORIDOR 3 DAS</span>
             </div>
 
             <p className="text-gray-600 text-sm leading-relaxed">
@@ -28,11 +26,11 @@ export const KondisiSosial = () => {
             <div className="flex gap-8 mt-4">
               <div>
                 <span className="block text-3xl font-bold text-[#0f1713]">186 km</span>
-                <span className="text-[10px] font-mono text-gray-500">PANJANG SUNGAI TERPANTAU</span>
+                <span className="text-[10px] tracking-wider text-gray-500">PANJANG SUNGAI TERPANTAU</span>
               </div>
               <div>
                 <span className="block text-3xl font-bold text-[#0f1713]">78.4%</span>
-                <span className="text-[10px] font-mono text-gray-500">CAKUPAN WILAYAH TERPANTAU</span>
+                <span className="text-[10px] tracking-wider text-gray-500">CAKUPAN WILAYAH TERPANTAU</span>
               </div>
             </div>
           </div>
@@ -41,7 +39,7 @@ export const KondisiSosial = () => {
           <div className="lg:col-span-4 flex flex-col gap-4">
             <div className="border border-gray-200 p-6 rounded-sm flex justify-between items-start">
               <div>
-                <span className="text-[10px] font-mono text-gray-400 block mb-1">INISIATIF TERPADU</span>
+                <span className="text-[10px] tracking-wider text-gray-400 block mb-1">INISIATIF TERPADU</span>
                 <span className="text-2xl font-bold text-[#0f1713]">12 Program Aktif</span>
                 <p className="text-xs text-gray-500 mt-2">Restorasi vegetasi riparian, bank sampah sirkular, dan pemantauan debit sungai.</p>
               </div>
@@ -50,7 +48,7 @@ export const KondisiSosial = () => {
             
             <div className="border border-gray-200 p-6 rounded-sm flex justify-between items-start">
               <div>
-                <span className="text-[10px] font-mono text-gray-400 block mb-1">KOLABORASI AKAR RUMPUT</span>
+                <span className="text-[10px] tracking-wider text-gray-400 block mb-1">KOLABORASI AKAR RUMPUT</span>
                 <span className="text-2xl font-bold text-[#0f1713]">28 Komunitas</span>
                 <p className="text-xs text-gray-500 mt-2">Forum warga bantaran Kali Code, Winongo Asri, dan Gajahwong.</p>
               </div>
@@ -59,7 +57,7 @@ export const KondisiSosial = () => {
 
             <div className="border border-gray-200 p-6 rounded-sm flex justify-between items-start">
               <div>
-                <span className="text-[10px] font-mono text-gray-400 block mb-1">TELEMETRI TERPASANG</span>
+                <span className="text-[10px] tracking-wider text-gray-400 block mb-1">TELEMETRI TERPASANG</span>
                 <span className="text-2xl font-bold text-[#0f1713]">3 Sungai Dipantau</span>
                 <p className="text-xs text-gray-500 mt-2">Sensor kualitas air dan tinggi muka air berbasis IoT.</p>
               </div>

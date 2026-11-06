@@ -1,33 +1,36 @@
 import Link from "next/link";
 import Image from "next/image";
 
+const footerColumns = [
+  {
+    title: "Navigasi",
+    links: [
+      { name: "Beranda", href: "/" },
+      { name: "Profil Living Lab", href: "/tentang/profil" },
+      { name: "Roadmap", href: "/tentang/roadmap" },
+      { name: "Sungai", href: "/sungai" },
+      { name: "Kolaborasi", href: "/kolaborasi" },
+      { name: "FAQ", href: "/tentang/faq" },
+    ],
+  },
+  {
+    title: "Riset & Arsip",
+    links: [
+      { name: "Data Kualitas Air", href: "/pengetahuan/data" },
+      { name: "Modul Edukasi", href: "/pengetahuan/modul" },
+      { name: "Jurnal & Publikasi", href: "/pengetahuan/jurnal" },
+    ],
+  },
+];
+
 export default function Footer() {
-  const navigasiLinks = [
-    { name: "Beranda Utama", href: "/" },
-    { name: "Tentang Living Lab (Profil & Roadmap)", href: "/tentang/profil" },
-    { name: "Observatorium Tiga Sungai", href: "/sungai" },
-    { name: "Kanal Kolaborasi & Kemitraan", href: "/kolaborasi" },
-    { name: "Pusat Pertanyaan (FAQ)", href: "/faq" },
-  ];
-
-  const risetLinks = [
-    { name: "Laporan Kualitas Air Real-Time", href: "/pengetahuan/data" },
-    { name: "Indeks Kerentanan DAS DIY", href: "/pengetahuan/indeks" },
-    { name: "Modul Sains Warga & Toolkit", href: "/pengetahuan/modul" },
-    { name: "Repositori Jurnal Terbuka UAJY", href: "/pengetahuan/jurnal" },
-  ];
-
   return (
-    <footer className="bg-[#0f172a] text-white pt-20 pb-8 text-sm">
-      <div className="container mx-auto px-4 lg:px-8">
-        
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          
-          {/* Column 1: Brand & Description */}
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center p-1">
+    <footer className="bg-[#0f172a] pb-8 pt-14 text-sm text-white sm:pt-20">
+      <div className="mx-auto max-w-[96rem] px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:mb-16 lg:grid-cols-4 lg:gap-12">
+          <div className="col-span-2 flex flex-col gap-5 lg:col-span-1">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white p-1">
                 <Image
                   src="/pictures/icon.png"
                   alt=""
@@ -36,81 +39,51 @@ export default function Footer() {
                   className="h-full w-full object-contain"
                 />
               </div>
-              <span className="font-semibold text-lg tracking-tight leading-tight">
-                Living Lab Sungai<br />Yogyakarta
+              <span className="text-lg font-semibold leading-tight tracking-tight">
+                Living Lab Sungai Yogyakarta
               </span>
             </div>
-            <p className="text-gray-400 text-xs leading-relaxed">
-              Platform kolaboratif berbasis sains warga, dan restorasi ekologis DAS Code, Winongo, dan Gajahwong di Daerah Istimewa Yogyakarta.
+            <p className="max-w-sm text-sm leading-relaxed text-gray-400">
+              Platform kolaboratif berbasis sains warga untuk restorasi ekologis DAS Code, Winongo, dan Gajahwong di Daerah Istimewa Yogyakarta.
             </p>
-            <div className="text-[10px] font-mono text-gray-500 tracking-wider mt-2 uppercase border border-gray-700 p-2 rounded-sm w-fit">
-              Civic Science • Eco Restoration • Participatory Design
+          </div>
+
+          {footerColumns.map((column) => (
+            <div key={column.title}>
+              <h4 className="mb-4 text-sm font-semibold text-white">{column.title}</h4>
+              <ul className="flex flex-col gap-3 text-gray-400">
+                {column.links.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="transition-colors hover:text-white">
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
+          ))}
 
-          {/* Column 2: Navigasi Cepat */}
-          <div>
-            <h4 className="text-xs font-mono text-gray-500 tracking-wider mb-6">
-              [ 01 / / NAVIGASI CEPAT ]
-            </h4>
-            <ul className="flex flex-col gap-3 text-gray-300">
-              {navigasiLinks.map((link, idx) => (
-                <li key={idx}>
-                  <Link href={link.href} className="hover:text-white transition-colors text-xs">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 3: Riset & Arsip */}
-          <div>
-            <h4 className="text-xs font-mono text-gray-500 tracking-wider mb-6">
-              [ 02 / / RISET & ARSIP ]
-            </h4>
-            <ul className="flex flex-col gap-3 text-gray-300">
-              {risetLinks.map((link, idx) => (
-                <li key={idx}>
-                  <Link href={link.href} className="hover:text-white transition-colors text-xs">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 4: Kontak & Sekretariat */}
-          <div>
-            <h4 className="text-xs font-mono text-gray-500 tracking-wider mb-6">
-              [ 03 / / KONTAK & SEKRETARIAT ]
-            </h4>
-            <div className="text-gray-400 text-xs space-y-3 leading-relaxed">
+          <div className="col-span-2 lg:col-span-1">
+            <h4 className="mb-4 text-sm font-semibold text-white">Kontak</h4>
+            <address className="space-y-3 not-italic leading-relaxed text-gray-400">
               <p>
-                Kampus UAJY, Babarsari. Gedung Thomas Aquinas Lantai 3, Jl. Babarsari No. 44, Sleman, DIY Yogyakarta 55281.
+                Kampus UAJY Babarsari, Gedung Thomas Aquinas Lantai 3, Jl. Babarsari No. 44, Sleman, DIY 55281.
               </p>
-              <div className="pt-2 space-y-1">
-                <a href="mailto:sekretariat@livinglabsungai.ac.id" className="block hover:text-white transition-colors">
-                  E: sekretariat@livinglabsungai.ac.id
+              <p className="flex flex-col gap-1">
+                <a href="mailto:sekretariat@livinglabsungai.ac.id" className="break-all transition-colors hover:text-white">
+                  sekretariat@livinglabsungai.ac.id
                 </a>
-                <a href="tel:+62274487711" className="block hover:text-white transition-colors">
-                  T: +62 (274) 487-711 Ext. 2104
+                <a href="tel:+62274487711" className="transition-colors hover:text-white">
+                  +62 (274) 487-711 ext. 2104
                 </a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-gray-500 font-mono">
-          <p>© 2025 Living Lab Sungai Yogyakarta. Universitas Atma Jaya Yogyakarta & Komunitas Bantara.</p>
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            <span>STATUS: SISTEM OPERASIONAL DAS JOGJA</span>
+              </p>
+            </address>
           </div>
         </div>
 
+        <div className="border-t border-gray-800 pt-6 text-xs text-gray-500">
+          <p>© 2025 Living Lab Sungai Yogyakarta · Universitas Atma Jaya Yogyakarta &amp; Komunitas Bantara.</p>
+        </div>
       </div>
     </footer>
   );

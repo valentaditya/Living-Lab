@@ -11,7 +11,7 @@ interface NewsSectionProps {
 export const NewsSection: React.FC<NewsSectionProps> = ({ articles }) => {
   return (
     <section className="w-full py-12 md:py-16 bg-white">
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[96rem] px-4 sm:px-6 lg:px-8">
         <SectionHeaderBar
           badgeText="KABAR LAPANGAN & RISET AKADEMIK"
           title="Kabar Lapangan & Publikasi Riset Terbaru"

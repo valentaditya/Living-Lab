@@ -8,7 +8,7 @@ export const ModelKolaborasi = () => {
           
           {/* Left Column */}
           <div className="lg:col-span-5 flex flex-col gap-6">
-            <span className="text-[10px] font-mono text-blue-800 tracking-widest">[ MODEL KOLABORASI LAPANGAN ]</span>
+            <span className="block text-xs font-semibold uppercase tracking-wider text-blue-800">Model Kolaborasi Lapangan</span>
             <h2 className="text-3xl lg:text-4xl font-semibold text-[#0f1713] leading-tight">
               Bukan Sekadar Tim di Atas Kertas
             </h2>

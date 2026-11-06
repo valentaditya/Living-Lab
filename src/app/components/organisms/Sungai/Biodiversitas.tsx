@@ -58,7 +58,6 @@ export const Biodiversitas = () => {
       <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
         
         <div className="mb-12">
-          <span className="text-[10px] font-mono text-teal-400 tracking-widest block mb-3">KEANEKARAGAMAN HAYATI RIPARIAN & AKUATIK</span>
           <h2 className="text-3xl lg:text-4xl font-semibold mb-4">Keanekaragaman Hayati Riparian & Akuatik</h2>
           <p className="text-gray-400 text-sm max-w-2xl">
             Dokumentasi taksonomi spesies bio-indikator kualitas air dan vegetasi penyangga tanggul alami hasil ekspedisi lapangan Living Lab UAJY.
@@ -77,16 +76,16 @@ export const Biodiversitas = () => {
                   className="object-cover" 
                   sizes="(max-width: 768px) 100vw, 33vw" 
                 />
-                <div className="absolute top-3 left-3 bg-teal-600 text-white text-[10px] font-mono px-2 py-1">
+                <div className="absolute top-3 left-3 bg-teal-600 text-white text-xs px-2 py-1">
                   {item.status}
                 </div>
               </div>
               <div className="p-6 flex-grow flex flex-col">
                 <h3 className="text-lg font-semibold text-white mb-1">{item.name}</h3>
-                <span className="text-xs text-teal-400 font-mono mb-4">{item.local}</span>
+                <span className="text-xs text-teal-400 mb-4">{item.local}</span>
                 <p className="text-xs text-gray-400 leading-relaxed mb-6 flex-grow">{item.desc}</p>
-                <div className="border-t border-white/10 pt-4 flex justify-between items-center">
-                  <span className="text-[10px] font-mono text-gray-500">Peran Ekologis:</span>
+                <div className="border-t border-white/10 pt-4 flex justify-between items-center gap-4">
+                  <span className="text-xs text-gray-500">Peran Ekologis:</span>
                   <span className="text-xs font-medium text-white">{item.peran}</span>
                 </div>
               </div>

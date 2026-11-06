@@ -10,7 +10,7 @@ export const CtaFAQ = () => {
           {/* Card 1: Arsip Data */}
           <div className="bg-white p-8 border border-gray-200 rounded-sm flex flex-col justify-between h-full shadow-sm">
             <div>
-              <span className="text-[10px] font-mono text-gray-500 block mb-4">[ ARSIP DATA TERBUKA ]</span>
+              <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-teal-700">Arsip Data Terbuka</span>
               <h3 className="text-xl font-semibold text-[#0f1713] mb-3">Mencari parameter teknis DAS spesifik?</h3>
               <p className="text-sm text-gray-600 leading-relaxed mb-8">
                 Akses bank data hidrologi terbuka, arsip uji kualitas biologis tiga sungai, dan dokumen kebijakan ekologis.
@@ -27,12 +27,12 @@ export const CtaFAQ = () => {
           {/* Card 2: Bantuan Operasional */}
           <div className="bg-white p-8 border border-gray-200 rounded-sm flex flex-col justify-between h-full shadow-sm">
             <div>
-              <span className="text-[10px] font-mono text-gray-500 block mb-4">[ BANTUAN OPERASIONAL // SEKRETARIAT ]</span>
+              <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-teal-700">Sekretariat</span>
               <h3 className="text-xl font-semibold text-[#0f1713] mb-3">Punya pertanyaan lain yang belum terjawab?</h3>
               <p className="text-sm text-gray-600 leading-relaxed mb-2">
                 Hubungi Tim Sekretariat kami di:
               </p>
-              <a href="mailto:sekretariat@livinglabsungaijogja.ac.id" className="text-sm font-semibold text-teal-700 hover:text-teal-900 underline block mb-8">
+              <a href="mailto:sekretariat@livinglabsungaijogja.ac.id" className="text-sm font-semibold text-teal-700 hover:text-teal-900 underline block break-all mb-8">
                 sekretariat@livinglabsungaijogja.ac.id
               </a>
             </div>

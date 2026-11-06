@@ -5,7 +5,6 @@ import { Download, ExternalLink, ArrowUpRight } from 'lucide-react';
 export interface PublicationItem {
   id: string;
   type: 'Policy Brief' | 'Jurnal Riset' | 'Artikel Ilmiah';
-  code: string; // e.g. "PB-2026-04"
   title: string;
   authors: string[];
   institution: string;
@@ -21,15 +20,12 @@ export const PublicationItemRow: React.FC<{ item: PublicationItem }> = ({ item }
     <article className="group relative p-6 sm:p-7 bg-white hover:bg-slate-50/80 transition-all duration-200 border-b border-slate-200 last:border-b-0">
       <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
         
-        {/* Left Col: Code & Type badge */}
+        {/* Left Col: Type badge & Date */}
         <div className="lg:w-48 shrink-0 flex lg:flex-col items-center lg:items-start justify-between gap-2">
-          <span className="font-mono text-xs font-semibold text-emerald-800 tracking-wider">
-            {item.code}
-          </span>
           <span className="inline-block text-[11px] font-medium uppercase tracking-wider text-slate-500 bg-slate-100 px-2.5 py-1 rounded">
             {item.type}
           </span>
-          <span className="text-xs font-mono text-slate-400 mt-auto hidden lg:block">
+          <span className="text-xs text-slate-400 mt-auto hidden lg:block">
             {item.date}
           </span>
         </div>
@@ -53,7 +49,7 @@ export const PublicationItemRow: React.FC<{ item: PublicationItem }> = ({ item }
             {item.abstract}
           </p>
 
-          <div className="flex items-center gap-4 pt-1 text-xs font-mono text-slate-400">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 text-xs text-slate-400">
             {item.doi && <span>DOI: {item.doi}</span>}
             <span className="lg:hidden">• {item.date}</span>
           </div>
@@ -61,7 +57,7 @@ export const PublicationItemRow: React.FC<{ item: PublicationItem }> = ({ item }
 
         {/* Right Col: Action & Meta */}
         <div className="lg:w-40 shrink-0 flex lg:flex-col items-center lg:items-end justify-between gap-3 relative z-10 pt-2 lg:pt-0">
-          <span className="text-xs font-mono text-slate-400">{item.fileSize}</span>
+          <span className="text-xs tabular-nums text-slate-400">{item.fileSize}</span>
           
           <a
             href={item.downloadUrl}

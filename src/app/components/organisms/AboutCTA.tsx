@@ -5,9 +5,9 @@ export default function AboutCTA() {
     <section className="bg-[#0f1713] py-24 text-center">
       <div className="container mx-auto px-4 lg:px-8 max-w-4xl flex flex-col items-center">
         
-        <div className="bg-white/10 text-teal-300 text-[10px] font-mono px-4 py-1.5 rounded-sm mb-6 tracking-widest">
-          PARTISIPASI SAINS WARGA DAS JOGJA
-        </div>
+        <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-teal-300">
+          Partisipasi Sains Warga DAS Jogja
+        </span>
         
         <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6 leading-tight">
           Ingin Mengembangkan Riset atau Berkolaborasi di Koridor Tiga Sungai?

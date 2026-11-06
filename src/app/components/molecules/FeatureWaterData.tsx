@@ -18,27 +18,15 @@ const SUMMARY_METRICS = [
 export const FeaturedWaterData: React.FC<FeaturedWaterDataProps> = ({ item }) => {
   return (
     <section className="border border-slate-900/10 bg-white rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
-      {/* Top Bar */}
-      <div className="flex flex-wrap items-center justify-between px-6 py-3 border-b border-slate-900/10 bg-slate-50 text-[11px] font-mono text-slate-500 uppercase tracking-wider">
-        <div className="flex items-center gap-3">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
-          <span className="font-semibold text-slate-800">Dataset Utama</span>
-          <span className="text-slate-300">/</span>
-          <span>{item.code}</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <span>Kategori: {item.category}</span>
-          <span className="hidden sm:inline text-slate-300">•</span>
-          <span className="hidden sm:inline">Periode: {item.date}</span>
-        </div>
-      </div>
-
       {/* Main Split Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12">
         {/* Kiri: Informasi Dataset */}
         <div className="lg:col-span-7 p-7 sm:p-10 flex flex-col justify-between space-y-8">
           <div className="space-y-5">
-            <div className="inline-flex items-center gap-2 font-mono text-xs text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded">
+            <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-emerald-800">
+              Dataset Utama
+            </span>
+            <div className="inline-flex items-center gap-2 text-xs text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded">
               <Droplets className="w-3.5 h-3.5" />
               <span>Pemantauan Kualitas Air Sungai</span>
             </div>
@@ -47,7 +35,7 @@ export const FeaturedWaterData: React.FC<FeaturedWaterDataProps> = ({ item }) =>
               {item.title}
             </h2>
 
-            <div className="font-mono text-xs text-slate-500 space-y-1 border-l-2 border-emerald-600 pl-3">
+            <div className="text-xs text-slate-500 space-y-1 border-l-2 border-emerald-600 pl-3">
               <p className="text-slate-800 font-medium">{item.location}</p>
               <p>{item.institution}</p>
             </div>
@@ -57,8 +45,10 @@ export const FeaturedWaterData: React.FC<FeaturedWaterDataProps> = ({ item }) =>
             </p>
           </div>
 
-          <div className="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
-            <span className="text-slate-400">FORMAT: {item.format}</span>
+          <div className="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 text-xs">
+            <span className="text-slate-400">
+              {item.category} · {item.date} · {item.format}
+            </span>
 
             <a
               href={item.downloadUrl}
@@ -73,7 +63,7 @@ export const FeaturedWaterData: React.FC<FeaturedWaterDataProps> = ({ item }) =>
         {/* Kanan: Ringkasan Parameter Bersih */}
         <div className="lg:col-span-5 bg-slate-50/70 p-7 sm:p-10 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-900/10">
           <div className="space-y-1 mb-6">
-            <span className="font-mono text-xs uppercase tracking-wider text-emerald-800 font-semibold">
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-800">
               Ringkasan Lapangan
             </span>
             <h3 className="text-base font-semibold text-slate-900">
@@ -88,10 +78,10 @@ export const FeaturedWaterData: React.FC<FeaturedWaterDataProps> = ({ item }) =>
                 className="bg-white p-4 rounded-lg border border-slate-200/80 space-y-1"
               >
                 <span className="text-xs text-slate-500 block">{m.label}</span>
-                <span className="text-xl font-semibold text-slate-900 font-mono block">
+                <span className="text-xl font-semibold text-slate-900 tabular-nums block">
                   {m.value}
                 </span>
-                <span className="text-[11px] font-mono text-emerald-700 block pt-1">
+                <span className="text-[11px] text-emerald-700 block pt-1">
                   {m.note}
                 </span>
               </div>

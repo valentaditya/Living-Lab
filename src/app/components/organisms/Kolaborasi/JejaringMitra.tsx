@@ -15,7 +15,7 @@ export const JejaringMitra = () => {
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div>
-            <span className="text-[10px] font-mono text-gray-500 tracking-widest block mb-2">[ SEKSI 02 // JEJARING MITRA ]</span>
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">Jejaring Mitra</span>
             <h2 className="text-3xl lg:text-4xl font-semibold text-[#0f1713]">DIPERCAYA OLEH LINTAS LEMBAGA & KOMUNITAS</h2>
           </div>
           <p className="text-gray-500 text-sm max-w-md text-left md:text-right">
@@ -34,7 +34,7 @@ export const JejaringMitra = () => {
 
         {/* Community List */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-gray-200 pt-8">
-          <span className="text-[10px] font-mono text-gray-400 tracking-widest">JEJARING KOMUNITAS SUNGAI:</span>
+          <span className="text-[10px] text-gray-400 tracking-widest">JEJARING KOMUNITAS SUNGAI:</span>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             {komunitasList.map((komunitas, idx) => (
               <span key={idx} className="text-xs text-gray-600 font-medium">

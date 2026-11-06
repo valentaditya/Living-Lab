@@ -21,12 +21,12 @@ export const PillarCard: React.FC<PillarCardProps> = ({
 }) => {
   return (
     <div
-      className={`group bg-[#f8fafc]/80 hover:bg-slate-50 border border-slate-200/70 hover:border-emerald-200 rounded-2xl p-6 md:p-7 flex flex-col justify-start transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${className}`}
+      className={`group bg-[#f8fafc]/80 hover:bg-slate-50 border border-slate-200/70 hover:border-emerald-200 rounded-2xl p-5 md:p-7 flex flex-col justify-start transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${className}`}
       {...props}
     >
       
       {(Icon || customIcon) && (
-        <div className="mb-8">
+        <div className="mb-5 md:mb-8">
           <IconBox icon={Icon}>
             {customIcon}
           </IconBox>

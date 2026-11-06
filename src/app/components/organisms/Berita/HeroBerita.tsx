@@ -9,8 +9,8 @@ export const HeroBerita = () => {
           
           {/* Left Content */}
           <div className="lg:col-span-6 flex flex-col gap-6">
-            <span className="inline-block text-[10px] font-mono text-teal-400 tracking-widest border border-teal-800/50 bg-teal-900/30 px-3 py-1 w-fit">
-              [ JURNAL, KABAR & BERITA PUBLIK ]
+            <span className="block text-xs font-semibold uppercase tracking-wider text-teal-400">
+              Jurnal, Kabar & Berita Publik
             </span>
             <h1 className="text-4xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
               Kabar Lapangan & Agenda
@@ -19,19 +19,19 @@ export const HeroBerita = () => {
               Arsip berkelanjutan sains warga, riset biomonitoring hidrologi, inovasi infrastruktur riparian, dan dinamika sosial-ekologi komunitas bantara di Daerah Istimewa Yogyakarta.
             </p>
             
-            <div className="flex items-center gap-8 mt-4 border-t border-gray-700 pt-6">
+            <div className="flex items-start gap-8 mt-4 border-t border-gray-700 pt-6">
               <div>
                 <span className="block text-3xl font-bold text-white">148</span>
-                <span className="text-[10px] font-mono text-gray-400">TOTAL ARTIKEL & DOKUMENTASI LAPANGAN TERARSIP</span>
+                <span className="text-[10px] tracking-wider text-gray-400">TOTAL ARTIKEL & DOKUMENTASI LAPANGAN TERARSIP</span>
               </div>
               <div>
                 <span className="block text-3xl font-bold text-white">40</span>
-                <span className="text-[10px] font-mono text-gray-400">LIPUTAN MEDIA NASIONAL & LOKAL</span>
+                <span className="text-[10px] tracking-wider text-gray-400">LIPUTAN MEDIA NASIONAL & LOKAL</span>
               </div>
             </div>
 
-            <div className="flex gap-4 mt-2">
-              <button className="bg-transparent border border-gray-600 text-white px-6 py-3 rounded-sm text-xs font-semibold hover:bg-gray-800 transition-colors flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row gap-4 mt-2">
+              <button className="bg-transparent border border-gray-600 text-white px-6 py-3 rounded-sm text-xs font-semibold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
                 📡 Langganan Buletin Mingguan
               </button>
               <button className="bg-white text-[#0a192f] px-6 py-3 rounded-sm text-xs font-semibold hover:bg-gray-100 transition-colors">
@@ -51,7 +51,7 @@ export const HeroBerita = () => {
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6">
-              <span className="text-[10px] font-mono text-teal-400 mb-2">DOKUMENTASI // LAPANGAN PELATIHAN 2024</span>
+              <span className="text-xs text-teal-400 mb-2">Dokumentasi · Lapangan Pelatihan 2024</span>
               <h3 className="text-white text-lg font-semibold">Kolaborasi Pemetaan Partisipatif Sempadan Sungai</h3>
               <p className="text-gray-300 text-xs mt-2">Tim gabungan UAJY, komunitas bantara, dan relawan melakukan pemetaan risiko erosi di hulu Kali Progo.</p>
             </div>

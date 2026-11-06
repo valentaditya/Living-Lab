@@ -5,8 +5,8 @@ export const CtaBerita = () => {
   return (
     <section className="py-24 bg-[#0a192f] text-white">
       <div className="container mx-auto px-4 lg:px-8 max-w-4xl text-center flex flex-col items-center">
-        <span className="text-[10px] font-mono text-teal-400 tracking-widest mb-6 border border-teal-800 bg-teal-900/30 px-4 py-2 rounded-full">
-          [ KANAL PARTISIPASI WARGA // REDAKSI BANTARA ]
+        <span className="block mb-4 text-xs font-semibold uppercase tracking-wider text-teal-400">
+          Kanal Partisipasi Warga
         </span>
         <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-6">
           Punya Informasi atau Kegiatan yang Ingin Dipublikasikan?

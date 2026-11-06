@@ -6,8 +6,8 @@ export const CtaVisiMisi = () => {
     <section className="py-20 lg:py-28 bg-white">
       <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
         <div className="bg-[#eef7f6] border border-[#d1ebe7] rounded-lg p-8 md:p-16 text-center flex flex-col items-center">
-          <span className="text-[10px] font-mono text-teal-800 tracking-widest mb-6 bg-teal-100/50 px-4 py-1.5 rounded-full">
-            UNDANGAN KOLABORASI INTELEKTUAL & KOMUNAL
+          <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-teal-800">
+            Undangan Kolaborasi Intelektual & Komunal
           </span>
           <h2 className="text-2xl md:text-4xl font-semibold text-[#0f1713] mb-4 leading-tight">
             Menjadi Bagian dari Laboratorium Terbuka Kami

@@ -10,7 +10,6 @@ import { Search } from 'lucide-react';
 const PUBLICATIONS_MOCK: PublicationItem[] = [
   {
     id: 'pub-1',
-    code: 'PB-2026-09',
     type: 'Policy Brief',
     title: 'Strategi Pengendalian Beban Pencemaran Mikroplastik dan Limbah Domestik DAS',
     authors: ['Tim Peneliti Living-Lab', 'Aliansi Warga Bantaran', 'PSL UAJY'],
@@ -23,7 +22,6 @@ const PUBLICATIONS_MOCK: PublicationItem[] = [
   },
   {
     id: 'pub-2',
-    code: 'JR-2026-07',
     type: 'Jurnal Riset',
     title: 'Biomonitoring Bentos Makroinvertebrata Sebagai Bioindikator Kualitas Air Sungai',
     authors: ['Dr. Hendra W.', 'Siti Nur A.', 'Lab Terpadu Teknik Sipil'],
@@ -36,7 +34,6 @@ const PUBLICATIONS_MOCK: PublicationItem[] = [
   },
   {
     id: 'pub-3',
-    code: 'ART-2026-05',
     type: 'Artikel Ilmiah',
     title: 'Model Partisipatif: Transformasi Sensor Kualitas Air IoT oleh Komunitas Tepi Sungai',
     authors: ['Hardiek Tatendra', 'Grup Riset Sistem Tertanam', 'Forum Kali'],
@@ -68,17 +65,12 @@ const PublicationsPage: React.FC = () => {
   return (
     <KnowledgePageLayout>
       {/* 1. Header Tipografis Bersih */}
-      <header className="border-b border-slate-900/10 pb-8 space-y-4">
-        <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-emerald-800">
-          <span className="font-semibold">Pusat Pengetahuan</span>
-          <span className="text-slate-300">/</span>
-          <span>Index 01</span>
-          <span className="text-slate-300">/</span>
-          <span>Naskah & Publikasi</span>
-        </div>
-
+      <header className="border-b border-slate-900/10 pb-8">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div>
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-800">
+              Pusat Pengetahuan
+            </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900">
               Jurnal & Publikasi Ilmiah
             </h1>
@@ -87,8 +79,8 @@ const PublicationsPage: React.FC = () => {
             </p>
           </div>
           
-          <div className="font-mono text-xs text-slate-500 bg-white border border-slate-200 px-3.5 py-2 rounded-lg shrink-0 self-start lg:self-auto">
-            STATUS ARSIP: <span className="text-emerald-700 font-semibold">TERBUKA (OPEN ACCESS)</span>
+          <div className="text-xs font-semibold text-emerald-700 bg-white border border-slate-200 px-3.5 py-2 rounded-lg shrink-0 self-start lg:self-auto">
+            Akses terbuka (open access)
           </div>
         </div>
       </header>
@@ -97,8 +89,8 @@ const PublicationsPage: React.FC = () => {
       <FeaturedPublication item={featured} videoSrc="/videos/river.mp4" />
 
       {/* 3. Utility Search & Categorization Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 pt-2">
+        <div className="relative w-full max-w-md">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
@@ -109,12 +101,12 @@ const PublicationsPage: React.FC = () => {
           />
         </div>
 
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+        <div className="flex flex-wrap items-center gap-1.5 lg:justify-end">
           {['All', 'Policy Brief', 'Jurnal Riset', 'Artikel Ilmiah'].map((type) => (
             <button
               key={type}
               onClick={() => setSelectedType(type)}
-              className={`px-3.5 py-2 rounded-lg text-xs font-mono transition-all ${
+              className={`px-3.5 py-2 rounded-lg text-xs transition-all whitespace-nowrap ${
                 selectedType === type
                   ? 'bg-slate-900 text-white font-medium shadow-sm'
                   : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'
@@ -128,9 +120,8 @@ const PublicationsPage: React.FC = () => {
 
       {/* 4. Editorial Index Registry */}
       <div className="border border-slate-900/10 rounded-xl bg-white overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
-        <div className="px-6 py-3.5 border-b border-slate-900/10 bg-slate-50 flex items-center justify-between text-xs font-mono text-slate-500">
-          <span>Menampilkan {filteredItems.length} Naskah Terindeks</span>
-          <span>FORMAT TERSEDIA: PDF / DOI</span>
+        <div className="px-6 py-3.5 border-b border-slate-900/10 bg-slate-50 text-xs text-slate-500">
+          Menampilkan {filteredItems.length} Naskah Terindeks
         </div>
 
         <div className="divide-y divide-slate-100">

@@ -5,9 +5,8 @@ export const CtaTim = () => {
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-4 lg:px-8 max-w-4xl text-center flex flex-col items-center">
-        <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-[10px] font-mono text-teal-800 tracking-widest mb-8">
-          <span className="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></span>
-          PINTU TERBUKA MAHASISWA & RELAWAN LOKAL
+        <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-teal-800">
+          Pintu Terbuka Mahasiswa & Relawan Lokal
         </span>
         
         <h2 className="text-3xl md:text-5xl font-semibold text-[#0f1713] leading-[1.15] mb-6">

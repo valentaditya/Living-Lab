@@ -3,7 +3,6 @@ import { TopIcon } from '../atoms/TopIcon';
 import { SectionHeading } from '../atoms/SectionHeading';
 
 import { ActionButtonGroup } from '../molecules/ActionButtonGroup';
-import { TrustBadges } from '../molecules/TrustBadge';
 import { SectionSubheading } from '../atoms/SectionSubHeading';
 
 
@@ -20,7 +19,5 @@ export const CtaContent: React.FC = () => (
     </SectionSubheading>
     
     <ActionButtonGroup />
-    
-    <TrustBadges />
   </div>
 );

@@ -40,7 +40,7 @@ export const StrategiMisi = () => {
           {/* Left Column */}
           <div className="lg:col-span-4 flex flex-col gap-10">
             <div>
-              <span className="text-[10px] font-mono text-gray-500 tracking-widest block mb-3">[ PILAR OPERASIONAL ]</span>
+              <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">Pilar Operasional</span>
               <h2 className="text-3xl lg:text-4xl font-semibold leading-tight mb-6 text-[#0f1713]">
                 Misi Strategis & Komitmen Nyata
               </h2>
@@ -51,30 +51,26 @@ export const StrategiMisi = () => {
 
             {/* Manifesto Card */}
             <div className="bg-[#f8f9fa] border border-gray-200 p-6 rounded-sm">
-              <div className="text-xs font-mono text-gray-500 mb-2">@ Manifesio Sains Warga</div>
+              <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">Manifesto Sains Warga</span>
               <p className="text-sm italic text-gray-700 leading-relaxed border-l-2 border-[#0f1713] pl-4">
                 "Riset tidak berhenti di lemari arsip akademis. Tiap tetes data parameter air, mikroplastik, dan kerentanan banjir dikembalikan ke tangan warga sebagai daya tawar politik dan kebijakan publik berbasis bukti."
               </p>
-              <span className="text-[10px] font-mono text-gray-400 mt-4 block">Konsorsium UAJY & Bantara</span>
-              <span className="text-[10px] font-mono text-gray-400 block">Inisiatif 2024-2030</span>
+              <span className="text-xs text-gray-400 mt-4 block">Konsorsium UAJY & Bantara</span>
+              <span className="text-xs text-gray-400 block">Inisiatif 2024-2030</span>
             </div>
 
             {/* Integrasi 4 Pilar */}
             <div>
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-[10px] font-mono text-gray-500">Integrasi 4 Pilar</span>
-                <span className="text-[10px] font-mono text-gray-500">STATUS: AKTIF</span>
-              </div>
+              <span className="block mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Integrasi 4 Pilar</span>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { label: "01 RIS", val: "100%", sub: "Riset Terbuka" },
-                  { label: "02 SIR", val: "85%", sub: "Sirkularitas" },
-                  { label: "03 DAT", val: "92%", sub: "Telemetri Real-time" },
-                  { label: "04 POL", val: "78%", sub: "Advokasi Perda" },
+                  { val: "100%", sub: "Riset Terbuka" },
+                  { val: "85%", sub: "Sirkularitas" },
+                  { val: "92%", sub: "Telemetri Real-time" },
+                  { val: "78%", sub: "Advokasi Perda" },
                 ].map((item, idx) => (
                   <div key={idx} className="bg-gray-50 border border-gray-100 p-4 rounded-sm">
-                    <span className="text-[9px] font-mono text-gray-400 block mb-1">{item.label}</span>
-                    <span className="text-lg font-bold text-[#0f1713] block">{item.val}</span>
+                    <span className="text-lg font-bold text-[#0f1713] block tabular-nums">{item.val}</span>
                     <span className="text-[10px] text-gray-500">{item.sub}</span>
                   </div>
                 ))}
@@ -94,7 +90,7 @@ export const StrategiMisi = () => {
                   <p className="text-sm text-gray-600 leading-relaxed mb-4">{misi.desc}</p>
                   <div className="flex flex-wrap gap-2">
                     {misi.tags.map((tag, tIdx) => (
-                      <span key={tIdx} className={`text-[10px] font-mono px-2 py-1 rounded-sm ${misi.tagColor}`}>
+                      <span key={tIdx} className={`text-xs px-2 py-1 rounded-sm ${misi.tagColor}`}>
                         {tag}
                       </span>
                     ))}

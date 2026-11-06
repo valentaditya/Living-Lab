@@ -9,7 +9,7 @@ export const FormKontak = () => {
           {/* Left Column: Contact Info */}
           <div className="lg:col-span-5 flex flex-col gap-8">
             <div>
-              <span className="text-[10px] font-mono text-teal-400 tracking-widest block mb-3">[ SEKSI 04 // KONTAK & SEKRETARIAT ]</span>
+              <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-teal-400">Kontak & Sekretariat</span>
               <h2 className="text-4xl lg:text-5xl font-bold leading-tight mb-6">MULAI INISIATIF BERSAMA KAMI</h2>
               <p className="text-gray-400 text-sm leading-relaxed max-w-md">
                 Sampaikan ide kemitraan, permohonan magang, proposal riset, atau ajakan diskusi lapangan. Tim koordinasi Living Lab Sungai Yogyakarta akan segera merespons.
@@ -18,25 +18,25 @@ export const FormKontak = () => {
 
             <div className="flex flex-col gap-6 mt-4">
               <div>
-                <span className="text-[10px] font-mono text-gray-500 block mb-1">SUREL RESMI SEKRETARIAT</span>
+                <span className="text-[10px] tracking-wider text-gray-500 block mb-1">SUREL RESMI SEKRETARIAT</span>
                 <a href="mailto:sekretariat@livinglabsungai.ac.id" className="text-teal-400 hover:text-teal-300 font-semibold transition-colors">
                   sekretariat@livinglabsungai.ac.id
                 </a>
               </div>
               <div>
-                <span className="text-[10px] font-mono text-gray-500 block mb-1">PIKET RISET & LABORATORIUM</span>
+                <span className="text-[10px] tracking-wider text-gray-500 block mb-1">PIKET RISET & LABORATORIUM</span>
                 <p className="text-sm text-gray-300 leading-relaxed">
                   Gedung Thomas Aquinas Lantai 3, Kampus 1 Universitas Atma Jaya Yogyakarta.<br />
                   Jl. Babarsari No. 44, Caturtunggal, Depok, Sleman, D.I. Yogyakarta 55281
                 </p>
               </div>
-              <div className="flex gap-12">
+              <div className="flex flex-wrap gap-x-12 gap-y-6">
                 <div>
-                  <span className="text-[10px] font-mono text-gray-500 block mb-1">TELEPON KANTOR</span>
+                  <span className="text-[10px] tracking-wider text-gray-500 block mb-1">TELEPON KANTOR</span>
                   <span className="text-sm text-gray-300">+62 (274) 487711</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono text-gray-500 block mb-1">JAM LAYANAN</span>
+                  <span className="text-[10px] tracking-wider text-gray-500 block mb-1">JAM LAYANAN</span>
                   <span className="text-sm text-gray-300">08:30 - 16:00 WIB</span>
                 </div>
               </div>
@@ -45,26 +45,26 @@ export const FormKontak = () => {
 
           {/* Right Column: Form */}
           <div className="lg:col-span-7">
-            <div className="bg-white/5 border border-white/10 rounded-sm p-8">
+            <div className="bg-white/5 border border-white/10 rounded-sm p-6 sm:p-8">
               <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="nama" className="text-[10px] font-mono text-gray-400 uppercase">Nama Lengkap / Kontak *</label>
+                  <label htmlFor="nama" className="text-[10px] text-gray-400 uppercase tracking-wider">Nama Lengkap / Kontak *</label>
                   <input type="text" id="nama" className="bg-transparent border border-gray-700 text-white px-4 py-3 rounded-sm focus:outline-none focus:border-teal-500 transition-colors text-sm" placeholder="Dr. Bambang Sudarmo / Instansi" />
                 </div>
                 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="text-[10px] font-mono text-gray-400 uppercase">Alamat Email *</label>
+                  <label htmlFor="email" className="text-[10px] text-gray-400 uppercase tracking-wider">Alamat Email *</label>
                   <input type="email" id="email" className="bg-transparent border border-gray-700 text-white px-4 py-3 rounded-sm focus:outline-none focus:border-teal-500 transition-colors text-sm" placeholder="nama@institusi.ac.id" />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="institusi" className="text-[10px] font-mono text-gray-400 uppercase">Institusi / Komunitas</label>
+                  <label htmlFor="institusi" className="text-[10px] text-gray-400 uppercase tracking-wider">Institusi / Komunitas</label>
                   <input type="text" id="institusi" className="bg-transparent border border-gray-700 text-white px-4 py-3 rounded-sm focus:outline-none focus:border-teal-500 transition-colors text-sm" placeholder="Nama Organisasi / Komunitas" />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="jalur" className="text-[10px] font-mono text-gray-400 uppercase">Jalur Kolaborasi *</label>
+                  <label htmlFor="jalur" className="text-[10px] text-gray-400 uppercase tracking-wider">Jalur Kolaborasi *</label>
                   <select id="jalur" className="bg-transparent border border-gray-700 text-gray-300 px-4 py-3 rounded-sm focus:outline-none focus:border-teal-500 transition-colors text-sm appearance-none">
                     <option value="">Pilih Jalur Kolaborasi</option>
                     <option value="mitra">01. Menjadi Mitra Strategis (Partner)</option>
@@ -76,7 +76,7 @@ export const FormKontak = () => {
                 </div>
 
                 <div className="flex flex-col gap-2 md:col-span-2">
-                  <label htmlFor="pesan" className="text-[10px] font-mono text-gray-400 uppercase">Pesan atau Deskripsi Rencana Kerja Sama *</label>
+                  <label htmlFor="pesan" className="text-[10px] text-gray-400 uppercase tracking-wider">Pesan atau Deskripsi Rencana Kerja Sama *</label>
                   <textarea id="pesan" rows={4} className="bg-transparent border border-gray-700 text-white px-4 py-3 rounded-sm focus:outline-none focus:border-teal-500 transition-colors text-sm resize-none" placeholder="Jelaskan secara singkat fokus program, kapasitas waktu, atau inisiatif yang ingin Anda rencanakan bersama Living Lab."></textarea>
                 </div>
 

@@ -3,24 +3,24 @@ import React from 'react';
 export const PrinsipPelaksanaan = () => {
   const prinsipData = [
     {
-      num: "01 / BIG DATA SAINS",
+      label: "Big Data Sains",
       title: "Metodologi Terbuka & Teruji",
       desc: "Kalibrasi alat sensor berkala bersama laboratorium Teknik Lingkungan UAJY guna memastikan akurasi data sebelum instrumen baku pemerintah.",
-      ref: "REF: STANDAR SNI-6989",
+      ref: "Acuan: Standar SNI-6989",
       icon: "🔬"
     },
     {
-      num: "02 / CO-KREASI WARGA",
+      label: "Co-Kreasi Warga",
       title: "Pengetahuan Lokal Bantaran",
       desc: "Teknologi tidak dipaksakan dari atas, melainkan dirancang bersama relawan sungai untuk memastikan keberlanjutan perawatan dan rasa kepemilikan komunitas.",
-      ref: "REF: KEARIFAN PAGUYUBAN BANTARA",
+      ref: "Acuan: Kearifan Paguyuban Bantara",
       icon: "🤝"
     },
     {
-      num: "03 / DAMPAK KEBIJAKAN",
+      label: "Dampak Kebijakan",
       title: "Advokasi Berbasis Bukti",
       desc: "Seluruh rekom data telemetri diolah menjadi policy brief politik bagi BBWS Serayu Opak dan Dinas Lingkungan Hidup DIY sebagai dasar pendekatan pencapaian.",
-      ref: "REF: ADVOKASI DAS DIY 2024-2029",
+      ref: "Acuan: Advokasi DAS DIY 2024-2029",
       icon: "⚖️"
     }
   ];
@@ -31,7 +31,7 @@ export const PrinsipPelaksanaan = () => {
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div>
-            <span className="text-[10px] font-mono text-gray-500 tracking-widest block mb-2">[ PENDEKATAN METODOLOGIS // KERANGKA KERJA ]</span>
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-teal-700">Pendekatan Metodologis</span>
             <h2 className="text-3xl lg:text-4xl font-semibold text-[#0f1713]">Prinsip Pelaksanaan Tiap Tahapan</h2>
           </div>
           <p className="text-gray-500 text-sm max-w-md text-left md:text-right">
@@ -46,12 +46,12 @@ export const PrinsipPelaksanaan = () => {
                 <div className="w-10 h-10 bg-teal-50 text-teal-600 rounded-sm flex items-center justify-center mb-6 text-lg">
                   {item.icon}
                 </div>
-                <span className="text-[10px] font-mono text-gray-400 block mb-2">{item.num}</span>
+                <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-teal-700">{item.label}</span>
                 <h3 className="text-lg font-semibold text-[#0f1713] mb-3">{item.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed mb-6">{item.desc}</p>
               </div>
               <div className="border-t border-gray-100 pt-4 mt-auto">
-                <span className="text-[10px] font-mono text-gray-400">{item.ref}</span>
+                <span className="text-xs text-gray-400">{item.ref}</span>
               </div>
             </div>
           ))}

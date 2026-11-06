@@ -11,7 +11,6 @@ import { FeaturedModule } from '@/app/components/molecules/FeatureModul';
 const MODULES_MOCK: ModuleItem[] = [
   {
     id: 'mod-1',
-    code: 'MOD-2026-08',
     category: 'Panduan Praktik',
     title: 'Panduan Menilai Kesehatan Sungai Melalui Pengamatan Biota Air (Biomonitoring)',
     authors: ['Tim Edukasi Living-Lab', 'Komunitas Sekolah Sungai'],
@@ -29,7 +28,6 @@ const MODULES_MOCK: ModuleItem[] = [
   },
   {
     id: 'mod-2',
-    code: 'MOD-2026-06',
     category: 'Buku Saku',
     title: 'Buku Saku Pengelolaan Sampah Rumah Tangga & Limbah Cair di Kawasan Bantaran',
     authors: ['PSL UAJY', 'Aliansi Warga Bantaran'],
@@ -47,7 +45,6 @@ const MODULES_MOCK: ModuleItem[] = [
   },
   {
     id: 'mod-3',
-    code: 'INF-2026-04',
     category: 'Infografis',
     title: 'Poster Edukasi: Mengenal Ekosistem Sungai Yogyakarta & Cara Menjaganya',
     authors: ['Tim Desain Komunikasi & Lingkungan UAJY'],
@@ -85,17 +82,12 @@ const EducationModulesPage: React.FC = () => {
   return (
     <KnowledgePageLayout>
       {/* 1. Header */}
-      <header className="border-b border-slate-900/10 pb-8 space-y-4">
-        <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-emerald-800">
-          <span className="font-semibold">Pusat Pengetahuan</span>
-          <span className="text-slate-300">/</span>
-          <span>Index 03</span>
-          <span className="text-slate-300">/</span>
-          <span>Modul Edukasi</span>
-        </div>
-
+      <header className="border-b border-slate-900/10 pb-8">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div>
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-800">
+              Pusat Pengetahuan
+            </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900">
               Modul Edukasi & Materi Belajar
             </h1>
@@ -104,8 +96,8 @@ const EducationModulesPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="font-mono text-xs text-slate-500 bg-white border border-slate-200 px-3.5 py-2 rounded-lg shrink-0 self-start lg:self-auto">
-            LISENSI MATERI: <span className="text-emerald-700 font-semibold">BEBAS UNDUH & CETAK</span>
+          <div className="text-xs font-semibold text-emerald-700 bg-white border border-slate-200 px-3.5 py-2 rounded-lg shrink-0 self-start lg:self-auto">
+            Bebas unduh & cetak
           </div>
         </div>
       </header>
@@ -114,8 +106,8 @@ const EducationModulesPage: React.FC = () => {
       <FeaturedModule item={featured} />
 
       {/* 3. Search & Filter Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 pt-2">
+        <div className="relative w-full max-w-md">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
@@ -126,12 +118,12 @@ const EducationModulesPage: React.FC = () => {
           />
         </div>
 
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+        <div className="flex flex-wrap items-center gap-1.5 lg:justify-end">
           {['All', 'Panduan Praktik', 'Buku Saku', 'Infografis'].map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3.5 py-2 rounded-lg text-xs font-mono transition-all whitespace-nowrap ${
+              className={`px-3.5 py-2 rounded-lg text-xs transition-all whitespace-nowrap ${
                 selectedCategory === cat
                   ? 'bg-slate-900 text-white font-medium shadow-sm'
                   : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'
@@ -145,9 +137,8 @@ const EducationModulesPage: React.FC = () => {
 
       {/* 4. Module List */}
       <div className="border border-slate-900/10 rounded-xl bg-white overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
-        <div className="px-6 py-3.5 border-b border-slate-900/10 bg-slate-50 flex items-center justify-between text-xs font-mono text-slate-500">
-          <span>Menampilkan {filteredItems.length} Modul Pembelajaran</span>
-          <span>FORMAT TERSEDIA: PDF SIAP CETAK</span>
+        <div className="px-6 py-3.5 border-b border-slate-900/10 bg-slate-50 text-xs text-slate-500">
+          Menampilkan {filteredItems.length} Modul Pembelajaran
         </div>
 
         <div className="divide-y divide-slate-100">

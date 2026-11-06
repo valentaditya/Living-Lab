@@ -11,7 +11,7 @@ interface ArticleCardProps {
 
 export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
   return (
-    <article className="group bg-[#F7F8F9] hover:bg-white rounded-3xl p-3 sm:p-4  hover:border-slate-300 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:-translate-y-1 mt-8">
+    <article className="group bg-[#F7F8F9] hover:bg-white rounded-3xl p-3 sm:p-4  hover:border-slate-300 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
     
       <CardHeaderMedia
         imageUrl={article.image}

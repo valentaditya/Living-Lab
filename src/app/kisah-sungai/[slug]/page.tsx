@@ -9,7 +9,6 @@ import { StoryArticleBody } from '@/app/components/organisms/StoryArticalBody';
 
 // Data mock yang sinkron dengan halaman index sebelumnya
 const STORIES_DETAILS_MOCK: Record<string, {
-  code: string;
   category: string;
   title: string;
   authorOrFigure: string;
@@ -19,7 +18,6 @@ const STORIES_DETAILS_MOCK: Record<string, {
   abstract: string;
 }> = {
   'perempuan-penjaga-titik-air': {
-    code: 'STR-2026-01',
     category: 'People of the River',
     title: 'Perempuan Penjaga Titik Air: Ketangguhan Ibu-Ibu Bantaran Winongo Merawat Aliran Kehidupan',
     authorOrFigure: 'Ibu Siti Aminah & Komunitas Perempuan Bantaran',
@@ -29,7 +27,6 @@ const STORIES_DETAILS_MOCK: Record<string, {
     abstract: 'Bagaimana gerakan kolektif para ibu di tepian sungai mengubah stigma halaman belakang rumah yang kotor menjadi ruang publik hijau dan pusat ekonomi sirkular warga.'
   },
   'bank-sampah-muja-muju': {
-    code: 'STR-2026-02',
     category: 'Community Stories',
     title: 'Bank Sampah Muja Muju: Dari Timbulan Plastik Menjadi Kolektif Ekonomi Warga',
     authorOrFigure: 'Pengurus Bank Sampah Mandiri',
@@ -39,7 +36,6 @@ const STORIES_DETAILS_MOCK: Record<string, {
     abstract: 'Transformasi pengelolaan sampah mandiri yang tidak hanya membersihkan aliran sungai tetapi juga menggerakkan tabungan pendidikan anak-anak warga sekitar.'
   },
   'catatan-lapangan-petani-urban': {
-    code: 'STR-2026-03',
     category: 'Field Notes',
     title: 'Catatan Lapangan: Mengukur Kualitas Air Bersama Petani Urban Pertanian Organik Tepi Sungai',
     authorOrFigure: 'Tim Riset Lapangan Living Lab UAJY',
@@ -71,7 +67,6 @@ export default function StoryDetailPage() {
       <main className="relative z-10 mx-auto px-6 sm:px-8 lg:px-12 pt-28 md:pt-36 pb-24 space-y-12">
         {/* Header Detail Cerita */}
         <StoryContentHeader
-          code={story.code}
           category={story.category}
           title={story.title}
           authorOrFigure={story.authorOrFigure}

@@ -44,25 +44,25 @@ const PILLARS_DATA = [
 
 export const PillarsSection = () => {
   return (
-    <section className="py-16 md:py-16 px-8  bg-white text-slate-800 antialiased selection:bg-emerald-100 selection:text-emerald-900">
- 
-      <SectionHeader 
-        badgeText="SIKLUS KREASI BERSAMA RISET & AKSI"
-        title="Pilar Utama Kami"
-        description="Mentransformasikan pengelolaan daerah aliran sungai melalui penyelidikan ilmiah berbasis komunitas dan aksi warga yang berkelanjutan."
-      />
+    <section className="bg-white py-12 text-slate-800 antialiased selection:bg-emerald-100 selection:text-emerald-900 md:py-16">
+      <div className="mx-auto max-w-[96rem] px-4 sm:px-6 lg:px-8">
+        <SectionHeader
+          badgeText="SIKLUS KREASI BERSAMA RISET & AKSI"
+          title="Pilar Utama Kami"
+          description="Mentransformasikan pengelolaan daerah aliran sungai melalui penyelidikan ilmiah berbasis komunitas dan aksi warga yang berkelanjutan."
+        />
 
-     
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-5 lg:gap-6">
-        {PILLARS_DATA.map((pillar) => (
-          <PillarCard 
-            key={pillar.step}
-            step={pillar.step}
-            title={pillar.title}
-            description={pillar.description}
-            icon={pillar.icon}
-          />
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-5 lg:gap-6">
+          {PILLARS_DATA.map((pillar) => (
+            <PillarCard
+              key={pillar.step}
+              step={pillar.step}
+              title={pillar.title}
+              description={pillar.description}
+              icon={pillar.icon}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

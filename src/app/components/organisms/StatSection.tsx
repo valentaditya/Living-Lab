@@ -47,8 +47,8 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
 }) => {
   return (
     <section className={`w-full py-8 md:py-12 bg-[#F7F8F9] ${className}`} {...props}>
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="mx-auto max-w-[96rem] px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
           {stats.map((item) => (
             <StatCard
               key={item.id}

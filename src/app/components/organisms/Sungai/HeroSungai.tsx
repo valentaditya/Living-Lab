@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export const HeroSungai = () => {
   return (
-    <section className="relative w-full h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden bg-[#0f1713]">
+    <section className="relative w-full min-h-[60vh] md:min-h-[80vh] pt-24 pb-16 flex items-center justify-center overflow-hidden bg-[#0f1713]">
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full">
         <Image
@@ -19,9 +19,8 @@ export const HeroSungai = () => {
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center flex flex-col items-center">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-[10px] font-mono text-white/80 tracking-widest mb-6">
-          <span className="w-1.5 h-1.5 bg-teal-400 rounded-full"></span>
-          OBSERVATORIUM SOSIAL-EKOLOGIS DAS
+        <span className="block mb-4 text-xs font-semibold uppercase tracking-wider text-white/80">
+          Observatorium Sosial-Ekologis DAS
         </span>
         
         <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-4">
@@ -32,7 +31,7 @@ export const HeroSungai = () => {
           Menelusuri Ekosistem, Denyut Kehidupan dan Ketahanan Sosial-Ekologi Koridor Sungai Yogyakarta
         </p>
         
-        <div className="flex items-center gap-4 text-[10px] md:text-xs font-mono text-teal-400 tracking-widest">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[10px] md:text-xs text-teal-400 tracking-widest">
           <span>KALI CODE</span>
           <span className="w-1 h-1 bg-gray-500 rounded-full"></span>
           <span>KALI WINONGO</span>

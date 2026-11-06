@@ -1,103 +1,144 @@
-import React, { useState } from 'react';
+'use client';
 
-import { Text } from '../atoms/HeaderText';
-import { CloseIcon } from '../atoms/CloseIcon';
-import { ChevronIcon } from '../atoms/ChevronIcon';
-import { ButtonCTA } from '../molecules/ButonCta';
-import { menuData } from './Navbar'; 
-import { usePathname } from 'next/navigation';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { ChevronDown, X } from 'lucide-react';
+import { isItemActive, isPathActive, menuData } from './navigation-data';
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  pathname: string;
 }
 
-export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
-
-  const currentPath = usePathname();
-  
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-
-  const toggleDropdown = (label: string) => {
-    setOpenDropdown((prev) => (prev === label ? null : label));
-  };
+/** Panel menu untuk layar di bawah xl (1280px). */
+export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, pathname }) => {
+  // Grup yang berisi halaman aktif terbuka otomatis, kecuali pengguna menutupnya sendiri.
+  const [toggled, setToggled] = useState<Record<string, boolean>>({});
 
   return (
     <>
-      
-      <div 
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden z-40 ${
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+      <div
+        aria-hidden="true"
         onClick={onClose}
+        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 xl:hidden ${
+          isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
+        }`}
       />
 
-    
-      <div 
-        className={`fixed top-0 right-0 w-3/4 max-w-sm h-screen bg-neutral-900/95 backdrop-blur-md border-l border-white/10 p-6 flex flex-col transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
+      <div
+        id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu navigasi"
+        inert={!isOpen}
+        className={`fixed inset-y-0 right-0 z-50 flex h-dvh w-[85vw] max-w-sm flex-col bg-[#0f1713] font-sans text-white shadow-2xl transition-transform duration-300 ease-out xl:hidden ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex justify-end mb-8">
-          <button onClick={onClose} className="p-2 -mr-2 text-white hover:bg-white/10 rounded-full transition">
-            <CloseIcon />
+        <div className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5">
+          <span className="text-base font-semibold">Menu</span>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Tutup menu"
+            className="-mr-2 rounded-full p-2 transition hover:bg-white/10"
+          >
+            <X className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        <div className="flex flex-col gap-4 flex-1 overflow-y-auto pr-2">
-          {menuData.map((item, index) => {
-            const isMenuRouteActive = currentPath === item.href && item.type !== 'dropdown';
-            const isDropdownOpen = openDropdown === item.label;
-            
-            return item.type === 'dropdown' ? (
-              <div key={index} className="flex flex-col border-b border-white/10">
-                <button 
-                  onClick={() => toggleDropdown(item.label)}
-                  className="flex items-center justify-between py-2 w-full text-left"
-                >
-                  <Text className="text-lg font-medium">{item.label}</Text>
-                  <div className={`transform transition-transform duration-300 ${isDropdownOpen ? '-rotate-180' : ''}`}>
-                    <ChevronIcon />
-                  </div>
-                </button>
 
-                
-                <div 
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    isDropdownOpen ? 'max-h-48 opacity-100 mb-3' : 'max-h-0 opacity-0'
-                  }`}
-                >
-                  <div className="flex flex-col gap-3 pl-4 pt-2 border-l border-white/20 ml-2">
-                    {item.subItems?.map((sub, idx) => (
-                      <Link
-                        key={idx} 
-                        href={sub.href} 
-                        onClick={onClose} 
-                        className="text-gray-400 hover:text-white transition-colors"
-                      >
-                        {sub.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <Link 
-                key={index} 
-                href={item.href || '#'} 
-                onClick={onClose}
-                className={`py-2 border-b border-white/10 transition-colors ${
-                  isMenuRouteActive ? 'text-white font-bold border-white' : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                <Text className={`text-lg ${isMenuRouteActive ? 'font-bold' : ''}`}>{item.label}</Text>
-              </Link>
-            );
-          })}
-        </div>
+        <nav aria-label="Navigasi seluler" className="flex-1 overflow-y-auto px-3 py-4">
+          <ul className="flex flex-col gap-1">
+            {menuData.map((item) => {
+              const active = isItemActive(item, pathname);
 
-        <div className="pt-6 mt-auto">
-          <ButtonCTA text="Menjadi Mitra" />
+              if (item.type === 'link') {
+                return (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href || '#'}
+                      onClick={onClose}
+                      aria-current={active ? 'page' : undefined}
+                      className={`block rounded-lg px-3 py-3 text-base transition-colors ${
+                        active ? 'bg-white/10 font-semibold text-white' : 'text-white/80 hover:bg-white/5 hover:text-white'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              }
+
+              const expanded = toggled[item.label] ?? active;
+              const panelId = `mobile-submenu-${item.label.toLowerCase().replace(/\s+/g, '-')}`;
+
+              return (
+                <li key={item.label}>
+                  <button
+                    type="button"
+                    onClick={() => setToggled((prev) => ({ ...prev, [item.label]: !expanded }))}
+                    aria-expanded={expanded}
+                    aria-controls={panelId}
+                    className={`flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-base transition-colors ${
+                      active ? 'font-semibold text-white' : 'text-white/80 hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    {item.label}
+                    <ChevronDown
+                      className={`h-5 w-5 shrink-0 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}
+                      aria-hidden="true"
+                    />
+                  </button>
+
+                  <div
+                    id={panelId}
+                    inert={!expanded}
+                    className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                      expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                    }`}
+                  >
+                    <ul className="ml-3 flex flex-col gap-1 overflow-hidden border-l border-white/15 pl-3">
+                      {item.subItems?.map((sub) => {
+                        const subActive = isPathActive(sub.href, pathname);
+                        return (
+                          <li key={sub.href}>
+                            <Link
+                              href={sub.href}
+                              onClick={onClose}
+                              aria-current={subActive ? 'page' : undefined}
+                              className={`block rounded-lg px-3 py-2.5 text-[15px] transition-colors ${
+                                subActive ? 'bg-white/10 font-medium text-white' : 'text-white/65 hover:bg-white/5 hover:text-white'
+                              }`}
+                            >
+                              {sub.label}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        <div className="flex shrink-0 flex-col gap-3 border-t border-white/10 p-5">
+          <Link
+            href="/kolaborasi"
+            onClick={onClose}
+            className="rounded-full bg-white px-6 py-3 text-center text-sm font-semibold text-gray-900 transition hover:bg-gray-100"
+          >
+            Menjadi Mitra
+          </Link>
+          <Link
+            href="/login"
+            onClick={onClose}
+            className="rounded-full border border-white/35 px-6 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10"
+          >
+            Masuk
+          </Link>
         </div>
       </div>
     </>

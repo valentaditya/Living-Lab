@@ -45,7 +45,7 @@ export const PeluangKontribusi = () => {
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
           <div>
-            <span className="text-[10px] font-mono text-gray-500 tracking-widest block mb-2">[ SEKSI 03 // PELUANG KONTRIBUSI ]</span>
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">Peluang Kontribusi</span>
             <h2 className="text-3xl lg:text-4xl font-semibold text-[#0f1713]">PILIH JALUR KETERLIBATAN ANDA</h2>
           </div>
           <p className="text-gray-500 text-sm max-w-md text-left md:text-right">
@@ -68,7 +68,7 @@ export const PeluangKontribusi = () => {
                 <p className="text-sm text-gray-600 leading-relaxed max-w-2xl">{item.desc}</p>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {item.tags.map((tag, tIdx) => (
-                    <span key={tIdx} className="text-[9px] font-mono bg-gray-100 text-gray-500 px-2 py-1 uppercase tracking-wider">
+                    <span key={tIdx} className="text-[10px] bg-gray-100 text-gray-500 px-2 py-1 uppercase tracking-wider">
                       {tag}
                     </span>
                   ))}

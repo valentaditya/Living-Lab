@@ -10,7 +10,6 @@ import { FeaturedStoryHero } from '../components/organisms/FeatureStoryHero';
 const STORIES_MOCK: StoryItem[] = [
   {
     id: 'str-1',
-    code: 'STR-2026-01',
     category: 'People of the River',
     title: 'Perempuan Penjaga Titik Air: Ketangguhan Ibu-Ibu Bantaran Winongo Merawat Aliran Kehidupan',
     authorOrFigure: 'Ibu Siti Aminah & Komunitas Perempuan Bantaran',
@@ -22,7 +21,6 @@ const STORIES_MOCK: StoryItem[] = [
   },
   {
     id: 'str-2',
-    code: 'STR-2026-02',
     category: 'Community Stories',
     title: 'Bank Sampah Muja Muju: Dari Timbulan Plastik Menjadi Kolektif Ekonomi Warga',
     authorOrFigure: 'Pengurus Bank Sampah Mandiri',
@@ -34,7 +32,6 @@ const STORIES_MOCK: StoryItem[] = [
   },
   {
     id: 'str-3',
-    code: 'STR-2026-03',
     category: 'Field Notes',
     title: 'Catatan Lapangan: Mengukur Kualitas Air Bersama Petani Urban Pertanian Organik Tepi Sungai',
     authorOrFigure: 'Tim Riset Lapangan Living Lab UAJY',
@@ -46,7 +43,6 @@ const STORIES_MOCK: StoryItem[] = [
   },
   {
     id: 'str-4',
-    code: 'STR-2026-04',
     category: 'Photo Essay',
     title: 'Esei Foto: Wajah-Wajah di Balik Pelestarian Titik Nol Aliran Sungai Code',
     authorOrFigure: 'Dokumentasi Visual Living Lab',
@@ -58,7 +54,6 @@ const STORIES_MOCK: StoryItem[] = [
   },
   {
     id: 'str-5',
-    code: 'STR-2026-05',
     category: 'River Stories',
     title: 'Menelusuri Riwayat Sempadan: Menjaga Keseimbangan Ekologis di Tengah Padatnya Kota',
     authorOrFigure: 'Divisi Kajian & Sejarah DAS',
@@ -70,7 +65,6 @@ const STORIES_MOCK: StoryItem[] = [
   },
   {
     id: 'str-6',
-    code: 'STR-2026-06',
     category: 'Mini Documentary',
     title: 'Dokumenter Mini: Suara dari Tepian — Dokumentasi Kehidupan, Harapan, dan Aksi Warga',
     authorOrFigure: 'Tim Media & Sinema Living Lab UAJY',
@@ -123,37 +117,21 @@ export default function KisahSungaiPage() {
       <main className="relative z-10 mx-auto px-6 sm:px-8 lg:px-12 pt-28 md:pt-36 pb-24 space-y-12">
         
         {/* Header */}
-        <header className="border-b border-slate-900/10 pb-8 space-y-4">
-          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-emerald-800">
-            <span className="font-semibold">Pusat Narasi</span>
-            <span className="text-slate-300">/</span>
-            <span>Index 06</span>
-            <span className="text-slate-300">/</span>
-            <span>Kisah & Refleksi Sungai (Stories)</span>
-          </div>
-
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 font-sans">
-                Kisah & Refleksi Sungai
-              </h1>
-              <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed">
-                Mengeksplorasi ikatan mendalam antara manusia dan sungai melalui narasi human-centered, catatan lapangan, esei foto, serta dokumenter mini kehidupan bantaran.
-              </p>
-            </div>
-            
-            <div className="font-mono text-xs text-slate-500 bg-white border border-slate-200 px-3.5 py-2 rounded-lg shrink-0 self-start lg:self-auto shadow-sm">
-              FOKUS NARASI: <span className="text-emerald-700 font-semibold">REFLEKTIF & HUMAN-CENTERED</span>
-            </div>
-          </div>
+        <header className="border-b border-slate-900/10 pb-8">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 font-sans">
+            Kisah & Refleksi Sungai
+          </h1>
+          <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed">
+            Mengeksplorasi ikatan mendalam antara manusia dan sungai melalui narasi human-centered, catatan lapangan, esei foto, serta dokumenter mini kehidupan bantaran.
+          </p>
         </header>
 
         {/* Featured Organism */}
         <FeaturedStoryHero item={featuredStory} />
 
         {/* Search & Filter Bar */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
-          <div className="relative flex-1 max-w-md">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 pt-2">
+          <div className="relative w-full max-w-md">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
@@ -164,12 +142,12 @@ export default function KisahSungaiPage() {
             />
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+          <div className="flex flex-wrap items-center gap-1.5 lg:justify-end">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-2 rounded-lg text-xs font-mono transition-all whitespace-nowrap ${
+                className={`px-3.5 py-2 rounded-lg text-xs transition-all whitespace-nowrap ${
                   selectedCategory === cat
                     ? 'bg-slate-900 text-white font-medium shadow-sm'
                     : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'
@@ -181,9 +159,8 @@ export default function KisahSungaiPage() {
           </div>
         </div>
         <div className="border border-slate-900/10 rounded-xl bg-white overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
-          <div className="px-6 py-3.5 border-b border-slate-900/10 bg-slate-50 flex items-center justify-between text-xs font-mono text-slate-500">
-            <span>Menampilkan {filteredStories.length} Narasi & Catatan Lapangan</span>
-            <span>FORMAT: ARTIKEL / FOTO / VIDEO</span>
+          <div className="px-6 py-3.5 border-b border-slate-900/10 bg-slate-50 text-xs text-slate-500">
+            Menampilkan {filteredStories.length} Narasi & Catatan Lapangan
           </div>
 
           <div className="divide-y divide-slate-100">

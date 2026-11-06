@@ -5,8 +5,8 @@ export const HeroFAQ = () => {
     <section className="pt-32 md:pt-40 pb-8 bg-[#f8f9fa]">
       <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
         <div className="flex flex-col gap-4">
-          <span className="inline-block px-3 py-1 bg-gray-100 border border-gray-200 text-[10px] font-mono tracking-widest text-[#0f1713] w-fit">
-            [ PANDUAN PUBLIK // TANYA JAWAB ]
+          <span className="block text-xs font-semibold uppercase tracking-wider text-[#0f1713]">
+            Panduan Publik
           </span>
           
           <h1 className="text-4xl md:text-5xl font-bold text-[#0f1713] tracking-tight">

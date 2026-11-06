@@ -25,7 +25,6 @@ export const FAQSection = ({ faqs }: { faqs: FAQItem[] }) => {
         
         {/* Filter Tabs */}
         <div className="flex flex-wrap items-center gap-2 mb-8">
-          <span className="text-[10px] font-mono text-gray-500 mr-2">TOPIK ARSIP:</span>
           {categories.map((cat, idx) => (
             <button
               key={idx}
@@ -50,10 +49,10 @@ export const FAQSection = ({ faqs }: { faqs: FAQItem[] }) => {
                 {/* Accordion Header */}
                 <button
                   onClick={() => toggleAccordion(faq.id)}
-                  className="w-full text-left px-6 py-5 flex justify-between items-center hover:bg-gray-50 transition-colors focus:outline-none"
+                  className="w-full text-left px-6 py-5 flex justify-between items-center gap-4 hover:bg-gray-50 transition-colors focus:outline-none"
                 >
                   <div className="flex items-start gap-4">
-                    <span className="text-sm font-mono text-gray-400 mt-1">0{idx + 1}.</span>
+                    <span className="text-sm text-gray-400 mt-1 tabular-nums">{String(idx + 1).padStart(2, "0")}.</span>
                     <span className="text-base font-semibold text-[#0f1713]">{faq.question}</span>
                   </div>
                   <span className="text-xl font-light text-gray-500 w-6 h-6 flex items-center justify-center border border-gray-300 rounded-sm flex-shrink-0">
@@ -70,7 +69,7 @@ export const FAQSection = ({ faqs }: { faqs: FAQItem[] }) => {
                     
                     {/* Tags */}
                     <div className="flex flex-wrap gap-2 mt-6">
-                      <span className="text-[9px] font-mono text-gray-500 px-2 py-1">
+                      <span className="text-xs text-gray-500 px-2 py-1">
                         Kategori: {faq.category}
                       </span>
                     </div>

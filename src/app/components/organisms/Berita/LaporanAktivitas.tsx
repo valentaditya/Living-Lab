@@ -5,29 +5,29 @@ export const LaporanAktivitas = () => {
   const reports = [
     {
       title: "Laporan Kepalasejahteraan Kolaboratif: Code Mengadopsi Sesi Konservasi Masyarakat 2024-2025",
-      date: "DOKUMEN RISET // LAPORAN SEMESTER II",
+      date: "Dokumen Riset · Laporan Semester II",
       desc: "Analisis kuantitatif partisipatif tentang adopsi teknologi ramah lingkungan di 12 bantaran sungai.",
       img: "/pictures/laporan.png", // <-- FOTO 3: Laporan
       alt: "Diskusi pemetaan partisipatif warga dan akademisi di bantaran sungai",
-      size: "84.2 MB // PDF",
+      size: "PDF · 84,2 MB",
       priority: true // Gambar pertama di seksi ini
     },
     {
       title: "Katalog Bio-Indikator Riparian: Panduan Identifikasi Makrobentos Tiga Sungai Yogyakarta",
-      date: "TAKSONOMI LAPANGAN // AKSI EKSPEDISI 24",
+      date: "Taksonomi Lapangan · Aksi Ekspedisi 24",
       desc: "Panduan visual untuk peneliti muda dan relawan dalam mengenali spesies air sebagai indikator kualitas air.",
       img: "/pictures/larva.png", // <-- FOTO 1: Larva
       alt: "Larva makrobentos di atas batu sungai sebagai bio-indikator kualitas air",
-      size: "54.8 MB // PDF",
+      size: "PDF · 54,8 MB",
       priority: false // Sebaiknya lazy load untuk optimasi Lighthouse
     },
     {
       title: "Audit Ekologi Restorasi Bambu dan Ketahanan Tanggul Alami Kali Winongo (2022-2024)",
-      date: "MONITORING EKOLOGI // DOKUMEN TAHUNAN",
+      date: "Monitoring Ekologi · Dokumen Tahunan",
       desc: "Studi pengukuran tingkat keberhasilan penanaman bambu dalam mencegah erosi tebing sungai.",
       img: "/pictures/akar.png", // <-- FOTO 2: Akar
       alt: "Jaringan akar pohon yang mengikat tebing sungai untuk mencegah erosi",
-      size: "112.4 MB // PDF",
+      size: "PDF · 112,4 MB",
       priority: false // Sebaiknya lazy load untuk optimasi Lighthouse
     }
   ];
@@ -38,7 +38,7 @@ export const LaporanAktivitas = () => {
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div>
-            <span className="text-[10px] font-mono text-gray-500 tracking-widest block mb-2">[ SEKSI 03 // REPOSITORI SAINS & ARSIP ]</span>
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">Repositori Sains & Arsip</span>
             <h2 className="text-3xl lg:text-4xl font-semibold text-[#0f1713]">Laporan Aktivitas & Dokumen Lapangan</h2>
           </div>
           <p className="text-gray-500 text-sm max-w-md text-left md:text-right">
@@ -60,11 +60,11 @@ export const LaporanAktivitas = () => {
                 />
               </div>
               <div className="p-6 flex-grow flex flex-col">
-                <span className="text-[10px] font-mono text-gray-400 block mb-2">{report.date}</span>
+                <span className="text-xs text-gray-400 block mb-2">{report.date}</span>
                 <h3 className="text-base font-semibold text-[#0f1713] leading-tight mb-3">{report.title}</h3>
                 <p className="text-xs text-gray-500 leading-relaxed mb-6 flex-grow">{report.desc}</p>
-                <div className="border-t border-gray-100 pt-4 flex justify-between items-center mt-auto">
-                  <span className="text-[10px] font-mono text-gray-400">{report.size}</span>
+                <div className="border-t border-gray-100 pt-4 flex justify-between items-center gap-4 mt-auto">
+                  <span className="text-xs text-gray-400 tabular-nums">{report.size}</span>
                   <a href="#" className="text-xs font-semibold text-teal-700 hover:text-teal-900">Baca Laporan →</a>
                 </div>
               </div>

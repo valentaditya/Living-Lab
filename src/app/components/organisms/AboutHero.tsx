@@ -8,10 +8,9 @@ export default function AboutHero() {
           
           {/* Kolom Kiri: Teks */}
           <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-2 text-xs font-mono text-gray-500">
-              <span className="w-2 h-2 bg-teal-600 rounded-full"></span>
-              <span>ARSIP 01 // PROFIL LEMBAGA | D.I. YOGYAKARTA</span>
-            </div>
+            <span className="block text-xs font-semibold uppercase tracking-wider text-teal-700">
+              Profil Lembaga
+            </span>
             
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#0f1713] leading-tight">
               Tentang <span className="text-teal-700">Living Lab</span>
@@ -22,17 +21,17 @@ export default function AboutHero() {
             </p>
 
             {/* Grid Info */}
-            <div className="grid grid-cols-3 gap-4 mt-4 border-t border-b border-gray-300 py-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4 border-t border-b border-gray-300 py-6">
               <div>
-                <div className="text-[10px] font-mono text-gray-500 mb-1">AFILIASI RISET</div>
+                <div className="text-xs text-gray-500 mb-1">Afiliasi Riset</div>
                 <div className="text-sm font-semibold text-[#0f1713]">UAJY & Paguyuban Bantara</div>
               </div>
               <div>
-                <div className="text-[10px] font-mono text-gray-500 mb-1">KORIDOR DAS</div>
+                <div className="text-xs text-gray-500 mb-1">Koridor DAS</div>
                 <div className="text-sm font-semibold text-[#0f1713]">Code • Winongo • Gajahwong</div>
               </div>
               <div>
-                <div className="text-[10px] font-mono text-gray-500 mb-1">METODOLOGI</div>
+                <div className="text-xs text-gray-500 mb-1">Metodologi</div>
                 <div className="text-sm font-semibold text-[#0f1713]">Sains Warga & IoT Sensor</div>
               </div>
             </div>
@@ -62,19 +61,9 @@ export default function AboutHero() {
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
-            
-            {/* Overlay Top */}
-            <div className="absolute top-4 left-4 bg-[#0f1713]/80 backdrop-blur-sm text-white px-3 py-1.5 text-[10px] font-mono flex items-center gap-2 rounded-sm">
-              <span className="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></span>
-              STATUS TELEMETRI #04 - BRONTOKUSUMAN
-            </div>
 
             {/* Overlay Bottom */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 pt-20 text-white">
-              <div className="flex justify-between items-center text-[10px] font-mono text-gray-300 mb-4 border-b border-gray-700 pb-2">
-                <span>DOC. REF: FIELD-2024</span>
-                <span>Koordinat: -7.78, 110.42</span>
-              </div>
               <p className="text-sm italic leading-relaxed text-gray-200">
                 "Uji kualitas air bantara Kali Brontokusuman — Tim gabungan mahasiswa Fakultas Teknologi UAJY bersama Paguyuban Bantara Kali Code mengambli sampel Dissolved Oxygen dan konduktivitas debit hulu."
               </p>

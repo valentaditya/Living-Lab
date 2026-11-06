@@ -1,47 +1,78 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { menuData } from './Navbar'; // Sesuaikan path import
+import { ChevronDown } from 'lucide-react';
+import { isItemActive, isPathActive, menuData } from './navigation-data';
 
-export const NavigationMenu = () => {
+interface NavigationMenuProps {
+  pathname: string;
+}
+
+const itemClass = (active: boolean) =>
+  `flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-2 transition-colors ${
+    active ? 'bg-white/10 text-white' : 'text-white/85 hover:bg-white/10 hover:text-white'
+  }`;
+
+// Lepas fokus setelah memilih submenu, agar dropdown (yang terbuka lewat focus-within) menutup.
+const blurOnSelect = (event: React.MouseEvent<HTMLAnchorElement>) => event.currentTarget.blur();
+
+/** Menu desktop, tampil mulai lebar xl (1280px). Di bawahnya dipakai MobileMenu. */
+export const NavigationMenu: React.FC<NavigationMenuProps> = ({ pathname }) => {
   return (
-    <div className="hidden md:flex items-center gap-6"> {/* Jarak antar menu konsisten */}
-      {menuData.map((item, idx) => (
-        <div key={idx} className="relative group">
-          {item.type === 'link' ? (
-            <Link 
-              href={item.href || '#'} 
-              className="flex items-center px-2 py-1 transition-opacity hover:opacity-75 text-current" // text-current agar ikut warna Navbar
-            >
-              {item.label}
-            </Link>
-          ) : (
-            <div className="flex items-center px-2 py-1 cursor-pointer transition-opacity hover:opacity-75 text-current">
-              {item.label}
-              {/* Ikon panah ke bawah */}
-              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          )}
+    <ul className="hidden items-center gap-1 text-sm font-medium xl:flex">
+      {menuData.map((item) => {
+        const active = isItemActive(item, pathname);
 
-          {/* Dropdown Menu (Jika ada subItems) */}
-          {item.type === 'dropdown' && item.subItems && (
-            <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-              <div className="py-2">
-                {item.subItems.map((sub, sIdx) => (
-                  <Link 
-                    key={sIdx} 
-                    href={sub.href}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#0f1713] transition-colors"
-                  >
-                    {sub.label}
-                  </Link>
-                ))}
-              </div>
+        if (item.type === 'link') {
+          return (
+            <li key={item.label}>
+              <Link
+                href={item.href || '#'}
+                aria-current={active ? 'page' : undefined}
+                className={itemClass(active)}
+              >
+                {item.label}
+              </Link>
+            </li>
+          );
+        }
+
+        return (
+          <li key={item.label} className="group relative">
+            <button type="button" aria-haspopup="true" className={itemClass(active)}>
+              {item.label}
+              <ChevronDown
+                className="h-4 w-4 transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180"
+                aria-hidden="true"
+              />
+            </button>
+
+            {/* pt-2 (bukan mt-2) supaya area hover tidak terputus antara tombol dan panel */}
+            <div className="invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+              <ul className="w-56 rounded-xl border border-slate-200 bg-white py-2 shadow-lg">
+                {item.subItems?.map((sub) => {
+                  const subActive = isPathActive(sub.href, pathname);
+                  return (
+                    <li key={sub.href}>
+                      <Link
+                        href={sub.href}
+                        onClick={blurOnSelect}
+                        aria-current={subActive ? 'page' : undefined}
+                        className={`block px-4 py-2 text-sm transition-colors hover:bg-slate-50 hover:text-[#0f1713] ${
+                          subActive ? 'font-semibold text-[#0f1713]' : 'text-slate-700'
+                        }`}
+                      >
+                        {sub.label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
-          )}
-        </div>
-      ))}
-    </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 };

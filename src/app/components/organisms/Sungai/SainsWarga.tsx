@@ -39,7 +39,7 @@ export const SainsWarga = () => {
                 </div>
                 <div>
                   <span className="block font-semibold text-sm text-[#0f1713]">Totok Prantondo</span>
-                  <span className="block text-[10px] font-mono text-gray-500">Inisiator Komunitas Kali Winongo</span>
+                  <span className="block text-xs text-gray-500">Inisiator Komunitas Kali Winongo</span>
                 </div>
               </div>
               <p className="text-xs text-gray-600 italic leading-relaxed">
@@ -54,7 +54,7 @@ export const SainsWarga = () => {
                 </div>
                 <div>
                   <span className="block font-semibold text-sm text-[#0f1713]">Sekar Ayu Prabawati, S.Si.</span>
-                  <span className="block text-[10px] font-mono text-gray-500">Peneliti Ekologi UAJY</span>
+                  <span className="block text-xs text-gray-500">Peneliti Ekologi UAJY</span>
                 </div>
               </div>
               <p className="text-xs text-gray-600 italic leading-relaxed">
@@ -69,7 +69,7 @@ export const SainsWarga = () => {
                 </div>
                 <div>
                   <span className="block font-semibold text-sm text-[#0f1713]">Endang Subekti</span>
-                  <span className="block text-[10px] font-mono text-gray-500">Ketua Forum Komunitas Sungai DIY</span>
+                  <span className="block text-xs text-gray-500">Ketua Forum Komunitas Sungai DIY</span>
                 </div>
               </div>
               <p className="text-xs text-gray-600 italic leading-relaxed">

@@ -5,7 +5,7 @@ export const AgendaKegiatan = ({ subsection = false }: { subsection?: boolean })
     {
       day: "28", month: "FEB", year: "2025",
       title: "Rembuk Akbar Pegiat Tiga Sungai: Evaluasi Indeks Kerapuhan Sempadan Musim Hujan",
-      category: "KOLABORASI SAINS WARGA // BANTARA CODE",
+      category: "Kolaborasi Sains Warga · Bantara Code",
       time: "08:00 - 12:00 WIB",
       location: "Pendopo Kraton Kilen Code, Tirtomulyo",
       quota: "KUOTA: 80 PESERTA"
@@ -13,7 +13,7 @@ export const AgendaKegiatan = ({ subsection = false }: { subsection?: boolean })
     {
       day: "07", month: "MAR", year: "2025",
       title: "Lokakarya Perancangan & Kalibrasi Sensor Telemetri Aliran Mandiri",
-      category: "WORKSHOP SAINS LAPANGAN // FASILITAS TEKNOLOGI INDUSTRI",
+      category: "Workshop Sains Lapangan · Fasilitas Teknologi Industri",
       time: "09:00 - 15:00 WIB",
       location: "Laboratorium Komputer & IoT UAJY, Kampus Babarsari",
       quota: "KUOTA: 25 PESERTA"
@@ -21,7 +21,7 @@ export const AgendaKegiatan = ({ subsection = false }: { subsection?: boolean })
     {
       day: "15", month: "MAR", year: "2025",
       title: "Aksi Tanam 500 Bibit Gayaman & Bambu Petung: Restorasi Sempadan Rawan Longsor",
-      category: "AREA FORESTRY // SEMPADAN WINONGO",
+      category: "Area Forestry · Sempadan Winongo",
       time: "06:30 - 11:00 WIB",
       location: "Bantaran Winongo, Kalasan, Bantul (Titik Kumpul Sanga Pituwa)",
       quota: "TERBUKA UNTUK RELAWAN"
@@ -40,7 +40,7 @@ export const AgendaKegiatan = ({ subsection = false }: { subsection?: boolean })
         
         {!subsection && <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div>
-            <span className="text-[10px] font-mono text-gray-500 tracking-widest block mb-2">[ SEKSI 02 // AGENDA & AKSI ]</span>
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">Agenda & Aksi</span>
             <h2 className="text-3xl lg:text-4xl font-semibold text-[#0f1713]">Agenda & Kegiatan Terjadwal</h2>
           </div>
           <p className="text-gray-500 text-sm max-w-md text-left md:text-right">
@@ -55,12 +55,12 @@ export const AgendaKegiatan = ({ subsection = false }: { subsection?: boolean })
               {/* Date Box */}
               <div className="flex flex-col items-center justify-center bg-[#0f1713] text-white w-20 h-20 rounded-sm flex-shrink-0">
                 <span className="text-2xl font-bold leading-none">{agenda.day}</span>
-                <span className="text-[10px] font-mono text-gray-400">{agenda.month} {agenda.year}</span>
+                <span className="text-[10px] tracking-wider text-gray-400 tabular-nums">{agenda.month} {agenda.year}</span>
               </div>
 
               {/* Content */}
               <div className="flex-grow flex flex-col gap-2">
-                <span className="text-[10px] font-mono text-teal-700">{agenda.category}</span>
+                <span className="text-xs text-teal-700">{agenda.category}</span>
                 <h3 className="text-lg font-semibold text-[#0f1713]">{agenda.title}</h3>
                 <div className="flex flex-wrap gap-4 text-xs text-gray-500 mt-1">
                   <span className="flex items-center gap-1">🕒 {agenda.time}</span>

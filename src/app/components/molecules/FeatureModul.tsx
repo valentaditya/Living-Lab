@@ -12,27 +12,15 @@ interface FeaturedModuleProps {
 export const FeaturedModule: React.FC<FeaturedModuleProps> = ({ item }) => {
   return (
     <section className="border border-slate-900/10 bg-white rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
-      {/* Top Bar */}
-      <div className="flex flex-wrap items-center justify-between px-6 py-3 border-b border-slate-900/10 bg-slate-50 text-[11px] font-mono text-slate-500 uppercase tracking-wider">
-        <div className="flex items-center gap-3">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
-          <span className="font-semibold text-slate-800">Modul Unggulan</span>
-          <span className="text-slate-300">/</span>
-          <span>{item.code}</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <span>Kategori: {item.category}</span>
-          <span className="hidden sm:inline text-slate-300">•</span>
-          <span className="hidden sm:inline">Rilis: {item.date}</span>
-        </div>
-      </div>
-
       {/* Main Split Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12">
         {/* Kiri: Informasi Modul */}
         <div className="lg:col-span-7 p-7 sm:p-10 flex flex-col justify-between space-y-8">
           <div className="space-y-5">
-            <div className="inline-flex items-center gap-2 font-mono text-xs text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded">
+            <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-emerald-800">
+              Modul Unggulan
+            </span>
+            <div className="inline-flex items-center gap-2 text-xs text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded">
               <BookOpen className="w-3.5 h-3.5" />
               <span>Panduan Belajar & Praktik Lapangan</span>
             </div>
@@ -41,7 +29,7 @@ export const FeaturedModule: React.FC<FeaturedModuleProps> = ({ item }) => {
               {item.title}
             </h2>
 
-            <div className="font-mono text-xs text-slate-500 space-y-1 border-l-2 border-emerald-600 pl-3">
+            <div className="text-xs text-slate-500 space-y-1 border-l-2 border-emerald-600 pl-3">
               <p className="text-slate-800 font-medium">Sasaran: {item.audience}</p>
               <p>Penyusun: {item.authors.join(', ')}</p>
             </div>
@@ -51,8 +39,10 @@ export const FeaturedModule: React.FC<FeaturedModuleProps> = ({ item }) => {
             </p>
           </div>
 
-          <div className="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
-            <span className="text-slate-400">TEBAL: {item.pages}</span>
+          <div className="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 text-xs">
+            <span className="text-slate-400">
+              {item.category} · {item.date} · {item.pages}
+            </span>
 
             <a
               href={item.downloadUrl}
@@ -67,7 +57,7 @@ export const FeaturedModule: React.FC<FeaturedModuleProps> = ({ item }) => {
         {/* Kanan: Ringkasan Isi Materi */}
         <div className="lg:col-span-5 bg-slate-50/70 p-7 sm:p-10 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-900/10">
           <div className="space-y-1 mb-6">
-            <span className="font-mono text-xs uppercase tracking-wider text-emerald-800 font-semibold">
+            <span className="block mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-800">
               Cakupan Materi
             </span>
             <h3 className="text-base font-semibold text-slate-900">

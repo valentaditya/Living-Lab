@@ -4,7 +4,6 @@ import { Download } from 'lucide-react';
 
 export interface ModuleItem {
   id: string;
-  code: string;
   category: 'Panduan Praktik' | 'Buku Saku' | 'Infografis';
   title: string;
   authors: string[];
@@ -22,15 +21,12 @@ export const ModuleItemRow: React.FC<{ item: ModuleItem }> = ({ item }) => {
     <article className="group relative p-6 sm:p-7 bg-white hover:bg-slate-50/80 transition-all duration-200 border-b border-slate-200 last:border-b-0">
       <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
         
-        {/* Left Col: Code & Category */}
+        {/* Left Col: Category & Date */}
         <div className="lg:w-48 shrink-0 flex lg:flex-col items-center lg:items-start justify-between gap-2">
-          <span className="font-mono text-xs font-semibold text-emerald-800 tracking-wider">
-            {item.code}
-          </span>
           <span className="inline-block text-[11px] font-medium uppercase tracking-wider text-slate-500 bg-slate-100 px-2.5 py-1 rounded">
             {item.category}
           </span>
-          <span className="text-xs font-mono text-slate-400 mt-auto hidden lg:block">
+          <span className="text-xs text-slate-400 mt-auto hidden lg:block">
             {item.date}
           </span>
         </div>
@@ -54,7 +50,7 @@ export const ModuleItemRow: React.FC<{ item: ModuleItem }> = ({ item }) => {
             {item.description}
           </p>
 
-          <div className="flex items-center gap-4 pt-1 text-xs font-mono text-slate-400">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 text-xs text-slate-400">
             <span>{item.pages}</span>
             <span className="lg:hidden">{item.date}</span>
           </div>
@@ -62,7 +58,7 @@ export const ModuleItemRow: React.FC<{ item: ModuleItem }> = ({ item }) => {
 
         {/* Right Col: Action & Meta */}
         <div className="lg:w-40 shrink-0 flex lg:flex-col items-center lg:items-end justify-between gap-3 relative z-10 pt-2 lg:pt-0">
-          <span className="text-xs font-mono text-slate-400">{item.fileSize}</span>
+          <span className="text-xs tabular-nums text-slate-400">{item.fileSize}</span>
 
           <a
             href={item.downloadUrl}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonBase } from '../atoms/ButtonBase';
+import Link from 'next/link';
 
 interface HeroVideoProps {
     title?: string;
@@ -8,7 +8,7 @@ interface HeroVideoProps {
 
 export const HeroVideo: React.FC<HeroVideoProps> = ({ title, description }) => {
     return (
-        <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+        <div className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 pb-16 pt-24 sm:px-6">
 
             <video
                 autoPlay
@@ -23,16 +23,21 @@ export const HeroVideo: React.FC<HeroVideoProps> = ({ title, description }) => {
 
 
             <div className="absolute inset-0 bg-black/60 -z-10"></div>
-            <div className="relative z-10 text-center px-4 flex flex-col items-center">
-                <h1 className="text-white text-4xl md:text-6xl max-w-6xl font-bold mb-4 drop-shadow-md leading-snug">
+            <div className="relative z-10 flex flex-col items-center text-center">
+                <h1 className="mb-4 max-w-5xl text-balance text-4xl font-bold leading-tight text-white drop-shadow-md sm:text-5xl lg:text-6xl">
                     {title ?? "Memulihkan Sungai, Memberdayakan Masyarakat."}
                 </h1>
-                <p className="text-gray-200 text-lg md:text-xl max-w-3xl drop-shadow-md">
+                <p className="max-w-3xl text-pretty text-base text-gray-200 drop-shadow-md sm:text-lg md:text-xl">
                     {description ??
                         "Riset berbasis sains dan aksi warga kolaboratif untuk masa depan ekosistem sungai yang berkelanjutan."}
                 </p>
-                <div className='mt-10'>
-                    <ButtonBase className='py-3.5 text-sm font-semibold hover:scale-105 cursor-pointer'>Terlibat Sekarang</ButtonBase>
+                <div className="mt-8 sm:mt-10">
+                    <Link
+                        href="/kolaborasi"
+                        className="inline-flex rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-gray-900 transition hover:scale-105 hover:bg-gray-100"
+                    >
+                        Terlibat Sekarang
+                    </Link>
                 </div>
             </div>
         </div>
