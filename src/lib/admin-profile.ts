@@ -88,12 +88,13 @@ export async function getAccountSummary(admin: AdminSession): Promise<AdminAccou
   const fallbackName = email.split("@")[0] || "Admin";
 
   try {
-    const profile = await getAdminProfile(admin);
+    // Cukup baris profil; email sudah ada di token, jadi tanpa getUser() ke server Auth.
+    const row = await readProfileRow(admin);
     return {
-      name: profile.fullName || fallbackName,
-      email: profile.email || email,
-      position: profile.position || "Pengelola situs",
-      avatarUrl: profile.avatarUrl,
+      name: row?.full_name || fallbackName,
+      email,
+      position: row?.position || "Pengelola situs",
+      avatarUrl: avatarUrlFor(admin, row?.avatar_path ?? null),
     };
   } catch {
     return { name: fallbackName, email, position: "Pengelola situs", avatarUrl: null };

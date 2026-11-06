@@ -33,8 +33,9 @@ export function LoginForm() {
         return;
       }
 
+      // replace sudah mengambil halaman dashboard yang baru; refresh tambahan
+      // hanya membuat dashboard dirender (dan query Supabase dijalankan) dua kali.
       router.replace(result.redirectTo ?? "/dashboard");
-      router.refresh();
     } catch {
       setError("Tidak dapat terhubung ke server. Silakan coba lagi.");
     } finally {

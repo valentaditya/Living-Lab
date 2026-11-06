@@ -1,5 +1,6 @@
 import "server-only";
 
+import { after } from "next/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "./supabase/server";
 
@@ -21,11 +22,7 @@ interface ActivityLogRow {
 
 const maximumLogEntries = 100;
 
-/**
- * Mencatat aktivitas admin. Gagal mencatat tidak menggagalkan aksi utamanya,
- * cukup dicatat di log server.
- */
-export async function writeActivityLog(
+async function insertActivityLog(
   supabase: SupabaseClient,
   action: string,
   detail: string,
@@ -38,6 +35,25 @@ export async function writeActivityLog(
   if (error) {
     console.error("[activity-log] Gagal menulis log:", error.message);
   }
+}
+
+/**
+ * Mencatat aktivitas admin di latar belakang (setelah respons terkirim),
+ * supaya pengguna tidak ikut menunggu. Gagal mencatat hanya ditulis ke log server.
+ * Pakai `{ wait: true }` jika sesi akan diakhiri sebelum respons (mis. logout).
+ */
+export async function writeActivityLog(
+  supabase: SupabaseClient,
+  action: string,
+  detail: string,
+  actorEmail?: string | null,
+  { wait = false }: { wait?: boolean } = {},
+) {
+  if (wait) {
+    await insertActivityLog(supabase, action, detail, actorEmail);
+    return;
+  }
+  after(() => insertActivityLog(supabase, action, detail, actorEmail));
 }
 
 const logColumns = "id, action, detail, actor_email, created_at";

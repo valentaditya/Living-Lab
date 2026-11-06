@@ -14,6 +14,8 @@ export async function POST() {
       "Logout",
       `${admin.email ?? "Admin"} keluar dari panel admin.`,
       admin.email,
+      // Ditunggu: setelah signOut, client tidak lagi membawa sesi untuk menulis log.
+      { wait: true },
     );
   }
 
