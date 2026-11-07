@@ -317,7 +317,7 @@ export default async function DashboardPage() {
                         </span>
                       </td>
                       <td className="whitespace-nowrap py-3 text-[#7A887E]">
-                        {item.updatedAt || "—"}
+                        {item.updatedAt || "-"}
                       </td>
                     </tr>
                   ))}

@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export const BrandLogo: React.FC = () => {
   return (
-    <Link href="/" aria-label="Living Lab Sungai — Beranda" className="flex min-w-0 items-center gap-3 text-white">
+    <Link href="/" aria-label="Beranda Living Lab Sungai" className="flex min-w-0 items-center gap-3 text-white">
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white p-1.5">
         <Image
           src="/pictures/icon.png"

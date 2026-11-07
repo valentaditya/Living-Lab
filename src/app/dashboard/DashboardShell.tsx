@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   BarChart3,
   BookOpenText,
@@ -14,20 +14,28 @@ import {
   FileText,
   GraduationCap,
   Handshake,
+  Home,
+  Images,
+  Info,
+  LayoutDashboard,
+  Library,
+  ListChecks,
   ListOrdered,
+  Megaphone,
+  Menu,
+  Network,
+  Newspaper,
+  PanelLeftClose,
+  PanelLeftOpen,
+  PanelTop,
   Phone,
   Route,
   Target,
-  UsersRound,
-  Images,
-  LayoutDashboard,
-  ListChecks,
-  Menu,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Settings2,
   UserRound,
+  UsersRound,
+  Waves,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
 import type { AdminAccountSummary } from "@/lib/admin-profile";
@@ -35,62 +43,123 @@ import { AdminAvatar } from "./AdminAvatar";
 import { LogoutButton } from "./LogoutButton";
 import { OfflineBanner } from "./drafts";
 
-const groups = [
+type NavLeaf = { label: string; href: string; icon: LucideIcon };
+type Chapter = {
+  label: string;
+  icon: LucideIcon;
+  /** Langsung ke satu halaman editor (tanpa sub bab). */
+  href?: string;
+  items?: NavLeaf[];
+  /** Halaman publik yang belum punya editor di dashboard. */
+  note?: string;
+};
+
+/** Urutan bab mengikuti menu navbar website publik (lihat navigation-data.ts). */
+const chapters: Chapter[] = [
   {
-    title: "MENU UTAMA",
-    items: [{ label: "Dashboard", href: "/dashboard", icon: LayoutDashboard }],
-  },
-  {
-    title: "BERANDA & BERITA",
+    label: "Beranda", icon: Home,
     items: [
-      { label: "Beranda", href: "/dashboard/homepage", icon: Settings2 },
-      { label: "Statistik Beranda", href: "/dashboard/content/stats", icon: BarChart3 },
-      { label: "Berita & Agenda", href: "/dashboard/news", icon: CalendarDays },
-      { label: "FAQ", href: "/dashboard/faq", icon: CircleHelp },
+      { label: "Konten Pembuka", href: "/dashboard/homepage", icon: PanelTop },
+      { label: "Statistik", href: "/dashboard/content/stats", icon: BarChart3 },
     ],
   },
   {
-    title: "TENTANG KAMI",
+    label: "Tentang Kami", icon: Info,
     items: [
       { label: "Tim Kami", href: "/dashboard/content/team", icon: UsersRound },
       { label: "Visi", href: "/dashboard/content/vision", icon: Eye },
       { label: "Misi", href: "/dashboard/content/missions", icon: ListOrdered },
       { label: "Target Capaian", href: "/dashboard/content/targets", icon: Target },
       { label: "Roadmap", href: "/dashboard/content/roadmap", icon: Route },
+      { label: "FAQ", href: "/dashboard/faq", icon: CircleHelp },
     ],
   },
+  { label: "Sungai", icon: Waves, note: "Halaman Sungai belum bisa diubah dari dashboard." },
   {
-    title: "PUSTAKA & KISAH",
+    label: "Pusat Pengetahuan", icon: Library,
     items: [
-      { label: "Kisah Sungai", href: "/dashboard/content/stories", icon: BookOpenText },
       { label: "Jurnal & Publikasi", href: "/dashboard/content/publications", icon: FileText },
       { label: "Data Kualitas Air", href: "/dashboard/content/datasets", icon: Database },
       { label: "Modul Edukasi", href: "/dashboard/content/modules", icon: GraduationCap },
     ],
   },
   {
-    title: "KOLABORASI",
+    label: "Berita", icon: Megaphone,
+    items: [
+      { label: "Berita", href: "/dashboard/news", icon: Newspaper },
+      { label: "Agenda", href: "/dashboard/news?tab=agenda", icon: CalendarDays },
+    ],
+  },
+  { label: "Kisah Sungai", icon: BookOpenText, href: "/dashboard/content/stories" },
+  {
+    label: "Kolaborasi", icon: Network,
     items: [
       { label: "Mitra & Komunitas", href: "/dashboard/content/partners", icon: Handshake },
       { label: "Kontak & Sekretariat", href: "/dashboard/content/contact", icon: Phone },
     ],
   },
-  {
-    title: "MEDIA",
-    items: [
-      { label: "Pustaka Media", href: "/dashboard/media", icon: Images },
-      { label: "Log Aktivitas", href: "/dashboard/logs", icon: ListChecks },
-    ],
-  },
-  {
-    title: "AKUN",
-    items: [{ label: "Profil Saya", href: "/dashboard/profile", icon: UserRound }],
-  },
 ];
 
-const pageNames: Record<string, string> = Object.fromEntries(
-  groups.flatMap((group) => group.items.map((item) => [item.href, item.label])),
-);
+const extraLinks = [
+  { label: "Pustaka Media", href: "/dashboard/media", icon: Images },
+  { label: "Log Aktivitas", href: "/dashboard/logs", icon: ListChecks },
+  { label: "Profil Saya", href: "/dashboard/profile", icon: UserRound },
+];
+
+/** Cocokkan link (termasuk ?tab=) dengan halaman yang sedang dibuka. */
+function isLeafActive(href: string, pathname: string, tab: string | null) {
+  const [path, query] = href.split("?");
+  if (pathname !== path && !(path !== "/dashboard" && pathname.startsWith(`${path}/`))) return false;
+  const wantedTab = new URLSearchParams(query ?? "").get("tab");
+  return path === "/dashboard/news" ? (wantedTab ?? "news") === (tab ?? "news") : true;
+}
+
+const chapterLeaves = (chapter: Chapter): NavLeaf[] =>
+  chapter.items ?? (chapter.href ? [{ label: chapter.label, href: chapter.href, icon: chapter.icon }] : []);
+
+/** Judul halaman untuk breadcrumb, mis. ["Tentang Kami", "Tim Kami"]. */
+function pageTrail(pathname: string, tab: string | null): string[] {
+  if (pathname === "/dashboard") return ["Dashboard"];
+  for (const chapter of chapters) {
+    const leaf = chapterLeaves(chapter).find((item) => isLeafActive(item.href, pathname, tab));
+    if (leaf) return chapter.items ? [chapter.label, leaf.label] : [chapter.label];
+  }
+  const extra = extraLinks.find((item) => isLeafActive(item.href, pathname, tab));
+  return [extra?.label ?? "Dashboard"];
+}
+
+const sectionTitle = "px-3 text-[10px] font-semibold tracking-[0.15em] text-[#96A198]";
+
+function NavLink({
+  href,
+  label,
+  icon,
+  active,
+  collapsed,
+  onNavigate,
+}: {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+  active: boolean;
+  collapsed: boolean;
+  onNavigate: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onNavigate}
+      title={collapsed ? label : undefined}
+      aria-current={active ? "page" : undefined}
+      className={`flex items-center rounded-xl text-sm font-medium outline-none transition focus-visible:ring-4 focus-visible:ring-[#315C40]/15 ${
+        collapsed ? "justify-center px-0 py-3" : "gap-3 px-3 py-2.5"
+      } ${active ? "bg-[#EAF1EA] text-[#315C40]" : "text-[#68766D] hover:bg-[#F5F8F5] hover:text-[#315C40]"}`}
+    >
+      {icon}
+      {!collapsed && label}
+    </Link>
+  );
+}
 
 export function DashboardShell({
   children,
@@ -103,12 +172,22 @@ export function DashboardShell({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const pageName =
-    pageNames[pathname] ??
-    Object.entries(pageNames).find(
-      ([path]) => path !== "/dashboard" && pathname.startsWith(path),
-    )?.[1] ??
-    "Dashboard";
+  const tab = useSearchParams().get("tab");
+  const trail = pageTrail(pathname, tab);
+  const activeChapter = chapters.find((chapter) =>
+    chapterLeaves(chapter).some((leaf) => isLeafActive(leaf.href, pathname, tab)),
+  )?.label;
+  // Bab yang sedang dibuka otomatis terbuka; bab lain bisa dibuka/tutup sendiri.
+  const [openChapters, setOpenChapters] = useState<string[]>(activeChapter ? [activeChapter] : []);
+  const [lastActive, setLastActive] = useState(activeChapter);
+  if (activeChapter !== lastActive) {
+    setLastActive(activeChapter);
+    if (activeChapter && !openChapters.includes(activeChapter)) setOpenChapters([...openChapters, activeChapter]);
+  }
+  const toggleChapter = (label: string) =>
+    setOpenChapters((current) =>
+      current.includes(label) ? current.filter((item) => item !== label) : [...current, label],
+    );
 
   return (
     <div className="min-h-screen bg-[#F5F7F4] font-sans text-[#26372D]">
@@ -137,7 +216,7 @@ export function DashboardShell({
         >
           <Link
             href="/dashboard"
-            title={sidebarCollapsed ? "Living Lab — Dashboard" : undefined}
+            title={sidebarCollapsed ? "Dashboard Living Lab" : undefined}
             className={`flex min-w-0 items-center ${
               sidebarCollapsed ? "justify-center" : "gap-3"
             }`}
@@ -177,43 +256,142 @@ export function DashboardShell({
             sidebarCollapsed ? "px-2" : "px-3"
           }`}
         >
-          {groups.map((group) => (
-            <div key={group.title}>
-              {!sidebarCollapsed && (
-                <p className="px-3 text-[10px] font-semibold tracking-[0.15em] text-[#96A198]">
-                  {group.title}
-                </p>
-              )}
-              <div className={`${sidebarCollapsed ? "mt-0" : "mt-2"} space-y-1`}>
-                {group.items.map(({ label, href, icon: Icon }) => {
-                  const active =
-                    pathname === href ||
-                    (href !== "/dashboard" && pathname.startsWith(href));
+          <NavLink
+            href="/dashboard"
+            label="Dashboard"
+            icon={<LayoutDashboard size={18} strokeWidth={1.8} aria-hidden="true" />}
+            active={pathname === "/dashboard"}
+            collapsed={sidebarCollapsed}
+            onNavigate={() => setSidebarOpen(false)}
+          />
+
+          <div>
+            {!sidebarCollapsed && <p className={sectionTitle}>HALAMAN WEBSITE</p>}
+            <ul className={`${sidebarCollapsed ? "mt-0" : "mt-2"} space-y-1`}>
+              {chapters.map((chapter) => {
+                const leaves = chapterLeaves(chapter);
+                const chapterActive = chapter.label === activeChapter;
+                const ChapterIcon = chapter.icon;
+                const badge = <ChapterIcon size={18} strokeWidth={1.8} aria-hidden="true" className="shrink-0" />;
+
+                // Sidebar diciutkan: hanya ikon bab, menuju halaman pertamanya.
+                if (sidebarCollapsed) {
                   return (
-                    <Link
-                      key={href}
-                      href={href}
-                      onClick={() => setSidebarOpen(false)}
-                      title={sidebarCollapsed ? label : undefined}
-                      aria-current={active ? "page" : undefined}
-                      className={`flex items-center rounded-xl text-sm font-medium outline-none transition focus-visible:ring-4 focus-visible:ring-[#315C40]/15 ${
-                        sidebarCollapsed
-                          ? "justify-center px-0 py-3"
-                          : "gap-3 px-3 py-2.5"
-                      } ${
-                        active
-                          ? "bg-[#EAF1EA] text-[#315C40]"
-                          : "text-[#68766D] hover:bg-[#F5F8F5] hover:text-[#315C40]"
+                    <li key={chapter.label}>
+                      {leaves[0] ? (
+                        <Link
+                          href={leaves[0].href}
+                          title={chapter.label}
+                          aria-current={chapterActive ? "page" : undefined}
+                          className={`flex justify-center rounded-xl py-3 outline-none transition focus-visible:ring-4 focus-visible:ring-[#315C40]/15 ${
+                            chapterActive ? "bg-[#EAF1EA] text-[#315C40]" : "text-[#68766D] hover:bg-[#F5F8F5] hover:text-[#315C40]"
+                          }`}
+                        >
+                          {badge}
+                        </Link>
+                      ) : (
+                        <span title={`${chapter.label}: ${chapter.note}`} className="flex justify-center py-3 text-[#C2CAC4]">
+                          {badge}
+                        </span>
+                      )}
+                    </li>
+                  );
+                }
+
+                if (chapter.note) {
+                  return (
+                    <li key={chapter.label} title={chapter.note} className="flex items-center gap-3 px-3 py-2 text-sm text-[#B4BDB6]">
+                      {badge}
+                      <span>
+                        {chapter.label}
+                        <span className="block text-[10px]">Belum bisa diubah</span>
+                      </span>
+                    </li>
+                  );
+                }
+
+                if (!chapter.items) {
+                  return (
+                    <li key={chapter.label}>
+                      <NavLink
+                        href={chapter.href!}
+                        label={chapter.label}
+                        icon={badge}
+                        active={chapterActive}
+                        collapsed={false}
+                        onNavigate={() => setSidebarOpen(false)}
+                      />
+                    </li>
+                  );
+                }
+
+                const open = openChapters.includes(chapter.label);
+                const listId = `nav-chapter-${chapter.label.toLowerCase().replace(/[^a-z]+/g, "-")}`;
+                return (
+                  <li key={chapter.label}>
+                    <button
+                      type="button"
+                      onClick={() => toggleChapter(chapter.label)}
+                      aria-expanded={open}
+                      aria-controls={listId}
+                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium outline-none transition focus-visible:ring-4 focus-visible:ring-[#315C40]/15 ${
+                        chapterActive ? "text-[#315C40]" : "text-[#4F5E54] hover:bg-[#F5F8F5] hover:text-[#315C40]"
                       }`}
                     >
-                      <Icon size={18} strokeWidth={1.8} aria-hidden="true" />
-                      {!sidebarCollapsed && label}
-                    </Link>
-                  );
-                })}
-              </div>
+                      {badge}
+                      <span className="flex-1">{chapter.label}</span>
+                      <ChevronRight
+                        size={15}
+                        aria-hidden="true"
+                        className={`text-[#A6B0A8] transition-transform ${open ? "rotate-90" : ""}`}
+                      />
+                    </button>
+                    {open && (
+                      <ul id={listId} className="mb-1 ml-[20px] mt-0.5 space-y-0.5 border-l border-[#E3E9E2] pl-3">
+                        {chapter.items.map((leaf) => {
+                          const active = isLeafActive(leaf.href, pathname, tab);
+                          return (
+                            <li key={leaf.href}>
+                              <Link
+                                href={leaf.href}
+                                onClick={() => setSidebarOpen(false)}
+                                aria-current={active ? "page" : undefined}
+                                className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] outline-none transition focus-visible:ring-4 focus-visible:ring-[#315C40]/15 ${
+                                  active
+                                    ? "bg-[#EAF1EA] font-medium text-[#315C40]"
+                                    : "text-[#68766D] hover:bg-[#F5F8F5] hover:text-[#315C40]"
+                                }`}
+                              >
+                                <leaf.icon size={15} strokeWidth={1.8} aria-hidden="true" className="shrink-0" />
+                                {leaf.label}
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          <div>
+            {!sidebarCollapsed && <p className={sectionTitle}>LAINNYA</p>}
+            <div className={`${sidebarCollapsed ? "mt-0" : "mt-2"} space-y-1`}>
+              {extraLinks.map(({ label, href, icon: Icon }) => (
+                <NavLink
+                  key={href}
+                  href={href}
+                  label={label}
+                  icon={<Icon size={18} strokeWidth={1.8} aria-hidden="true" />}
+                  active={isLeafActive(href, pathname, tab)}
+                  collapsed={sidebarCollapsed}
+                  onNavigate={() => setSidebarOpen(false)}
+                />
+              ))}
             </div>
-          ))}
+          </div>
         </nav>
 
         <div
@@ -248,7 +426,7 @@ export function DashboardShell({
               className={`flex min-w-0 items-center rounded-lg outline-none focus-visible:ring-4 focus-visible:ring-[#315C40]/15 ${
                 sidebarCollapsed ? "justify-center" : "gap-2.5"
               }`}
-              title={`${account.name} — Profil Saya`}
+              title={`Profil Saya (${account.name})`}
             >
               <AdminAvatar name={account.name} avatarUrl={account.avatarUrl} size={32} />
               {!sidebarCollapsed && (
@@ -304,8 +482,14 @@ export function DashboardShell({
                 className="hidden text-[#A6B0A8] sm:block"
                 aria-hidden="true"
               />
+              {trail.slice(0, -1).map((part) => (
+                <span key={part} className="hidden items-center gap-2 text-[#87938A] md:flex">
+                  {part}
+                  <ChevronRight size={14} className="text-[#A6B0A8]" aria-hidden="true" />
+                </span>
+              ))}
               <span className="truncate font-medium text-[#314438]">
-                {pageName}
+                {trail[trail.length - 1]}
               </span>
             </div>
           </div>

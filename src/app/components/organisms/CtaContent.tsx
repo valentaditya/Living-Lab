@@ -15,7 +15,7 @@ export const CtaContent: React.FC = () => (
     </SectionHeading>
     
     <SectionSubheading>
-      Baik Anda seorang akademisi, mahasiswa, pegiat komunitas, ataupun mitra industri — mari sinergikan pengetahuan dan tindakan nyata untuk merawat masa depan sungai kita.
+      Baik Anda seorang akademisi, mahasiswa, pegiat komunitas, ataupun mitra industri, mari sinergikan pengetahuan dan tindakan nyata untuk merawat masa depan sungai kita.
     </SectionSubheading>
     
     <ActionButtonGroup />

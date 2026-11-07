@@ -21,7 +21,7 @@ export const HeroRoadmap = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-8 pt-8 border-t border-gray-200">
             <div>
               <span className="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Rentang Waktu</span>
-              <span className="block text-sm font-bold text-[#0f1713]">2023 — 2028+</span>
+              <span className="block text-sm font-bold text-[#0f1713]">2023–2028+</span>
             </div>
             <div>
               <span className="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Target Wilayah</span>

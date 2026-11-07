@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { Check, Copy, ExternalLink } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { AgendaItem } from "@/types/agenda";
@@ -177,6 +178,13 @@ export function CMSAdminEditor({
     initialTab,
   );
   const [faqDraft, setFaqDraft] = useState<FAQItem>(emptyFAQ);
+  // Pindah Berita <-> Agenda lewat menu samping (URL ?tab= berubah, komponen tidak dimuat ulang).
+  const urlTab = useSearchParams().get("tab") === "agenda" ? "agenda" : "news";
+  const [lastUrlTab, setLastUrlTab] = useState(urlTab);
+  if (section === "news" && urlTab !== lastUrlTab) {
+    setLastUrlTab(urlTab);
+    setActiveContentTab(urlTab);
+  }
   const [uploading, setUploading] = useState(false);
 
   // Pencarian & halaman untuk daftar yang difilter di browser (konten sudah dimuat utuh).
@@ -979,7 +987,14 @@ export function CMSAdminEditor({
               role="tab"
               aria-selected={isActive}
               aria-controls={`admin-content-panel-${tab.id}`}
-              onClick={() => setActiveContentTab(tab.id)}
+              onClick={() => {
+                setActiveContentTab(tab.id);
+                // Simpan tab di URL supaya menu samping ikut menandai Berita / Agenda.
+                const url = new URL(window.location.href);
+                if (tab.id === "agenda") url.searchParams.set("tab", "agenda");
+                else url.searchParams.delete("tab");
+                window.history.replaceState(null, "", url);
+              }}
               className={`-mb-px border-b-2 px-5 py-3 text-sm font-semibold transition ${
                 isActive
                   ? "border-brand text-brand"

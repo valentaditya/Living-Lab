@@ -37,7 +37,7 @@ export const FormKontak = ({ contact }: { contact: BlockData }) => {
                 </div>
                 <div>
                   <span className="text-[10px] tracking-wider text-gray-500 block mb-1">JAM LAYANAN</span>
-                  <span className="text-sm text-gray-300">{contact.hours || "—"}</span>
+                  <span className="text-sm text-gray-300">{contact.hours || "-"}</span>
                 </div>
               </div>
             </div>

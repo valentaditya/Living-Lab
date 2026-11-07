@@ -140,7 +140,7 @@ export const DEFAULT_COLLECTIONS: Record<string, ContentItem[]> = {
     },
     {
       "id": "story-6",
-      "title": "Dokumenter Mini: Suara dari Tepian — Dokumentasi Kehidupan, Harapan, dan Aksi Warga",
+      "title": "Dokumenter Mini: Suara dari Tepian (Dokumentasi Kehidupan, Harapan, dan Aksi Warga)",
       "slug": "dokumenter-mini-suara-dari-tepian",
       "category": "Mini Documentary",
       "date": "Mei 2026",
@@ -306,7 +306,7 @@ export const DEFAULT_COLLECTIONS: Record<string, ContentItem[]> = {
       "phaseTag": "Fase 1: Inisiasi & Baseline",
       "year": "2023",
       "status": "Fase Selesai",
-      "dateRange": "Q1 2023 — Q4 2023",
+      "dateRange": "Q1 2023–Q4 2023",
       "title": "Fondasi Konsortium Pentahelix & Audit Awal Kualitas Tiga Sungai",
       "desc": "Pembentukan konsortium pentahelix awal yang mempertemukan akademisi UAJY, komunitas Paguyuban Kali/ngga, pemerintah Kota Yogyakarta, dan kelompok swadaya. Menetapkan modul sains warga terapan, telemetri hidrologi, dan pemetaan spasial partisipatif.",
       "tags": [
@@ -326,7 +326,7 @@ export const DEFAULT_COLLECTIONS: Record<string, ContentItem[]> = {
       "phaseTag": "Fase 2: Lab Uji-Coba & IoT",
       "year": "2024",
       "status": "Sedang Berjalan",
-      "dateRange": "Q1 2024 — Q4 2024",
+      "dateRange": "Q1 2024–Q4 2024",
       "title": "Penerapan Sensor Nirkabel Komunal & Inkubasi Sains Bantara",
       "desc": "Deploy pilot sensor IoT kualitas air nirkabel berbasis LoRaWAN, perakitan purwarupa sistem pengolahan limbah cair domestik (IPAL) skala komunal di Terban (Code) dan Suryowijayan (Winongo), serta pengenalan kurikulum sains warga bagi generasi muda sekolah bantara.",
       "tags": [
@@ -346,7 +346,7 @@ export const DEFAULT_COLLECTIONS: Record<string, ContentItem[]> = {
       "phaseTag": "Fase 3: Integrasi & Scale-Up",
       "year": "2025",
       "status": "Rencana Mendatang",
-      "dateRange": "Q1 2025 — Q4 2025",
+      "dateRange": "Q1 2025–Q4 2025",
       "title": "Portal Keterbukaan Data Terpadu & Koridor Ekowisata Bantara",
       "desc": "Peluncuran portal keterbukaan data terpadu se-DIY untuk akses publik, akademisi, dan pembuat kebijakan. Penguatan koridor ekowisata bantaran sungai mandiri berbasis kelola warga, serta standardisasi replikasi metodologi living lab untuk DAS regional di luar lingkup Yogyakarta.",
       "tags": [
@@ -366,7 +366,7 @@ export const DEFAULT_COLLECTIONS: Record<string, ContentItem[]> = {
       "phaseTag": "Fase 4: Regenerasi Mandiri",
       "year": "2026+",
       "status": "Visi Masa Depan",
-      "dateRange": "Jangka Panjang 2026 — 2030",
+      "dateRange": "Jangka Panjang 2026–2030",
       "title": "Kemandirian Komunitas Bantara & Standar Mutu Air Kelas II",
       "desc": "Tercapainya kemandirian tata kelola komunitas bantara tanpa ketergantungan intervensi eksternal penuh. Peningkatan mutu air konsisten ke standar Kelas II Nasional (rekreasi air & budidaya tawar), serta terbangunnya ketahanan iklim mikro perkotaan Yogyakarta menghadapi risiko banjir lahar dan curah ekstrem.",
       "tags": [

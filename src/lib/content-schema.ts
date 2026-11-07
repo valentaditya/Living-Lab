@@ -190,7 +190,7 @@ export const COLLECTIONS: CollectionDef[] = [
       { key: "phaseTag", label: "Nama fase", type: "text", required: true, max: 80, placeholder: "Fase 1: Inisiasi & Baseline", wide: true },
       { key: "year", label: "Tahun", type: "text", required: true, max: 12, placeholder: "2024" },
       { key: "status", label: "Status", type: "select", required: true, options: ["Fase Selesai", "Sedang Berjalan", "Rencana Mendatang", "Visi Masa Depan"] },
-      { key: "dateRange", label: "Rentang waktu", type: "text", required: true, max: 60, placeholder: "Q1 2024 — Q4 2024", wide: true },
+      { key: "dateRange", label: "Rentang waktu", type: "text", required: true, max: 60, placeholder: "Q1 2024–Q4 2024", wide: true },
       { key: "title", label: "Judul", type: "text", required: true, max: 200, wide: true },
       { key: "desc", label: "Deskripsi", type: "textarea", required: true, max: 1500, wide: true },
       { key: "tags", label: "Label", type: "list", help: "Satu label per baris.", wide: true },

@@ -65,7 +65,7 @@ export default function AboutHero() {
             {/* Overlay Bottom */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 pt-20 text-white">
               <p className="text-sm italic leading-relaxed text-gray-200">
-                "Uji kualitas air bantara Kali Brontokusuman — Tim gabungan mahasiswa Fakultas Teknologi UAJY bersama Paguyuban Bantara Kali Code mengambli sampel Dissolved Oxygen dan konduktivitas debit hulu."
+                "Uji kualitas air bantara Kali Brontokusuman. Tim gabungan mahasiswa Fakultas Teknologi UAJY bersama Paguyuban Bantara Kali Code mengambli sampel Dissolved Oxygen dan konduktivitas debit hulu."
               </p>
             </div>
           </div>
