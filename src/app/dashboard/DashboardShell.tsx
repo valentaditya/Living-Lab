@@ -4,10 +4,21 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
+  BarChart3,
+  BookOpenText,
   CalendarDays,
   ChevronRight,
   CircleHelp,
+  Database,
+  Eye,
   FileText,
+  GraduationCap,
+  Handshake,
+  ListOrdered,
+  Phone,
+  Route,
+  Target,
+  UsersRound,
   Images,
   LayoutDashboard,
   ListChecks,
@@ -22,6 +33,7 @@ import { useState } from "react";
 import type { AdminAccountSummary } from "@/lib/admin-profile";
 import { AdminAvatar } from "./AdminAvatar";
 import { LogoutButton } from "./LogoutButton";
+import { OfflineBanner } from "./drafts";
 
 const groups = [
   {
@@ -29,11 +41,38 @@ const groups = [
     items: [{ label: "Dashboard", href: "/dashboard", icon: LayoutDashboard }],
   },
   {
-    title: "KONTEN SITUS",
+    title: "BERANDA & BERITA",
     items: [
       { label: "Beranda", href: "/dashboard/homepage", icon: Settings2 },
+      { label: "Statistik Beranda", href: "/dashboard/content/stats", icon: BarChart3 },
       { label: "Berita & Agenda", href: "/dashboard/news", icon: CalendarDays },
       { label: "FAQ", href: "/dashboard/faq", icon: CircleHelp },
+    ],
+  },
+  {
+    title: "TENTANG KAMI",
+    items: [
+      { label: "Tim Kami", href: "/dashboard/content/team", icon: UsersRound },
+      { label: "Visi", href: "/dashboard/content/vision", icon: Eye },
+      { label: "Misi", href: "/dashboard/content/missions", icon: ListOrdered },
+      { label: "Target Capaian", href: "/dashboard/content/targets", icon: Target },
+      { label: "Roadmap", href: "/dashboard/content/roadmap", icon: Route },
+    ],
+  },
+  {
+    title: "PUSTAKA & KISAH",
+    items: [
+      { label: "Kisah Sungai", href: "/dashboard/content/stories", icon: BookOpenText },
+      { label: "Jurnal & Publikasi", href: "/dashboard/content/publications", icon: FileText },
+      { label: "Data Kualitas Air", href: "/dashboard/content/datasets", icon: Database },
+      { label: "Modul Edukasi", href: "/dashboard/content/modules", icon: GraduationCap },
+    ],
+  },
+  {
+    title: "KOLABORASI",
+    items: [
+      { label: "Mitra & Komunitas", href: "/dashboard/content/partners", icon: Handshake },
+      { label: "Kontak & Sekretariat", href: "/dashboard/content/contact", icon: Phone },
     ],
   },
   {
@@ -49,15 +88,9 @@ const groups = [
   },
 ];
 
-const pageNames: Record<string, string> = {
-  "/dashboard": "Dashboard",
-  "/dashboard/homepage": "Beranda",
-  "/dashboard/news": "Berita & Agenda",
-  "/dashboard/faq": "FAQ",
-  "/dashboard/media": "Pustaka Media",
-  "/dashboard/logs": "Log Aktivitas",
-  "/dashboard/profile": "Profil Saya",
-};
+const pageNames: Record<string, string> = Object.fromEntries(
+  groups.flatMap((group) => group.items.map((item) => [item.href, item.label])),
+);
 
 export function DashboardShell({
   children,
@@ -325,6 +358,7 @@ export function DashboardShell({
           </div>
         </header>
         <main className="mx-auto w-full max-w-[1440px] px-4 py-7 sm:px-7 sm:py-9 lg:px-10">
+          <OfflineBanner />
           {children}
         </main>
       </div>

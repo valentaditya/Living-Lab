@@ -212,7 +212,7 @@ export function LoginForm() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-[#315C40] px-5 text-sm font-semibold text-white shadow-sm outline-none transition hover:bg-[#274C34] active:scale-[0.99] focus-visible:ring-4 focus-visible:ring-[#315C40]/20 disabled:cursor-wait disabled:opacity-75"
+                  className="flex h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-brand px-5 text-sm font-semibold text-white shadow-sm outline-none transition hover:bg-brand-dark active:scale-[0.99] focus-visible:ring-4 focus-visible:ring-[#315C40]/20 disabled:cursor-wait disabled:opacity-75"
                 >
                   {isSubmitting ? (
                     <>

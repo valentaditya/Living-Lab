@@ -35,7 +35,7 @@ export function AgendaTabs({ agendas }: { agendas: AgendaItem[] }) {
               onClick={() => setActiveTab(tab.id)}
               className={`-mb-px border-b-2 px-4 py-3 text-sm font-medium transition ${
                 isActive
-                  ? "border-[#315b3d] text-[#315b3d]"
+                  ? "border-brand text-brand"
                   : "border-transparent text-[#78857b] hover:border-[#b8c9b8] hover:text-[#385944]"
               }`}
             >

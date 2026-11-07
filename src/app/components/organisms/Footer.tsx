@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { BlockData } from "@/lib/content-schema";
 
 const footerColumns = [
   {
@@ -23,7 +24,7 @@ const footerColumns = [
   },
 ];
 
-export default function Footer() {
+export default function Footer({ contact }: { contact: BlockData }) {
   return (
     <footer className="bg-[#0f172a] pb-8 pt-14 text-sm text-white sm:pt-20">
       <div className="mx-auto max-w-[96rem] px-4 sm:px-6 lg:px-8">
@@ -66,16 +67,15 @@ export default function Footer() {
           <div className="col-span-2 lg:col-span-1">
             <h4 className="mb-4 text-sm font-semibold text-white">Kontak</h4>
             <address className="space-y-3 not-italic leading-relaxed text-gray-400">
-              <p>
-                Kampus UAJY Babarsari, Gedung Thomas Aquinas Lantai 3, Jl. Babarsari No. 44, Sleman, DIY 55281.
-              </p>
+              <p>{contact.address}</p>
               <p className="flex flex-col gap-1">
-                <a href="mailto:sekretariat@livinglabsungai.ac.id" className="break-all transition-colors hover:text-white">
-                  sekretariat@livinglabsungai.ac.id
+                <a href={`mailto:${contact.email}`} className="break-all transition-colors hover:text-white">
+                  {contact.email}
                 </a>
-                <a href="tel:+62274487711" className="transition-colors hover:text-white">
-                  +62 (274) 487-711 ext. 2104
+                <a href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`} className="transition-colors hover:text-white">
+                  {contact.phone}
                 </a>
+                {contact.hours && <span>{contact.hours}</span>}
               </p>
             </address>
           </div>

@@ -18,7 +18,7 @@ export default function MethodologySection() {
               Empat fase iteratif yang menjamin setiap riset akademik langsung terjun dan dirasakan manfaatnya di bantaran sungai.
             </p>
           </div>
-          <button className="bg-teal-700 text-white px-6 py-3 rounded-sm text-sm font-semibold hover:bg-teal-800 transition-colors whitespace-nowrap">
+          <button className="bg-brand text-white px-6 py-3 rounded-sm text-sm font-semibold hover:bg-brand-dark transition-colors whitespace-nowrap">
             GABUNG RISET TERAPAN
           </button>
         </div>

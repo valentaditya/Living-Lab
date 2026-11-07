@@ -38,7 +38,7 @@ export const CtaFAQ = () => {
             </div>
             <a 
               href="mailto:sekretariat@livinglabsungaijogja.ac.id" 
-              className="inline-flex items-center justify-center gap-2 bg-teal-700 text-white px-6 py-3 rounded-sm font-semibold text-xs hover:bg-teal-800 transition-colors w-full"
+              className="inline-flex items-center justify-center gap-2 bg-brand text-white px-6 py-3 rounded-sm font-semibold text-xs hover:bg-brand-dark transition-colors w-full"
             >
               KIRIM EMAIL ✉
             </a>

@@ -20,7 +20,7 @@ export const CtaSungai = () => {
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <Link 
             href="/kolaborasi" 
-            className="bg-[#0f1713] text-white px-8 py-4 rounded-sm font-semibold text-sm hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+            className="bg-brand text-white px-8 py-4 rounded-sm font-semibold text-sm hover:bg-brand-dark transition-colors flex items-center justify-center gap-2"
           >
             Bergabung dalam Kolaborasi <span>→</span>
           </Link>

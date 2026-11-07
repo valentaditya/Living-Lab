@@ -10,6 +10,9 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* Hijau utama tombol (berdampingan dengan biru #245399 dan kuning #EDA60E) */
+  --color-brand: #1b7a43;
+  --color-brand-dark: #155f34;
 }
 
 @media (prefers-color-scheme: dark) {

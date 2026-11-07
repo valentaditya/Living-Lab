@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteChrome } from "./SiteChrome";
+import { getBlock } from "@/lib/site-content";
+
+// Footer menampilkan kontak dari dashboard, jadi semua halaman dirender per kunjungan
+// agar perubahan kontak langsung terlihat.
+export const dynamic = "force-dynamic";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,14 +29,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const contact = await getBlock("contact");
   return (
     <html
       lang="id"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <SiteChrome>{children}</SiteChrome>
+        <SiteChrome contact={contact}>{children}</SiteChrome>
       </body>
     </html>
   );

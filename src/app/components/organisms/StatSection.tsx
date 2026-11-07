@@ -1,60 +1,55 @@
 import React, { HTMLAttributes } from 'react';
+import {
+  Database,
+  FileText,
+  FolderKanban,
+  HandHeart,
+  MapPin,
+  RadioTower,
+  UsersRound,
+  Waves,
+  type LucideIcon,
+} from 'lucide-react';
+import { itemText, type ContentItem } from '@/lib/content-schema';
 import { StatCard } from '../molecules/StatCard';
 
-
-export interface StatItem {
-  id: string | number;
-  value: string;
-  title: string;
-  description: string;
-}
+/** Nama ikon yang bisa dipilih di dashboard (lihat STAT_ICONS di content-schema). */
+export const STAT_ICON_MAP: Record<string, LucideIcon> = {
+  Folder: FolderKanban,
+  Komunitas: UsersRound,
+  Sungai: Waves,
+  Data: Database,
+  Sensor: RadioTower,
+  Dokumen: FileText,
+  Relawan: HandHeart,
+  Lokasi: MapPin,
+};
 
 export interface StatsSectionProps extends HTMLAttributes<HTMLElement> {
-  stats?: StatItem[];
+  stats: ContentItem[];
 }
 
-export const defaultStatsData: StatItem[] = [
-  {
-    id: 'prog-aktif',
-    value: '12',
-    title: 'Program Aktif',
-    description: 'Inisiatif komunitas & riset multi-tahun di Sleman, Kota Yogyakarta & Bantul',
-  },
-  {
-    id: 'kom-terlibat',
-    value: '28',
-    title: 'Komunitas Terlibat',
-    description: 'Paguyuban RT/RW, pemerti sungai, dan koalisi pemuda',
-  },
-  {
-    id: 'sungai-pantau',
-    value: '3',
-    title: 'Sungai Perkotaan Dipantau',
-    description: 'Pengamatan berkala di DAS Kali Code, Kali Winongo, dan Kali Gajahwong',
-  },
-  {
-    id: 'dataset-kebijakan',
-    value: '45+',
-    title: 'Dataset & Naskah Kebijakan',
-    description: 'Akses terbuka hidrologi, peta sains warga, dan publikasi telaah kritis',
-  },
-];
-
+/** Kartu statistik yang menumpang di batas bawah video hero (margin negatif). */
 export const StatsSection: React.FC<StatsSectionProps> = ({
-  stats = defaultStatsData,
+  stats,
   className = '',
   ...props
 }) => {
   return (
-    <section className={`w-full py-8 md:py-12 bg-[#F7F8F9] ${className}`} {...props}>
-      <div className="mx-auto max-w-[96rem] px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+    <section
+      aria-label="Capaian Living Lab"
+      className={`relative z-10 -mt-28 w-full bg-[linear-gradient(to_bottom,transparent_7rem,#fff_7rem)] pb-4 sm:-mt-24 sm:bg-[linear-gradient(to_bottom,transparent_6rem,#fff_6rem)] ${className}`}
+      {...props}
+    >
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
           {stats.map((item) => (
             <StatCard
               key={item.id}
-              value={item.value}
-              title={item.title}
-              description={item.description}
+              value={itemText(item, 'value')}
+              title={itemText(item, 'title')}
+              description={itemText(item, 'description')}
+              icon={STAT_ICON_MAP[itemText(item, 'icon')] ?? FolderKanban}
             />
           ))}
         </div>

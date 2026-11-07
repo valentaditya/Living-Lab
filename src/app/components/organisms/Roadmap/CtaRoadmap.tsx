@@ -24,7 +24,7 @@ export const CtaRoadmap = () => {
           <div className="flex flex-col sm:flex-row lg:flex-col gap-4 w-full lg:w-auto flex-shrink-0">
             <Link 
               href="/kolaborasi" 
-              className="bg-teal-600 text-white px-8 py-4 rounded-sm font-semibold text-sm hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 text-center"
+              className="bg-brand text-white px-8 py-4 rounded-sm font-semibold text-sm hover:bg-brand-dark transition-colors flex items-center justify-center gap-2 text-center"
             >
               AJUKAN INISIATIF KOLABORASI <span>→</span>
             </Link>

@@ -8,7 +8,7 @@ interface HeroVideoProps {
 
 export const HeroVideo: React.FC<HeroVideoProps> = ({ title, description }) => {
     return (
-        <div className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 pb-16 pt-24 sm:px-6">
+        <div className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 pb-40 pt-24 sm:px-6 sm:pb-36">
 
             <video
                 autoPlay
@@ -34,7 +34,7 @@ export const HeroVideo: React.FC<HeroVideoProps> = ({ title, description }) => {
                 <div className="mt-8 sm:mt-10">
                     <Link
                         href="/kolaborasi"
-                        className="inline-flex rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-gray-900 transition hover:scale-105 hover:bg-gray-100"
+                        className="inline-flex rounded-full bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:scale-105 hover:bg-brand-dark"
                     >
                         Terlibat Sekarang
                     </Link>

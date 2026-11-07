@@ -5,19 +5,21 @@ import { PrinsipKolaborasi } from '@/app/components/organisms/Kolaborasi/Prinsip
 import { JejaringMitra } from '@/app/components/organisms/Kolaborasi/JejaringMitra';
 import { PeluangKontribusi } from '@/app/components/organisms/Kolaborasi/PeluangKontribusi';
 import { FormKontak } from '@/app/components/organisms/Kolaborasi/FormKontak';
+import { getBlock, getCollection } from '@/lib/site-content';
 export const metadata: Metadata = {
   title: 'Kolaborasi | Living Lab Sungai Yogyakarta',
   description: 'Membangun Ekosistem Sungai melalui Co-Creation dan Co-Production. Platform terbuka untuk restorasi sosial-ekologi.',
 };
 
-export default function KolaborasiPage() {
+export default async function KolaborasiPage() {
+  const [partners, contact] = await Promise.all([getCollection('partners'), getBlock('contact')]);
   return (
     <div className="bg-white min-h-screen text-gray-900 font-sans">
       <HeroKolaborasi />
       <PrinsipKolaborasi />
-      <JejaringMitra />
+      <JejaringMitra items={partners} />
       <PeluangKontribusi />
-      <FormKontak />
+      <FormKontak contact={contact} />
     </div>
   );
 }

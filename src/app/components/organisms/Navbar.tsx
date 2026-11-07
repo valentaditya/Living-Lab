@@ -81,12 +81,14 @@ export const Navbar: React.FC = () => {
             >
               Masuk
             </Link>
+            {/* Tombol "Menjadi Mitra" dinonaktifkan sementara; hapus komentar untuk mengaktifkan lagi.
             <Link
               href="/kolaborasi"
               className="hidden rounded-full bg-white px-5 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-100 min-[90rem]:inline-flex"
             >
               Menjadi Mitra
             </Link>
+            */}
 
             <button
               type="button"

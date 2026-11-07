@@ -28,6 +28,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({
           src={image}
           alt={name}
           fill
+          unoptimized
           className="object-cover grayscale hover:grayscale-0 transition-all duration-500"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />

@@ -18,7 +18,7 @@ export default function AboutCTA() {
         </p>
         
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-          <button className="w-full sm:w-auto bg-teal-600 text-white px-8 py-4 rounded-sm text-sm font-bold hover:bg-teal-500 transition-colors">
+          <button className="w-full sm:w-auto bg-brand text-white px-8 py-4 rounded-sm text-sm font-bold hover:bg-brand-dark transition-colors">
             DAFTARKAN AGENDA KOLABORASI
           </button>
           <Link href="/tentang/faq"

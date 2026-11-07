@@ -17,6 +17,8 @@ import {
 } from "./ListControls";
 import { EditorSkeleton, LogTableSkeleton, MediaGridSkeleton } from "./Skeletons";
 import { StatusBadge } from "../components/atoms/StatusBadge";
+import { AgendaPreview, ArticlePreview, FAQPreview, HeroPreview } from "./preview/CMSPreview";
+import { DraftNotice, DraftStatus, useFormDraft, useOnline } from "./drafts";
 import {
   agendaToDateInput,
   dateInputToAgenda,
@@ -142,11 +144,13 @@ function PageHeading({ title, description }: { title: string; description: strin
 }
 
 function SaveButton({ saving }: { saving: boolean }) {
+  const online = useOnline();
   return (
     <button
       type="submit"
-      disabled={saving}
-      className="rounded-xl bg-[#315b3d] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#274b32] disabled:opacity-60"
+      disabled={saving || !online}
+      title={online ? undefined : "Koneksi terputus"}
+      className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-60"
     >
       {saving ? "Menyimpan..." : "Simpan perubahan"}
     </button>
@@ -206,6 +210,25 @@ export function CMSAdminEditor({
   const faqFormRef = useRef<HTMLFormElement>(null);
   const scrollToForm = (form: HTMLFormElement | null) =>
     form?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // Draf lokal tiap form, supaya isian tidak hilang saat refresh / pindah menu / offline.
+  const ready = content !== null && !loading;
+  const homepageDraft = useFormDraft(
+    ready && section === "homepage" ? "homepage" : null,
+    content?.settings ?? null,
+    (settings) => settings && setContent((current) => current && { ...current, settings }),
+  );
+  const faqFormDraft = useFormDraft(ready && section === "faq" ? `faq:${faqDraft.id || "new"}` : null, faqDraft, setFaqDraft);
+  const articleFormDraft = useFormDraft(
+    ready && section === "news" ? `news:${articleDraft.id || "new"}` : null,
+    articleDraft,
+    setArticleDraft,
+  );
+  const agendaFormDraft = useFormDraft(
+    ready && section === "news" ? `agenda:${agendaDraft.id || "new"}` : null,
+    agendaDraft,
+    setAgendaDraft,
+  );
 
   async function loadContent() {
     setLoading(true);
@@ -522,13 +545,15 @@ export function CMSAdminEditor({
           description="Ubah judul dan deskripsi utama yang tampil pada bagian pembuka situs."
         />
         {alerts}
+        <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(360px,44%)]">
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            void persist(content);
+            void persist(content).then((saved) => saved && homepageDraft.markSaved());
           }}
           className="space-y-5 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
         >
+          <DraftNotice draft={homepageDraft} />
           <label className={labelClass}>
             Judul utama
             <textarea
@@ -566,10 +591,13 @@ export function CMSAdminEditor({
             />
             <CharacterCount value={content.settings.heroDescription} max={500} />
           </label>
-          <div className="flex justify-end">
+          <div className="flex flex-wrap justify-end gap-2">
+            <DraftStatus draft={homepageDraft} />
             <SaveButton saving={saving} />
           </div>
         </form>
+        <HeroPreview title={content.settings.heroTitle} description={content.settings.heroDescription} />
+        </div>
       </>
     );
   }
@@ -588,6 +616,7 @@ export function CMSAdminEditor({
           description="Tambah, ubah, atau hapus FAQ yang tampil di halaman pertanyaan."
         />
         {alerts}
+        <div className="mb-7 grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(360px,44%)]">
         <form
           onSubmit={async (event) => {
             event.preventDefault();
@@ -595,14 +624,18 @@ export function CMSAdminEditor({
             const faqs = editing
               ? content.faqs.map((faq) => (faq.id === nextFAQ.id ? nextFAQ : faq))
               : [...content.faqs, nextFAQ];
-            if (await persist({ ...content, faqs })) setFaqDraft(emptyFAQ);
+            if (await persist({ ...content, faqs })) {
+              faqFormDraft.markSaved();
+              setFaqDraft(emptyFAQ);
+            }
           }}
           ref={faqFormRef}
-          className="mb-7 scroll-mt-24 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
+          className="scroll-mt-24 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
         >
           <h2 className="text-base font-semibold text-[#24392a]">
             {editing ? "Ubah pertanyaan" : "Tambah pertanyaan"}
           </h2>
+          <DraftNotice draft={faqFormDraft} />
           <label className={labelClass}>
             Pertanyaan
             <input
@@ -642,7 +675,8 @@ export function CMSAdminEditor({
             />
             <Suggestions id="faq-categories" values={suggestions(content.faqs.map((faq) => faq.category))} />
           </label>
-          <div className="flex justify-end gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
+            <DraftStatus draft={faqFormDraft} />
             {editing && (
               <button
                 type="button"
@@ -655,6 +689,8 @@ export function CMSAdminEditor({
             <SaveButton saving={saving} />
           </div>
         </form>
+        <FAQPreview faq={faqDraft} />
+        </div>
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-base font-semibold text-[#24392a]">Daftar pertanyaan</h2>
           <SearchField
@@ -756,7 +792,7 @@ export function CMSAdminEditor({
           <button
             type="submit"
             disabled={uploading}
-            className="h-[42px] rounded-xl bg-[#315b3d] px-5 text-sm font-semibold text-white disabled:opacity-60"
+            className="h-[42px] rounded-xl bg-brand px-5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-60"
           >
             {uploading ? "Mengunggah..." : "Unggah file"}
           </button>
@@ -784,7 +820,7 @@ export function CMSAdminEditor({
                   }}
                   className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
                     mediaType === filter.id
-                      ? "bg-[#315b3d] text-white"
+                      ? "bg-brand text-white"
                       : "text-[#526157] hover:bg-[#f5f8f5]"
                   }`}
                 >
@@ -946,7 +982,7 @@ export function CMSAdminEditor({
               onClick={() => setActiveContentTab(tab.id)}
               className={`-mb-px border-b-2 px-5 py-3 text-sm font-semibold transition ${
                 isActive
-                  ? "border-[#315b3d] text-[#315b3d]"
+                  ? "border-brand text-brand"
                   : "border-transparent text-[#78857b] hover:border-[#b8c9b8] hover:text-[#385944]"
               }`}
             >
@@ -963,6 +999,7 @@ export function CMSAdminEditor({
       >
       {activeContentTab === "news" && (
       <>
+      <div className="mb-7 grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(360px,44%)]">
       <form
         onSubmit={async (event) => {
           event.preventDefault();
@@ -978,15 +1015,17 @@ export function CMSAdminEditor({
               )
             : [nextArticle, ...content.articles];
           if (await persist({ ...content, articles })) {
+            articleFormDraft.markSaved();
             setArticleDraft(emptyArticle);
           }
         }}
         ref={articleFormRef}
-        className="mb-7 scroll-mt-24 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
+        className="scroll-mt-24 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
       >
         <h2 className="text-base font-semibold text-[#24392a]">
           {editingArticle ? "Ubah berita" : "Tambah berita"}
         </h2>
+        <DraftNotice draft={articleFormDraft} />
         <div className="grid gap-4 sm:grid-cols-2">
           <label className={`${labelClass} sm:col-span-2`}>
             Judul
@@ -1203,7 +1242,8 @@ export function CMSAdminEditor({
           id="article-action-texts"
           values={suggestions(content.articles.map((item) => item.actionText), ["Baca Selengkapnya", "Baca Artikel", "Baca Abstrak"])}
         />
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-wrap justify-end gap-2">
+          <DraftStatus draft={articleFormDraft} />
           {editingArticle && (
             <button
               type="button"
@@ -1216,6 +1256,8 @@ export function CMSAdminEditor({
           <SaveButton saving={saving} />
         </div>
       </form>
+      <ArticlePreview article={articleDraft} />
+      </div>
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-base font-semibold text-[#24392a]">Daftar berita</h2>
         <SearchField
@@ -1294,6 +1336,7 @@ export function CMSAdminEditor({
       )}
       {activeContentTab === "agenda" && (
       <>
+      <div className="mb-7 grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(360px,44%)]">
       <form
         onSubmit={async (event) => {
           event.preventDefault();
@@ -1304,15 +1347,17 @@ export function CMSAdminEditor({
               )
             : [...content.agenda, nextAgenda];
           if (await persist({ ...content, agenda })) {
+            agendaFormDraft.markSaved();
             setAgendaDraft(emptyAgenda);
           }
         }}
         ref={agendaFormRef}
-        className="mb-7 scroll-mt-24 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
+        className="scroll-mt-24 space-y-4 rounded-2xl border border-[#e5ebe4] bg-white p-5 sm:p-7"
       >
         <h2 className="text-base font-semibold text-[#24392a]">
           {editingAgenda ? "Ubah agenda" : "Tambah agenda"}
         </h2>
+        <DraftNotice draft={agendaFormDraft} />
         <div className="grid gap-4 sm:grid-cols-2">
           <label className={`${labelClass} sm:col-span-2`}>
             Nama kegiatan
@@ -1461,7 +1506,8 @@ export function CMSAdminEditor({
           id="agenda-buttons"
           values={suggestions(content.agenda.map((item) => item.buttonText), ["Daftar Gratis", "Ajukan Kehadiran", "Informasi"])}
         />
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-wrap justify-end gap-2">
+          <DraftStatus draft={agendaFormDraft} />
           {editingAgenda && (
             <button
               type="button"
@@ -1474,6 +1520,8 @@ export function CMSAdminEditor({
           <SaveButton saving={saving} />
         </div>
       </form>
+      <AgendaPreview item={agendaDraft} />
+      </div>
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-base font-semibold text-[#24392a]">Daftar agenda</h2>
         <SearchField

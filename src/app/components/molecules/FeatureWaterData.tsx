@@ -52,7 +52,7 @@ export const FeaturedWaterData: React.FC<FeaturedWaterDataProps> = ({ item }) =>
 
             <a
               href={item.downloadUrl}
-              className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-slate-900 hover:bg-emerald-800 text-white font-medium rounded-lg transition duration-200"
+              className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition duration-200"
             >
               <span>Unduh Data Lengkap ({item.fileSize})</span>
               <ArrowDownRight className="w-4 h-4 stroke-[2.2]" />

@@ -1,13 +1,9 @@
 import React from 'react';
+import { itemText, type ContentItem } from '@/lib/content-schema';
 
-export const JejaringMitra = () => {
-  const mitraLogos = ["SHIND", "SGH", "DLH DIY", "KLHK RI", "AQUA"];
-  const komunitasList = [
-    "FKWA (Forum Komunitas Winongo Asri)",
-    "Pemerti Kali Code",
-    "Komunitas Peduli Gajahwong",
-    "Sekolah Sungai DIY"
-  ];
+export const JejaringMitra = ({ items }: { items: ContentItem[] }) => {
+  const lembaga = items.filter((item) => itemText(item, "kind") === "Lembaga");
+  const komunitasList = items.filter((item) => itemText(item, "kind") === "Komunitas").map((item) => itemText(item, "name"));
 
   return (
     <section className="py-20 bg-gray-50 border-t border-b border-gray-200">
@@ -25,9 +21,13 @@ export const JejaringMitra = () => {
 
         {/* Logo Grid */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6 mb-12">
-          {mitraLogos.map((logo, idx) => (
-            <div key={idx} className="bg-white border border-gray-200 h-20 flex items-center justify-center rounded-sm text-sm font-bold text-gray-700 tracking-wider">
-              {logo}
+          {lembaga.map((item) => (
+            <div key={item.id} className="bg-white border border-gray-200 h-20 flex items-center justify-center rounded-sm px-4 text-center text-sm font-bold text-gray-700 tracking-wider">
+              {itemText(item, "logo") ? (
+                <img src={itemText(item, "logo")} alt={itemText(item, "name")} className="max-h-12 w-auto object-contain" />
+              ) : (
+                itemText(item, "name")
+              )}
             </div>
           ))}
         </div>

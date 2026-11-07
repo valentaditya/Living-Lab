@@ -1,39 +1,35 @@
 import React, { HTMLAttributes, ReactNode } from 'react';
+import type { LucideIcon } from 'lucide-react';
+import { CountUp } from '../atoms/CountUp';
 
 export interface StatCardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   value: ReactNode;
   title: ReactNode;
-  description: ReactNode;
+  description?: string;
+  icon?: LucideIcon;
 }
 
-/** Di ponsel: angka di kiri, teks di kanan. Mulai sm: kartu vertikal. */
+/** Kartu putih ringkas: ikon, angka, garis kecil, label (deskripsi muncul sebagai tooltip). */
 export const StatCard: React.FC<StatCardProps> = ({
   value,
   title,
   description,
+  icon: Icon,
   className = '',
   ...props
 }) => {
   return (
     <div
-      className={`flex items-start gap-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-shadow duration-300 hover:shadow-md sm:flex-col sm:gap-0 sm:p-6 md:p-7 ${className}`}
+      title={description}
+      className={`flex flex-col items-center justify-center bg-white px-3 py-6 text-center shadow-[0_12px_32px_rgba(15,23,19,0.12)] sm:px-5 sm:py-8 ${className}`}
       {...props}
     >
-      <div className="w-16 shrink-0 sm:w-auto">
-        <span className="block text-3xl font-black leading-none tracking-tight text-[#0B1E33] sm:text-4xl md:text-5xl">
-          {value}
-        </span>
-        <div className="mt-3 hidden h-1 w-8 rounded-full bg-[#15803d] sm:mb-4 sm:block" />
-      </div>
-
-      <div className="min-w-0">
-        <h4 className="mb-1 text-sm font-bold tracking-tight text-[#0B1E33] sm:mb-2 md:text-base">
-          {title}
-        </h4>
-        <p className="text-xs leading-relaxed text-slate-500 md:text-[13px]">
-          {description}
-        </p>
-      </div>
+      {Icon && <Icon className="h-8 w-8 text-[#1b7a43] sm:h-9 sm:w-9" strokeWidth={1.4} aria-hidden="true" />}
+      <span className="mt-3 text-3xl font-bold tracking-tight text-[#0B1E33] sm:mt-4 sm:text-4xl">
+        {typeof value === 'string' ? <CountUp value={value} /> : value}
+      </span>
+      <span className="my-3 h-px w-8 bg-slate-300" aria-hidden="true" />
+      <span className="text-xs font-medium text-slate-500 sm:text-sm">{title}</span>
     </div>
   );
 };

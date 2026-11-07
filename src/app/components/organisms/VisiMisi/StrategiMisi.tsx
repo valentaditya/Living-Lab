@@ -1,36 +1,40 @@
 import React from 'react';
+import { itemList, itemText, type ContentItem } from '@/lib/content-schema';
 
-export const StrategiMisi = () => {
-  const misiData = [
-    {
-      num: "01",
-      title: "Memfasilitasi Riset Kolaboratif & Inovasi Teknologi",
-      desc: "Memadukan riset multidisiplin dan pengujian teknologi tepat guna berbasis sains warga, melibatkan akademisi, praktisi, dan komunitas. Mencakup purwarupa sensor nirkabel kualitas air, pemodelan hidrologi mikro, serta pemantauan vegetasi riparian endemik untuk bioremediasi alami.",
-      tags: ["Sensor IoT Mandiri", "Fitoremediasi Riparian", "Audit Morfologi Sungai"],
-      tagColor: "bg-blue-50 text-blue-700"
-    },
-    {
-      num: "02",
-      title: "Memberdayakan Komunitas Berbasis Sirkular",
-      desc: "Mengembangkan kapasitas warga bantaran sungai melalui edukasi kepedulian air, tata kelola sampah partisipatif, serta pengembangan ekonomi sirkular lokal. Mewujudkan posko pemilahan organik-anorganik bantara mandiri, pembuatan kompos fermentasi air kali, dan lokakarya daur plastik mikro.",
-      tags: ["Bank Sampah Bantara", "Sanitasi Komunal Berkelanjutan", "Sekolah Sungai Mandiri"],
-      tagColor: "bg-green-50 text-green-700"
-    },
-    {
-      num: "03",
-      title: "Menyediakan Data Terbuka & Transparan",
-      desc: "Membangun repositori data terbuka pemantauan kualitas air dan indeks ekologis sungai secara real-time untuk penguatan sains warga (citizen science). Siapa pun, mulai dari pelajar SD hingga peneliti doktoral, dapat mengunduh raw telemetry pH, DO, BOD, serta status debit kali tanpa dinding berbayar.",
-      tags: ["Open API Hidrologi", "Indeks Makroinvertebrata", "Peta Spasial Risiko Banjir"],
-      tagColor: "bg-purple-50 text-purple-700"
-    },
-    {
-      num: "04",
-      title: "Akselerasi Tata Kelola & Kebijakan Publik",
-      desc: "Mengakselerasi terwujudnya tata kelola sungai partisipatif dan kebijakan publik terpadu bersama pemangku kebijakan di tingkat Penda DIY maupun Kota/Kabupaten. Menyelenggarakan forum musyawarah bantara reguler dan penyusunan kertas kebijakan (policy brief) protokol sempadan sungai.",
-      tags: ["Policy Brief Semesteran", "Konsultasi Publik AMDAL", "Harmonisasi Perda Sempadan"],
-      tagColor: "bg-orange-50 text-orange-700"
-    }
-  ];
+const tagColors = ["bg-blue-50 text-blue-700", "bg-green-50 text-green-700", "bg-purple-50 text-purple-700", "bg-orange-50 text-orange-700"];
+
+export function toMission(item: ContentItem, index: number) {
+  return {
+    num: String(index + 1).padStart(2, "0"),
+    title: itemText(item, "title"),
+    desc: itemText(item, "desc"),
+    tags: itemList(item, "tags"),
+    tagColor: tagColors[index % tagColors.length],
+  };
+}
+
+/** Satu kartu misi (dipakai halaman Visi & Misi dan pratinjau dashboard). */
+export const MissionCard = ({ misi }: { misi: ReturnType<typeof toMission> }) => (
+  <div className="flex flex-col md:flex-row gap-6 p-6 md:p-8 bg-white border border-gray-100 rounded-sm shadow-[0_2px_10px_-3px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
+    <div className="flex-shrink-0">
+      <span className="text-4xl md:text-5xl font-light text-gray-300">{misi.num}</span>
+    </div>
+    <div className="flex-grow">
+      <h3 className="text-xl font-semibold text-[#0f1713] mb-3">{misi.title}</h3>
+      <p className="text-sm text-gray-600 leading-relaxed mb-4">{misi.desc}</p>
+      <div className="flex flex-wrap gap-2">
+        {misi.tags.map((tag, tIdx) => (
+          <span key={tIdx} className={`text-xs px-2 py-1 rounded-sm ${misi.tagColor}`}>
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+export const StrategiMisi = ({ items }: { items: ContentItem[] }) => {
+  const misiData = items.map(toMission);
 
   return (
     <section className="py-20 lg:py-28 bg-white">
@@ -81,22 +85,7 @@ export const StrategiMisi = () => {
           {/* Right Column: 4 Mission Cards */}
           <div className="lg:col-span-8 flex flex-col gap-6">
             {misiData.map((misi, idx) => (
-              <div key={idx} className="flex flex-col md:flex-row gap-6 p-6 md:p-8 bg-white border border-gray-100 rounded-sm shadow-[0_2px_10px_-3px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
-                <div className="flex-shrink-0">
-                  <span className="text-4xl md:text-5xl font-light text-gray-300">{misi.num}</span>
-                </div>
-                <div className="flex-grow">
-                  <h3 className="text-xl font-semibold text-[#0f1713] mb-3">{misi.title}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed mb-4">{misi.desc}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {misi.tags.map((tag, tIdx) => (
-                      <span key={tIdx} className={`text-xs px-2 py-1 rounded-sm ${misi.tagColor}`}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <MissionCard key={idx} misi={misi} />
             ))}
           </div>
 

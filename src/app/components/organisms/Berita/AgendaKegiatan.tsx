@@ -71,7 +71,7 @@ export const AgendaKegiatan = ({ subsection = false }: { subsection?: boolean })
 
               {/* Action Button */}
               <div className="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
-                <button className="w-full md:w-auto bg-white border border-teal-600 text-teal-700 px-6 py-3 rounded-sm text-xs font-semibold hover:bg-teal-50 transition-colors">
+                <button className="w-full md:w-auto bg-white border border-brand text-brand px-6 py-3 rounded-sm text-xs font-semibold hover:bg-brand hover:text-white transition-colors">
                   DAFTAR KEGIATAN
                 </button>
               </div>

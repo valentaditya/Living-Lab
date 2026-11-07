@@ -130,7 +130,7 @@ export function LogoutButton({ compact = false }: { compact?: boolean }) {
                   type="button"
                   disabled={isLoggingOut}
                   onClick={logout}
-                  className="rounded-xl bg-[#315C40] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#274C34] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#315C40]/20 disabled:cursor-wait disabled:opacity-70"
+                  className="rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#315C40]/20 disabled:cursor-wait disabled:opacity-70"
                 >
                   {isLoggingOut ? "Memproses..." : "Ya, keluar"}
                 </button>

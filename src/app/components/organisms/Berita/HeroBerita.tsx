@@ -34,7 +34,7 @@ export const HeroBerita = () => {
               <button className="bg-transparent border border-gray-600 text-white px-6 py-3 rounded-sm text-xs font-semibold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
                 📡 Langganan Buletin Mingguan
               </button>
-              <button className="bg-white text-[#0a192f] px-6 py-3 rounded-sm text-xs font-semibold hover:bg-gray-100 transition-colors">
+              <button className="bg-brand text-white px-6 py-3 rounded-sm text-xs font-semibold hover:bg-brand-dark transition-colors">
                 + Kirim Rilis / Kegiatan
               </button>
             </div>

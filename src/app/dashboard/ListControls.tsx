@@ -146,7 +146,7 @@ export function Pagination({
                 aria-label={`Halaman ${value}`}
                 className={`${pageButtonClass} ${
                   value === page
-                    ? "border-[#315b3d] bg-[#315b3d] text-white"
+                    ? "border-brand bg-brand text-white"
                     : "border-[#dce4dc] bg-white text-[#526157] hover:bg-[#f5f8f5]"
                 }`}
               >

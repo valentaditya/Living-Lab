@@ -1,6 +1,7 @@
+import type { BlockData } from '@/lib/content-schema';
 import React from 'react';
 
-export const FormKontak = () => {
+export const FormKontak = ({ contact }: { contact: BlockData }) => {
   return (
     <section className="py-24 bg-[#0a192f] text-white">
       <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
@@ -19,25 +20,24 @@ export const FormKontak = () => {
             <div className="flex flex-col gap-6 mt-4">
               <div>
                 <span className="text-[10px] tracking-wider text-gray-500 block mb-1">SUREL RESMI SEKRETARIAT</span>
-                <a href="mailto:sekretariat@livinglabsungai.ac.id" className="text-teal-400 hover:text-teal-300 font-semibold transition-colors">
-                  sekretariat@livinglabsungai.ac.id
+                <a href={`mailto:${contact.email}`} className="break-all text-teal-400 hover:text-teal-300 font-semibold transition-colors">
+                  {contact.email}
                 </a>
               </div>
               <div>
                 <span className="text-[10px] tracking-wider text-gray-500 block mb-1">PIKET RISET & LABORATORIUM</span>
                 <p className="text-sm text-gray-300 leading-relaxed">
-                  Gedung Thomas Aquinas Lantai 3, Kampus 1 Universitas Atma Jaya Yogyakarta.<br />
-                  Jl. Babarsari No. 44, Caturtunggal, Depok, Sleman, D.I. Yogyakarta 55281
+                  {contact.address}
                 </p>
               </div>
               <div className="flex flex-wrap gap-x-12 gap-y-6">
                 <div>
                   <span className="text-[10px] tracking-wider text-gray-500 block mb-1">TELEPON KANTOR</span>
-                  <span className="text-sm text-gray-300">+62 (274) 487711</span>
+                  <a href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`} className="text-sm text-gray-300 hover:text-white">{contact.phone}</a>
                 </div>
                 <div>
                   <span className="text-[10px] tracking-wider text-gray-500 block mb-1">JAM LAYANAN</span>
-                  <span className="text-sm text-gray-300">08:30 - 16:00 WIB</span>
+                  <span className="text-sm text-gray-300">{contact.hours || "—"}</span>
                 </div>
               </div>
             </div>
@@ -84,7 +84,7 @@ export const FormKontak = () => {
                   <p className="text-[10px] text-gray-500 italic max-w-sm">
                     Semua data dikirimkan kode etik riset Universitas Atma Jaya Yogyakarta.
                   </p>
-                  <button type="submit" className="bg-teal-600 text-white px-8 py-3 rounded-sm font-semibold text-sm hover:bg-teal-700 transition-colors w-full md:w-auto">
+                  <button type="submit" className="bg-brand text-white px-8 py-3 rounded-sm font-semibold text-sm hover:bg-brand-dark transition-colors w-full md:w-auto">
                     KIRIM PESAN
                   </button>
                 </div>

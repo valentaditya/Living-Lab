@@ -12,7 +12,7 @@ const labelClass = "block text-xs font-medium text-[#526157]";
 const inputClass =
   "mt-1.5 w-full rounded-xl border border-[#dce4dc] bg-white px-3.5 py-2.5 text-sm text-[#26392b] outline-none focus:border-[#63816a] focus:ring-4 focus:ring-[#63816a]/10 aria-[invalid=true]:border-red-300 disabled:bg-[#f5f7f4] disabled:text-[#718076]";
 const primaryButtonClass =
-  "rounded-xl bg-[#315b3d] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#274b32] disabled:cursor-not-allowed disabled:opacity-60";
+  "rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60";
 const secondaryButtonClass =
   "inline-flex items-center justify-center gap-2 rounded-xl border border-[#dce4dc] bg-white px-4 py-2.5 text-sm font-semibold text-[#315b3d] transition hover:bg-[#f5f8f5] disabled:cursor-not-allowed disabled:opacity-60";
 
@@ -430,7 +430,7 @@ export function ProfileEditor({ initialProfile }: { initialProfile: AdminProfile
                 >
                   <span
                     className={`flex h-4 w-4 items-center justify-center rounded-full ${
-                      requirement.met ? "bg-[#315b3d] text-white" : "border border-[#c9d3ca]"
+                      requirement.met ? "bg-brand text-white" : "border border-[#c9d3ca]"
                     }`}
                   >
                     {requirement.met && <Check size={11} strokeWidth={3} aria-hidden="true" />}

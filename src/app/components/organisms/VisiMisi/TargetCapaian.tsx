@@ -1,12 +1,27 @@
 import React from 'react';
+import { itemText, type ContentItem } from '@/lib/content-schema';
 
-export const TargetCapaian = () => {
-  const targetData = [
-    { value: "24", label: "Stasiun Pantau", desc: "Titik Aksi", sub: "Sensor telemetri terintegrasi di DAS Code, Winongo, & Gajahwong" },
-    { value: "1.200+", label: "Relawan Sains Warga", desc: "Warga Terlatih", sub: "Kader sampling air dan mitigasi darurat tingkat RW/Kalurahan." },
-    { value: "12", label: "Kertas Kebijakan", desc: "Naskah Akademik", sub: "Diserahkan kepada Bappeda DIY dan Balai Besar Wilayah Sungai." },
-    { value: "+35%", label: "Indeks Kesehatan Kali", desc: "Kemajuan Mutu", sub: "Target reduksi beban limbah cair domestik & sampah makro terhanyut." }
-  ];
+/** Satu kartu target (dipakai halaman Visi & Misi dan pratinjau dashboard). */
+export const TargetCard = ({ target }: { target: { value: string; label: string; desc: string; sub: string } }) => (
+  <div className="bg-white p-6 rounded-sm border border-gray-100 flex flex-col justify-between h-full shadow-sm">
+    <div>
+      <span className="text-xs text-gray-400 block mb-2">{target.label}</span>
+      <span className="text-4xl lg:text-5xl font-bold text-[#0f1713] block mb-1">{target.value}</span>
+      <span className="text-sm font-semibold text-gray-700 block mb-3">{target.desc}</span>
+    </div>
+    <p className="text-xs text-gray-500 leading-relaxed border-t border-gray-100 pt-3 mt-4">
+      {target.sub}
+    </p>
+  </div>
+);
+
+export const TargetCapaian = ({ items }: { items: ContentItem[] }) => {
+  const targetData = items.map((item) => ({
+    value: itemText(item, "value"),
+    label: itemText(item, "label"),
+    desc: itemText(item, "desc"),
+    sub: itemText(item, "sub"),
+  }));
 
   return (
     <section className="py-20 lg:py-24 bg-gray-50 border-t border-b border-gray-200">
@@ -24,16 +39,7 @@ export const TargetCapaian = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {targetData.map((target, idx) => (
-            <div key={idx} className="bg-white p-6 rounded-sm border border-gray-100 flex flex-col justify-between h-full shadow-sm">
-              <div>
-                <span className="text-xs text-gray-400 block mb-2">{target.label}</span>
-                <span className="text-4xl lg:text-5xl font-bold text-[#0f1713] block mb-1">{target.value}</span>
-                <span className="text-sm font-semibold text-gray-700 block mb-3">{target.desc}</span>
-              </div>
-              <p className="text-xs text-gray-500 leading-relaxed border-t border-gray-100 pt-3 mt-4">
-                {target.sub}
-              </p>
-            </div>
+            <TargetCard key={idx} target={target} />
           ))}
         </div>
 

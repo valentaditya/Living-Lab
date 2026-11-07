@@ -20,7 +20,7 @@ export const CtaTim = () => {
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <Link 
             href="/kolaborasi" 
-            className="bg-[#0f6b5c] text-white px-8 py-4 rounded-sm font-semibold text-sm hover:bg-[#0b5448] transition-colors flex items-center justify-center gap-2"
+            className="bg-brand text-white px-8 py-4 rounded-sm font-semibold text-sm hover:bg-brand-dark transition-colors flex items-center justify-center gap-2"
           >
             Daftar Menjadi Sukarelawan / Peneliti Mitra
           </Link>

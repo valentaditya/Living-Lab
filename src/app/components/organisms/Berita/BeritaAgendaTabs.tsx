@@ -47,7 +47,7 @@ export function BeritaAgendaTabs({
                   onClick={() => setActiveTab(tab.id)}
                   className={`-mb-px border-b-2 px-5 py-4 text-sm font-semibold transition ${
                     isActive
-                      ? "border-[#315b3d] text-[#315b3d]"
+                      ? "border-brand text-brand"
                       : "border-transparent text-[#78857b] hover:border-[#b8c9b8] hover:text-[#385944]"
                   }`}
                 >

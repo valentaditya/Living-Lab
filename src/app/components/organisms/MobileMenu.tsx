@@ -125,6 +125,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, pathnam
         </nav>
 
         <div className="flex shrink-0 flex-col gap-3 border-t border-white/10 p-5">
+          {/* Tombol "Menjadi Mitra" dinonaktifkan sementara; hapus komentar untuk mengaktifkan lagi.
           <Link
             href="/kolaborasi"
             onClick={onClose}
@@ -132,6 +133,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, pathnam
           >
             Menjadi Mitra
           </Link>
+          */}
           <Link
             href="/login"
             onClick={onClose}
